@@ -1,0 +1,14 @@
+body {
+  position: relative;
+}
+div.jumbotron .navbar{
+  top: -60px;
+  transition: all 0.5s ease 0s;
+}
+div.jumbotron.small .navbar{
+  top: 0px;
+}
+
+tr.input td.input-cell{
+  padding-top: 14px;
+}
