@@ -84,14 +84,7 @@ class AdminController extends BaseController {
 			$obj = $obj->find($id);
 		$form_fields = $obj->form_fields;
 
-		// var_dump((new PiaDept())->gen_key_value());
-		// die();
-
-		// return View::make('macro/select')->with(array(
-		// 	'type' => "dept",
-		// 	'name' => "123",
-		// 	'value' => "",
-		// ));
+		$obj->p_pass = "";
 
 		return View::make('admin/edit')->with(array('title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
 	}

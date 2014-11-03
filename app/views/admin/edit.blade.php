@@ -23,7 +23,11 @@
   
   <script>
     $(document).ready(function(){
-      $('.selectpicker').selectpicker();
+      $('.selectpicker').each(function(cnt,ele){
+        ele = $(ele);
+        ele.val(ele.attr('value'));
+        ele.selectpicker('refresh');
+      });
     });
   </script>
 
