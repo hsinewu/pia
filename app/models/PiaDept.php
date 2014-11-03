@@ -1,6 +1,6 @@
 <?php
 
-class Dept extends PiaBase {
+class PiaDept extends PiaBase {
 
 	/**
 	 * The database table used by the model.
@@ -8,6 +8,8 @@ class Dept extends PiaBase {
 	 * @var string
 	 */
 	protected $table = 'dept';
+	protected $primaryKey = 'dept_id';
+	protected $text = 'dept_name';
 
 	public $info_table_columns = array(
 		"dept_id" => "#",
@@ -22,5 +24,12 @@ class Dept extends PiaBase {
 	public function info_table(){
 	    return DB::select('select `A`.`dept_id`,`A`.`org_id`,`B`.`dept_name` as `group_name`,`A`.`dept_name` from `dept` as `A` left join `dept` as `B` on `A`.`group_id` = `B`.`dept_id`');
 	}
+
+	public $form_fields = array(
+		// name => type, placeholder, display_text
+		'group_id' => array('select.dept','院系','院系'),
+		// 'org_id' => array('select.org','學校','學校'),
+		'dept_name' => array('text','單位名稱','單位名稱'),
+	);
 
 }

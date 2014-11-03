@@ -5,7 +5,7 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class Audit extends PiaBase implements UserInterface, RemindableInterface {
+class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
 
@@ -15,6 +15,8 @@ class Audit extends PiaBase implements UserInterface, RemindableInterface {
 	 * @var string
 	 */
 	protected $table = 'person';
+	protected $primaryKey = 'p_id';
+	protected $text = 'p_name';
 
 	public $info_table_columns = array(
 		"p_id" => "#",
@@ -34,6 +36,17 @@ class Audit extends PiaBase implements UserInterface, RemindableInterface {
 	protected $hidden = array('p_pass', 'remember_token');
 
 	public static function get($email,$pwd){
-		return Person::where('p_mail', $email)->where('p_pass',$pwd)->first();
+		return self::where('p_mail', $email)->where('p_pass',$pwd)->first();
 	}
+
+	public $form_fields = array(
+		// name => type, placeholder, display_text
+		// 'org_id' => array('select.org','學校','學校'),
+		'dept_id' => array('select.dept','院系','院系'),
+		'p_name' => array('text','名稱','名稱'),
+		'p_phone' => array('text','電話','電話'),
+		'p_mail' => array('email','信相','信箱'),
+		'p_title' => array('text','職稱','職稱'),
+		'p_pass' => array('text','更改密碼','更改密碼'),
+	);
 }

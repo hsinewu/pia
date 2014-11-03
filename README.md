@@ -1,5 +1,35 @@
-pia
+個資稽核系統 Personal Infomation Audition System (PIA)
 ===
+
+### 簡述
+
+使用 Laravel 開發之個資稽核系統。
+
+### 特色
+
+- 使用 Laravel 開發之個資稽核系統。
+
+## 下載、安裝
+
+### 步驟
+
+- 執行終端指令 `git clone <本專案git位址>` 本專案到指定資料夾
+- 將網路伺服器設定根目錄到本專案的public資料夾，或是指定到本專案根目錄的server資料夾。
+- 執行終端指令 `composer update` ，更新vendor (PHP/Laravel 相依套件)，詳細請參照 [Composer](https://getcomposer.org/) 的說明文件。
+- 複製設定示範檔案至正式設定檔：
+
+  ```
+  cp app/config/database.example.php app/config/database.php
+  ```
+
+- 編輯 `app/config/database.php` ，修改資料庫連線參數。
+- 執行終端指令 `php artisan migrate` ，建立資料表。(未來預計加入自動從個資系統匯入之功能)
+- 連線到網站，測試是否正常：
+    - 是否能正常看到頁面。
+    - 到處丟測資，看會不會出現系統錯誤訊息，若有，請檢查是否為伺服器環境的問題。若認為是程式問題，請到本專案的頁面提報Issue。
+- 清除各項測資。
+- 編輯 `app/config/app.php` ，將 `debug` 參數改為 `false` 並且依據需求修改各項選項。
+- 開始運作本網站囉！
 
 ## Laravel PHP Framework
 
