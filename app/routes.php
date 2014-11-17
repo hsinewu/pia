@@ -62,7 +62,7 @@ Route::group(array('before' => 'auth'), function()
 
         Route::post('/admin/edit/{type}/{id?}' , array(
             'as' => 'admin_edit_process',
-            'uses' => 'AdminController@edit'
+            'uses' => 'AdminController@edit_process'
         ));
 
         Route::get('/admin/del/{type}/{id}' , array(

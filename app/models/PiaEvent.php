@@ -22,6 +22,7 @@ class PiaEvent extends PiaBase {
 
 	public $form_fields = array(
 		// name => type, placeholder, display_text
+		'event_id' => array('text','事件編號','事件編號'),
 		'event_name' => array('text','事件名稱','事件名稱'),
 		'event_from' => array('date','開始時間','開始時間'),
 		'event_end' => array('date','結束時間','結束時間'),

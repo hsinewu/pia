@@ -23,26 +23,31 @@ class AdminController extends BaseController {
 		'event' => '事件設定'
 	);
 
-	public function info($type)
+	private function type2instancd($type)
 	{
 		switch ($type) {
 			case 'person':
-				$obj = new PiaPerson();
+				return new PiaPerson();
 				break;
 			case 'dept':
-				$obj = new PiaDept();
+				return new PiaDept();
 				break;
 			case 'audit':
-				$obj = new PiaAudit();
+				return new PiaAudit();
 				break;
 			case 'event':
-				$obj = new PiaEvent();
+				return new PiaEvent();
 				break;
 
 			default:
 				App::abort(404);
 		}
-		
+	}
+
+	public function info($type)
+	{
+		$obj = $this->type2instancd($type);
+
 		$info = $obj->info_table();
 		$columns = $obj->info_table_columns;
 
@@ -62,23 +67,7 @@ class AdminController extends BaseController {
 
 	public function edit($type,$id = null)
 	{
-		switch ($type) {
-			case 'person':
-				$obj = new PiaPerson();
-				break;
-			case 'dept':
-				$obj = new PiaDept();
-				break;
-			case 'audit':
-				$obj = new PiaAudit();
-				break;
-			case 'event':
-				$obj = new PiaEvent();
-				break;
-
-			default:
-				App::abort(404);
-		}
+		$obj = $this->type2instancd($type);
 
 		if(!is_null($id))
 			$obj = $obj->find($id);
@@ -86,7 +75,27 @@ class AdminController extends BaseController {
 
 		$obj->p_pass = "";
 
-		return View::make('admin/edit')->with(array('title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
+		return View::make('admin/edit')->with(array('type' => $type,'title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
+	}
+
+	public function edit_process($type,$id = null)
+	{
+		$obj = $this->type2instancd($type);
+
+		if(!is_null($id))
+			$obj = $obj->find($id);
+		$obj->fill_field(Input::all())->save();
+		Session::set("message","設定成功！");
+		return Redirect::route('admin_info',$type);
+	}
+
+	public function del($type,$id)
+	{
+		$obj = $this->type2instancd($type);
+		$obj = $obj->find($id);
+		$obj->delete();
+		Session::set("message","刪除成功！");
+		return Redirect::route('admin_info',$type);
 	}
 
 }

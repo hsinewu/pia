@@ -14,7 +14,7 @@ class Init extends Migration {
 	{
 		Schema::create('dept', function($table)
 		{
-			$table->increments('dept_id');
+			$table->integer('dept_id');
 			$table->integer('group_id')->nullable();
 			$table->string('org_id')->nullable();
 			$table->string('dept_name')->unique();
@@ -22,7 +22,7 @@ class Init extends Migration {
 
 		Schema::create('person', function($table)
 		{
-			$table->increments('p_id');
+			$table->string('p_id');
 			$table->string('org_id');
 			$table->integer('dept_id');
 			$table->string('p_name')->unique();
@@ -34,6 +34,7 @@ class Init extends Migration {
 
 		Schema::create('auditor', function($table)
 		{
+			$table->increments('a_id'); // caution: original db structure doesnt have this
 			$table->string('event_id');
 			$table->string('org_id');
 			$table->string('p_id');

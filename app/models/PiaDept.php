@@ -25,6 +25,17 @@ class PiaDept extends PiaBase {
 	    return DB::select('select `A`.`dept_id`,`A`.`org_id`,`B`.`dept_name` as `group_name`,`A`.`dept_name` from `dept` as `A` left join `dept` as `B` on `A`.`group_id` = `B`.`dept_id`');
 	}
 
+	public function save(array $options = array()){
+		if(is_null($this->org_id))
+			$this->org_id = "NCHU";
+
+		// hope I can remove this stupid thing in the future...
+		if(is_null($this->dept_id))
+			$this->dept_id = DB::table($this->table)->max('dept_id') + 1;
+
+		parent::save($options);
+	}
+
 	public $form_fields = array(
 		// name => type, placeholder, display_text
 		'group_id' => array('select.dept','院系','院系'),

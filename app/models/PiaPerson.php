@@ -42,11 +42,12 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 	public $form_fields = array(
 		// name => type, placeholder, display_text
 		// 'org_id' => array('select.org','學校','學校'),
+		'p_id' => array('text','編號','編號'),
 		'dept_id' => array('select.dept','院系','院系'),
 		'p_name' => array('text','名稱','名稱'),
 		'p_phone' => array('text','電話','電話'),
-		'p_mail' => array('email','信相','信箱'),
+		'p_mail' => array('email','信箱','信箱'),
 		'p_title' => array('text','職稱','職稱'),
-		'p_pass' => array('text','更改密碼','更改密碼'),
+		'p_pass' => array('password','更改密碼','密碼'),
 	);
 }
