@@ -2,6 +2,8 @@
 
 class PiaBase extends Eloquent {
 
+    public $timestamps = false;
+
     public function info_table(){
         $query = DB::table($this->table);
         $alias = '';
@@ -24,6 +26,18 @@ class PiaBase extends Eloquent {
         $pk = $this->primaryKey;
         $text = $this->text;
         return DB::table($this->table)->get(array("$pk as value","$text as text"));
+    }
+
+    public function fill_field($data){
+        foreach ($this->form_fields as $key => $value) {
+            switch ($value[0]) {
+                case 'password':
+                    $data[$key] = md5($data[$key]);
+                    break;
+            }
+            $this->$key = $data[$key];
+        }
+        return $this;
     }
 
 }

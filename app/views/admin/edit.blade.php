@@ -23,7 +23,11 @@
   
   <script>
     $(document).ready(function(){
-      $('.selectpicker').selectpicker();
+      $('.selectpicker').each(function(cnt,ele){
+        ele = $(ele);
+        ele.val(ele.attr('value'));
+        ele.selectpicker('refresh');
+      });
     });
   </script>
 
@@ -46,7 +50,7 @@
     </div>
     <div class="col-xs-9">
 
-      <form class="form-horizontal" role="form">
+      <form class="form-horizontal" role="form" action="{{ route('admin_edit_process',$type) }}" method="POST">
         @foreach($fields as $k => $v)
           @if(strpos($v[0],"select") !== false)
             <div class="form-group">
@@ -70,7 +74,7 @@
         @endforeach
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Sign in</button>
+            <button type="submit" class="btn btn-default">送出</button>
           </div>
         </div>
       </form>

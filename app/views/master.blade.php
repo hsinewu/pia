@@ -68,7 +68,7 @@
               </li>
             </ul> -->
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="logout">登出</a></li>
+              <li><a href="{{ route('logout') }}">登出</a></li>
             </ul>
           </div>
         </div>
