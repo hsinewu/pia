@@ -32,7 +32,23 @@ class PiaDept extends PiaBase {
 		// hope I can remove this stupid thing in the future...
 		if(is_null($this->dept_id))
 			$this->dept_id = DB::table($this->table)->max('dept_id') + 1;
-
+		$validator = Validator::make
+		(
+		    array(
+	    		"dept_id" => "#",
+	    		"org_id" => "學校",
+	    		"group_name" => "院系",
+	    		"dept_name" => "單位"
+		    	),
+		    array(
+		        'dept_id' => 'required',
+		        'org_id' => 'required',
+		        'group_name' => 'required',
+				'dept_name' => 'required|min:3'
+		    )
+		);
+		if($validator->fails())
+			return $validator->messages();
 		parent::save($options);
 	}
 

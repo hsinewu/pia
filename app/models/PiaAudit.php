@@ -21,13 +21,29 @@ class PiaAudit extends PiaBase {
 		array('person','p_id','p_id'),
 		array('dept','ad_dept_id','dept_id')
 	);
-
+	
 	public function save(array $options = array()){
 
 		// hope I can remove this stupid thing in the future...
 		if(is_null($this->a_id))
 			$this->a_id = DB::table($this->table)->max('a_id') + 1;
-
+		$validator = Validator::make
+		(
+		    array(
+	    		"a_id" => "#",
+	    		"p_name" => "稽核人",
+	    		"ad_time_from" => "時間",
+	    		"dept_name" => "受稽單位"
+		    	),
+		    array(
+		        'a_id' => 'required',
+		        'p_name' => 'required',
+		        'ad_time_from' => 'required',
+				"dept_name" => 'required'
+		    )
+		);
+		if($validator->fails())
+			return $validator->messages();
 		parent::save($options);
 	}
 

@@ -17,7 +17,6 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 	protected $table = 'person';
 	protected $primaryKey = 'p_id';
 	protected $text = 'p_name';
-
 	public $info_table_columns = array(
 		"p_id" => "#",
 		"dept_name" => "系所",
@@ -27,7 +26,7 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 	public $info_table_leftJoin = array(
 		array('dept','dept_id','dept_id')
 	);
-
+	
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -50,4 +49,24 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		'p_title' => array('text','職稱','職稱'),
 		'p_pass' => array('password','更改密碼','密碼'),
 	);
+	public function save(array $options = array()){
+		$validator = Validator::make
+		(
+		    array(
+		    		"p_id" => "#",
+		    		"dept_name" => "系所",
+		    		"p_name" => "姓名",
+		    		"p_mail" => "信箱"
+		    	),
+		    array(
+		        'p_id' => 'required',
+		        'dept_name' => 'required',
+		        'p_name' => 'required',
+				"p_mail" => 'required'
+		    )
+		);
+		if($validator->fails())
+			return $validator->messages();
+		parent::save($options);
+	}
 }
