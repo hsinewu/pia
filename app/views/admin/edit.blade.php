@@ -14,21 +14,36 @@
       display: none;
     }
   </style>
+  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.datetimepicker.css'); }}"/ >
 @stop
 
 @section('footer_scripts')
   @parent
+  <script src="{{ asset('assets/js/jquery.js'); }}"></script>
+  <script src="{{ asset('assets/js/jquery.datetimepicker.js'); }}"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/i18n/defaults-zh_TW.min.js"></script>
-  
-  <script>
-    $(document).ready(function(){
-      $('.selectpicker').each(function(cnt,ele){
-        ele = $(ele);
-        ele.val(ele.attr('value'));
-        ele.selectpicker('refresh');
-      });
-    });
+
+
+  <script type="text/javascript">
+    jQuery('#datetimepicker').datetimepicker();jQuery(function(){
+ jQuery('#date_timepicker_start').datetimepicker({
+  format:'Y/m/d H:i',
+  onShow:function( ct ){
+   this.setOptions({
+    maxDate:jQuery('#date_timepicker_end').val()?jQuery('#date_timepicker_end').val():false
+   })
+  },
+ });
+ jQuery('#date_timepicker_end').datetimepicker({
+  format:'Y/m/d H:i',
+  onShow:function( ct ){
+   this.setOptions({
+    minDate:jQuery('#date_timepicker_start').val()?jQuery('#date_timepicker_start').val():false
+   })
+  },
+ });
+});
   </script>
 
 @stop
@@ -67,7 +82,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">{{ $v[2] }}</label>
             <div class="col-sm-10">
-              <input type="{{ $v[0] }}" name="{{ $k }}" class="form-control" placeholder="{{ $v[1] }}" value="{{ $obj->$k }}">
+              <input id="{{ $v[0] }}" name="{{ $k }}" class="form-control" placeholder="{{ $v[1] }}" value="{{ $obj->$k }}">
             </div>
           </div>
           @endif

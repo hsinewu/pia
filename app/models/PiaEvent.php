@@ -24,8 +24,8 @@ class PiaEvent extends PiaBase {
 		// name => type, placeholder, display_text
 		'event_id' => array('text','事件編號','事件編號'),
 		'event_name' => array('text','事件名稱','事件名稱'),
-		'event_from' => array('date','開始時間','開始時間'),
-		'event_end' => array('date','結束時間','結束時間'),
+		'event_from' => array('date_timepicker_start','開始時間','開始時間'),
+		'event_end' => array('date_timepicker_end','結束時間','結束時間'),
 	);
 
 }
