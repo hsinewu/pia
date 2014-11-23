@@ -35,10 +35,10 @@ class PiaDept extends PiaBase {
 		$validator = Validator::make
 		(
 		    array(
-	    		"dept_id" => "#",
-	    		"org_id" => "學校",
-	    		"group_name" => "院系",
-	    		"dept_name" => "單位"
+	    		"dept_id" => $this->dept_id,
+	    		"org_id" => $this->org_id,
+	    		"group_name" => $this->group_name,
+	    		"dept_name" => $this->dept_name
 		    	),
 		    array(
 		        'dept_id' => 'required',

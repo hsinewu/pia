@@ -30,10 +30,10 @@ class PiaAudit extends PiaBase {
 		$validator = Validator::make
 		(
 		    array(
-	    		"a_id" => "#",
-	    		"p_name" => "稽核人",
-	    		"ad_time_from" => "時間",
-	    		"dept_name" => "受稽單位"
+	    		"a_id" => $this->a_id,
+	    		"p_name" => $this->p_name,
+	    		"ad_time_from" => $this->ad_time_from,
+	    		"dept_name" => $this->dept_name
 		    	),
 		    array(
 		        'a_id' => 'required',
