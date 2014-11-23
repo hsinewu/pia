@@ -53,20 +53,22 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		$validator = Validator::make
 		(
 		    array(
-		    		"p_id" => "#",
-		    		"dept_name" => "系所",
-		    		"p_name" => "姓名",
-		    		"p_mail" => "信箱"
+		    		"p_id" => $this->p_id,
+		    		"dept_id" => $this->dept_id,
+		    		"p_name" => $this->p_name,
+		    		"p_mail" => $this->p_mail,
 		    	),
 		    array(
 		        'p_id' => 'required',
-		        'dept_name' => 'required',
+		        'dept_id' => 'required',
 		        'p_name' => 'required',
 				"p_mail" => 'required'
 		    )
 		);
+
+		//die($validator->fails());
 		if($validator->fails())
-			return $validator->messages();
+			throw new Exception($validator->messages());
 		parent::save($options);
 	}
 }

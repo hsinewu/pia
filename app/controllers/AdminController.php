@@ -84,7 +84,12 @@ class AdminController extends BaseController {
 
 		if(!is_null($id))
 			$obj = $obj->find($id);
-		$obj->fill_field(Input::all())->save();
+		try {
+			$obj->fill_field(Input::all())->save();
+		} catch (Exception $e) {
+			Session::set("message","設定失敗！請確認您的輸入！");
+			return Redirect::route('admin_edit',$type);
+		}
 		Session::set("message","設定成功！");
 		return Redirect::route('admin_info',$type);
 	}

@@ -48,7 +48,7 @@ class PiaDept extends PiaBase {
 		    )
 		);
 		if($validator->fails())
-			return $validator->messages();
+			throw new Exception($validator->messages());
 		parent::save($options);
 	}
 
