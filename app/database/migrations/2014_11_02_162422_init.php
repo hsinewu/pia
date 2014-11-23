@@ -40,16 +40,16 @@ class Init extends Migration {
 			$table->string('p_id');
 			$table->string('ad_org_id');
 			$table->string('ad_dept_id');
-			$table->date('ad_time_from');
-			$table->date('ad_time_end');
+			$table->datetime('ad_time_from');
+			$table->datetime('ad_time_end');
 		});
 
 		Schema::create('event', function($table)
 		{
 			$table->string('event_id');
 			$table->string('event_name');
-			$table->date('event_from');
-			$table->date('event_end');
+			$table->datetime('event_from');
+			$table->datetime('event_end');
 		});
 	}
 

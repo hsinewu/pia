@@ -21,7 +21,7 @@ class PiaDept extends PiaBase {
 		array('dept','group_id','dept_id')
 	);
 
-	public function info_table(){
+	public function info_table($more_columns = array()){
 	    return DB::select('select `A`.`dept_id`,`A`.`org_id`,`B`.`dept_name` as `group_name`,`A`.`dept_name` from `dept` as `A` left join `dept` as `B` on `A`.`group_id` = `B`.`dept_id`');
 	}
 

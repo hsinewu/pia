@@ -4,14 +4,14 @@ class PiaBase extends Eloquent {
 
     public $timestamps = false;
 
-    public function info_table(){
+    public function info_table($more_columns = array()){
         $query = DB::table($this->table);
         $alias = '';
         foreach ($this->info_table_leftJoin as $join){
             $alias .= 'A';
             $query = $query->join($join[0] . " AS $alias", $this->table . "." . $join[1], '=', "$alias." . $join[2]);
         }
-        return $query->select(array_keys($this->info_table_columns))->get();
+        return $query->select(array_merge($more_columns,array_keys($this->info_table_columns)))->get();
     }
 
     public function getPK(){

@@ -59,8 +59,13 @@ class AdminController extends BaseController {
 
 	public function cal(){
 		$type = 'cal';
+		$obj = new PiaAudit();
+		$info = $obj->info_table(array('ad_time_end'));
+		// var_dump($info);
+		// die();
 		return View::make('admin/cal')->with(array(
 			'type' => 'cal',
+			"info" => $info,
 			'title' => $this->type2name[$type],
 		));
 	}

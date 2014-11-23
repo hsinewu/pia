@@ -19,6 +19,14 @@
     table.table tr.sample{
       display: none;
     }
+
+    #calendar .fc-button-group, .fc button{
+      display: block;
+    }
+
+    td.fc-state-highlight.fc-today{
+      color: rgba(243, 120, 0, 1);
+    }
   </style>
 @stop
 
@@ -28,11 +36,30 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.1.1/fullcalendar.min.js"></script>
 
   <script>
-    $(document).ready(function(){
+    
+
+    $(document).ready(function() {
+      
       $('#calendar').fullCalendar({
-          // put your options and callbacks here
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,basicWeek,basicDay'
+        },
+        events: [
+          @foreach($info as $row)
+          {
+            title: '{{ $row->p_name }} => {{ $row->dept_name }}',
+            start: '{{ $row->ad_time_from }}',
+            end: '{{ $row->ad_time_end }}'
+          },
+          @endforeach
+        ]
       });
+      
     });
+
+
   </script>
 @stop
 
