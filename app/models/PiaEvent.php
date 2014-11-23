@@ -27,5 +27,24 @@ class PiaEvent extends PiaBase {
 		'event_from' => array('date_timepicker_start','開始時間','開始時間'),
 		'event_end' => array('date_timepicker_end','結束時間','結束時間'),
 	);
-
+	public function save(array $options = array()){
+		$validator = Validator::make
+		(
+		    array(
+		    		"event_id" => "#",
+		    		"event_name" => "名稱",
+		    		"event_from" => "開始",
+		    		"event_end" => "結束"
+		    	),
+		    array(
+		        'event_id' => 'required|min:2',
+		        'event_name' => 'required|min:2',
+		        'event_from' => 'required',//|date_format:
+				"event_end" => 'required'
+		    )
+		);
+		if($validator->fails())
+			return $validator->messages();
+		parent::save($options);
+	}
 }
