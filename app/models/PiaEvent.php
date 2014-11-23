@@ -31,10 +31,10 @@ class PiaEvent extends PiaBase {
 		$validator = Validator::make
 		(
 		    array(
-		    		"event_id" => "#",
-		    		"event_name" => "名稱",
-		    		"event_from" => "開始",
-		    		"event_end" => "結束"
+		    		"event_id" => $this->event_id,
+		    		"event_name" => $this->event_name,
+		    		"event_from" => $this->event_from,
+		    		"event_end" => $this->event_end
 		    	),
 		    array(
 		        'event_id' => 'required|min:2',

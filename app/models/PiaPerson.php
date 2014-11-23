@@ -62,7 +62,7 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		        'p_id' => 'required',
 		        'dept_id' => 'required',
 		        'p_name' => 'required',
-				"p_mail" => 'required'
+				"p_mail" => 'required|email'
 		    )
 		);
 
