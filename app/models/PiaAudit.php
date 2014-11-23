@@ -38,8 +38,10 @@ class PiaAudit extends PiaBase {
 		'p_id' => array('select.person','稽核人','稽核人'),
 		//'ad_org_id' => array('select.org','受稽組織','受稽組織'),
 		'ad_dept_id' => array('select.dept','受稽單位','受稽單位'),
-		'ad_time_from' => array('date','開始時間','開始時間'),
-		'ad_time_end' => array('date','結束時間','結束時間'),
+		// 'ad_time_from' => array('date','開始時間','開始時間'),
+		// 'ad_time_end' => array('date','結束時間','結束時間'),
+		'ad_time_from' => array('date_timepicker_start','開始時間','開始時間'),
+		'ad_time_end' => array('date_timepicker_end','結束時間','結束時間'),
 	);
 
 }

@@ -19,14 +19,14 @@
 
 @section('footer_scripts')
   @parent
-  <script src="{{ asset('assets/js/jquery.js'); }}"></script>
   <script src="{{ asset('assets/js/jquery.datetimepicker.js'); }}"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/i18n/defaults-zh_TW.min.js"></script>
 
 
   <script type="text/javascript">
-    jQuery('#datetimepicker').datetimepicker();jQuery(function(){
+    jQuery('[type^=date_timepicker]').datetimepicker();
+    jQuery(function(){
  jQuery('#date_timepicker_start').datetimepicker({
   format:'Y/m/d H:i',
   onShow:function( ct ){
@@ -82,7 +82,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">{{ $v[2] }}</label>
             <div class="col-sm-10">
-              <input id="{{ $v[0] }}" name="{{ $k }}" class="form-control" placeholder="{{ $v[1] }}" value="{{ $obj->$k }}">
+              <input type="{{ $v[0] }}" id="{{ $v[0] }}" name="{{ $k }}" class="form-control" placeholder="{{ $v[1] }}" value="{{ $obj->$k }}">
             </div>
           </div>
           @endif
