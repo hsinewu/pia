@@ -23,19 +23,23 @@ class AdminController extends BaseController {
 		'event' => '事件設定'
 	);
 
-	private function type2instancd($type)
+	private function type2instancd($type,$id = null)
 	{
 		switch ($type) {
 			case 'person':
+				if(!is_null($id))  return PiaPerson::find($id);
 				return new PiaPerson();
 				break;
 			case 'dept':
+				if(!is_null($id))  return PiaDept::find($id);
 				return new PiaDept();
 				break;
 			case 'audit':
+				if(!is_null($id))  return PiaAudit::find($id);
 				return new PiaAudit();
 				break;
 			case 'event':
+				if(!is_null($id))  return PiaEvent::find($id);
 				return new PiaEvent();
 				break;
 
@@ -72,10 +76,10 @@ class AdminController extends BaseController {
 
 	public function edit($type,$id = null)
 	{
-		$obj = $this->type2instancd($type);
+		$obj = $this->type2instancd($type,$id);
 
-		if(!is_null($id))
-			$obj = $obj->find($id);
+		// if(!is_null($id))
+		// 	$obj = $obj->find($id);
 		$form_fields = $obj->form_fields;
 
 		$obj->p_pass = "";
@@ -85,17 +89,23 @@ class AdminController extends BaseController {
 
 	public function edit_process($type,$id = null)
 	{
-		$obj = $this->type2instancd($type);
-
-		if(!is_null($id))
-			$obj = $obj->find($id);
+		$obj = $this->type2instancd($type,$id);
+		//die(is_null($id));
+		// if(!is_null($id))
+		// 	$obj = $obj->find($id);
 		try {
 			$obj->fill_field(Input::all())->save();
+		} catch (PDOException $e) {
+			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
+			return Redirect::route('admin_edit',$type);
 		} catch (Exception $e) {
-			Session::set("message","設定失敗！請確認您的輸入！");
+			//$m = "";
+			//foreach($e->getMessage() as $k => $v) $m.=$v;
+			die($e->getMessage());
+			Session::set("message","設定失敗!請確認您的輸入:"/*.$m*/);
 			return Redirect::route('admin_edit',$type);
 		}
-		Session::set("message","設定成功！");
+		Session::set("message","設定成功!");
 		return Redirect::route('admin_info',$type);
 	}
 
@@ -104,7 +114,7 @@ class AdminController extends BaseController {
 		$obj = $this->type2instancd($type);
 		$obj = $obj->find($id);
 		$obj->delete();
-		Session::set("message","刪除成功！");
+		Session::set("message","刪除成功!");
 		return Redirect::route('admin_info',$type);
 	}
 

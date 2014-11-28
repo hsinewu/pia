@@ -37,10 +37,10 @@ class PiaEvent extends PiaBase {
 		    		"event_end" => $this->event_end
 		    	),
 		    array(
-		        'event_id' => 'required|min:2',
-		        'event_name' => 'required|min:2',
+		        'event_id' => 'required',
+		        'event_name' => 'required',
 		        'event_from' => 'required',//|date_format:
-				"event_end" => 'required'
+				'event_end' => 'required'
 		    )
 		);
 		if($validator->fails())

@@ -35,16 +35,12 @@ class PiaDept extends PiaBase {
 		$validator = Validator::make
 		(
 		    array(
-	    		"dept_id" => $this->dept_id,
-	    		"org_id" => $this->org_id,
-	    		"group_name" => $this->group_name,
+	    		"group_id" => $this->group_id,
 	    		"dept_name" => $this->dept_name
 		    	),
 		    array(
-		        'dept_id' => 'required',
-		        'org_id' => 'required',
 		        'group_name' => 'required',
-				'dept_name' => 'required|min:3'
+				'dept_name' => 'required'
 		    )
 		);
 		if($validator->fails())

@@ -30,16 +30,18 @@ class PiaAudit extends PiaBase {
 		$validator = Validator::make
 		(
 		    array(
-	    		"a_id" => $this->a_id,
-	    		"p_name" => $this->p_name,
+	    		"event_id" => $this->event_id,
+	    		"p_id" => $this->p_id,
+	    		"ad_dept_id" => $this->ad_dept_id,
 	    		"ad_time_from" => $this->ad_time_from,
-	    		"dept_name" => $this->dept_name
+	    		"ad_time_end" => $this->ad_time_from
 		    	),
 		    array(
-		        'a_id' => 'required',
-		        'p_name' => 'required',
-		        'ad_time_from' => 'required',
-				"dept_name" => 'required'
+		        'event_id' => 'required',
+		        'p_id' => 'required',
+		        'ad_dept_id' => 'required',
+				"ad_time_from" => 'required',
+				"ad_time_end" => 'required'
 		    )
 		);
 		if($validator->fails())

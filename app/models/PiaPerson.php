@@ -50,25 +50,31 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		'p_pass' => array('password','更改密碼','密碼'),
 	);
 	public function save(array $options = array()){
-		$validator = Validator::make
-		(
-		    array(
-		    		"p_id" => $this->p_id,
-		    		"dept_id" => $this->dept_id,
-		    		"p_name" => $this->p_name,
-		    		"p_mail" => $this->p_mail,
-		    	),
-		    array(
-		        'p_id' => 'required',
-		        'dept_id' => 'required',
-		        'p_name' => 'required',
-				"p_mail" => 'required|email'
-		    )
-		);
+		// $validator = Validator::make
+		// (
+		//     array(
+		//     		'p_id' => $this->p_id,
+		//     		'dept_id' => $this->dept_id,
+		//     		'p_name' => $this->p_name,
+		//     		'p_phone' => $this->p_phone,
+		//     		'p_mail' => $this->p_mail,
+		//     		'p_title' => $this->p_title,
+		//     		'p_pass' => $this->p_pass
+		//     	),
+		//     array(
+		//         'p_id' => 'required',
+		//         'dept_id' => 'required',
+		//         'p_name' => 'required',
+		//         'p_phone' => 'required',
+		//         'p_mail' => 'required|email',
+		//         'p_title' => 'required',
+		//         'p_pass' => 'required'
+		//     )
+		// );
 
 		//die($validator->fails());
-		if($validator->fails())
-			throw new Exception($validator->messages());
+		// if($validator->fails())
+		// 	throw new Exception($validator->messages());
 		parent::save($options);
 	}
 }
