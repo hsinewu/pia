@@ -74,7 +74,7 @@
     </div>
     <div class="col-xs-9">
 
-      <form class="form-horizontal" role="form" action="{{ route('admin_edit_process',$type) }}" method="POST">
+      <form class="form-horizontal" role="form" action="{{ is_null($id) ? route('admin_edit_process',$type) : route('admin_edit_process',array($type,$id)) }}" method="POST">
         @foreach($fields as $k => $v)
           @if(strpos($v[0],"select") !== false)
             <div class="form-group">
