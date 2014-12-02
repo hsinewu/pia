@@ -7,11 +7,25 @@ class PiaBase extends Eloquent {
     public function info_table($more_columns = array()){
         $query = DB::table($this->table);
         $alias = '';
+        $tbl_prefix = Config::get('database.connections.mysql.prefix');
+        // die($tbl_prefix);
         foreach ($this->info_table_leftJoin as $join){
             $alias .= 'A';
-            $query = $query->join($join[0] . " AS $alias", $this->table . "." . $join[1], '=', "$alias." . $join[2]);
+            $query = $query->join($join[0] . " AS $tbl_prefix$alias", $this->table . "." . $join[1], '=', "$alias." . $join[2]);
         }
         return $query->select(array_merge($more_columns,array_keys($this->info_table_columns)))->get();
+    }
+
+    public function info()
+    {
+        $alias = '';
+        $self = $this;
+        $tbl_prefix = Config::get('database.connections.mysql.prefix');
+        foreach ($this->info_table_leftJoin as $join){
+            $alias .= 'A';
+            $self = $self->join($join[0] . " AS $tbl_prefix$alias", $this->table . "." . $join[1], '=', "$alias." . $join[2]);
+        }
+        return $self;
     }
 
     public function getPK(){

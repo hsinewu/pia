@@ -37,12 +37,6 @@
         <!-- Default panel contents -->
         <div class="panel-heading" style="height: 55px; line-height: 34px;">
         {{ $title }}
-
-          <!-- Button trigger modal -->
-          <a class="btn btn-primary pull-right create" href="{{ route('admin_edit', $type) }}">
-            ＋ 新增
-          </a>
-          <!-- Modal -->
         </div>
 
         <div class="panel-body">
@@ -72,9 +66,7 @@
                   <td>{{ $i->$c }}</td>
                 @endforeach
                 <td>
-                  <a href="{{ route('admin_edit', array($type,$i->{$obj->getPK()})) }}">Edit</a>
-                  or
-                  <a href="{{ route('admin_del', array($type,$i->{$obj->getPK()})) }}">Delete</a>
+                  <a href="{{ route('audit_report', $i->a_id) }}">填寫稽核報告</a>
                 </td>
               </tr>
             @endforeach

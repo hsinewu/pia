@@ -55,7 +55,8 @@ class AdminController extends BaseController {
 		$info = $obj->info_table();
 		$columns = $obj->info_table_columns;
 
-		// var_dump($info[0]->{$obj->getPK()});
+		// var_dump($info);
+		// var_dump(DB::getQueryLog());
 		// die();
 
 		return View::make('admin/info')->with(array('type' => $type,'title' => $this->type2name[$type],'columns' => $columns, "info" => $info, 'obj' => $obj));

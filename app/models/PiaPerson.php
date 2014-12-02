@@ -26,6 +26,16 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 	public $info_table_leftJoin = array(
 		array('dept','dept_id','dept_id')
 	);
+
+	public function getLevel_key_value(){
+		$object = new stdClass();
+
+		return array(
+			(object)array("value" => 0, "text" => "受稽人員"),
+			(object)array("value" => 1, "text" => "稽核人員"),
+			(object)array("value" => 2, "text" => "管理員"),
+		);
+	}
 	
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -48,6 +58,7 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		'p_mail' => array('email','信箱','信箱'),
 		'p_title' => array('text','職稱','職稱'),
 		'p_pass' => array('password','更改密碼','密碼'),
+		'p_level' => array('select.level','權限','權限'),
 	);
 	public function save(array $options = array()){
 		$validator = Validator::make
@@ -76,5 +87,13 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		if($validator->fails())
 			throw new Exception($validator->messages());
 		parent::save($options);
+	}
+
+	public function audit(){
+		return $this->hasMany("PiaAudit","p_id","p_id")->join('dept','ad_dept_id','=','dept_id');
+	}
+
+	public function isAdmin(){
+		return $this->p_level == 2;
 	}
 }

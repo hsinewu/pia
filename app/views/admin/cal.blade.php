@@ -67,16 +67,7 @@
 
   <div class="row">
     <div class="col-xs-3">
-      <div class="alert alert-info" role="alert">
-        xxx您好
-      </div>
-      <div class="list-group">
-        <a class="list-group-item" href="{{ route('admin_info','dept') }}">單位資料表</a>
-        <a class="list-group-item" href="{{ route('admin_info','person') }}">人員資料表</a>
-        <a class="list-group-item" href="{{ route('admin_info','audit') }}">稽核設定</a>
-        <a class="list-group-item" href="{{ route('admin_cal') }}">行事曆</a>
-        <a class="list-group-item" href="{{ route('admin_info','event') }}">事件設定</a>
-      </div>
+      @include("menu")
     </div>
     <div class="col-xs-9">
 

@@ -9,6 +9,12 @@
     case 'event':
       $select_arr = (new PiaEvent())->gen_key_value();
       break;
+    case 'level':
+      $select_arr = (new PiaPerson())->getLevel_key_value();
+      break;
+    case 'report_base':
+      $select_arr = Config::get('pia_report');
+      break;
   }
 ?>
 <select class="selectpicker" name="{{ $name }}" value="{{ $value }}" data-live-search="true">

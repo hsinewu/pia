@@ -30,8 +30,8 @@ class PiaDept extends PiaBase {
 			$this->org_id = "NCHU";
 
 		// hope I can remove this stupid thing in the future...
-		if(is_null($this->dept_id))
-			$this->dept_id = DB::table($this->table)->max('dept_id') + 1;
+		// if(is_null($this->dept_id))
+		// 	$this->dept_id = DB::table($this->table)->max('dept_id') + 1;
 		$validator = Validator::make
 		(
 		    array(

@@ -70,6 +70,26 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AdminController@del'
         ));
     // });
+
+    Route::get('/audit' , array(
+        'as' => 'audit',
+        function() { return Redirect::route('audit_tasks'); }
+    ));
+
+    Route::get('/audit/tasks' , array(
+        'as' => 'audit_tasks',
+        'uses' => 'AuditController@tasks'
+    ));
+
+    Route::get('/audit/report/{id}' , array(
+        'as' => 'audit_report',
+        'uses' => 'AuditController@report'
+    ));
+
+    Route::post('/audit/report/{id}' , array(
+        'as' => 'audit_report',
+        'uses' => 'AuditController@report_process'
+    ));
 });
 
 Route::get('/logout' , array(
