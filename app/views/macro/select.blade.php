@@ -12,9 +12,9 @@
     case 'level':
       $select_arr = (new PiaPerson())->getLevel_key_value();
       break;
-    case 'report_base':
-      $select_arr = Config::get('pia_report');
-      break;
+    // case 'report_base':
+    //   $select_arr = Config::get('pia_report');
+    //   break;
   }
 ?>
 <select class="select" name="{{ $name }}" value="{{ $value }}" data-live-search="true">
