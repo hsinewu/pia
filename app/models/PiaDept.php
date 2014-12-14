@@ -14,15 +14,16 @@ class PiaDept extends PiaBase {
 	public $info_table_columns = array(
 		"dept_id" => "#",
 		"org_id" => "學校",
+		"code" => "機關代碼",
+		"dept_name" => "單位",
 		"group_name" => "院系",
-		"dept_name" => "單位"
 	);
 	public $info_table_leftJoin = array(
 		array('dept','group_id','dept_id')
 	);
 
 	public function info_table($more_columns = array()){
-	    return DB::select('select `A`.`dept_id`,`A`.`org_id`,`B`.`dept_name` as `group_name`,`A`.`dept_name` from `dept` as `A` left join `dept` as `B` on `A`.`group_id` = `B`.`dept_id`');
+	    return DB::select('select `A`.`dept_id`,`A`.`org_id`,`A`.`code`,`B`.`dept_name` as `group_name`,`A`.`dept_name` from `dept` as `A` left join `dept` as `B` on `A`.`group_id` = `B`.`dept_id`');
 	}
 
 	public function save(array $options = array()){
@@ -36,11 +37,15 @@ class PiaDept extends PiaBase {
 		(
 		    array(
 	    		"group_id" => $this->group_id,
-	    		"dept_name" => $this->dept_name
+	    		"dept_name" => $this->dept_name,
+	    		"email" => $this->email,
+	    		//"code" => $this->code,
 		    	),
 		    array(
 		        'group_name' => 'required',
-				'dept_name' => 'required'
+				'dept_name' => 'required',
+				'email' => 'required|email',
+				//'code' => 'required',
 		    )
 		);
 		if($validator->fails())
@@ -53,6 +58,8 @@ class PiaDept extends PiaBase {
 		'group_id' => array('select.dept','院系','院系'),
 		// 'org_id' => array('select.org','學校','學校'),
 		'dept_name' => array('text','單位名稱','單位名稱'),
+		'email' => array('email','主管信箱','主管信箱'),
+		'code' => array('text','機關代碼','機關代碼'),
 	);
 
 }
