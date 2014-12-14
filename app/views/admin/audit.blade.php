@@ -13,6 +13,12 @@
     table.table tr.sample{
       display: none;
     }
+
+    div.audit{
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-radius: 6px;
+    }
   </style>
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.datetimepicker.css'); }}"/ >
 @stop
@@ -27,7 +33,7 @@
   <script type="text/javascript">
     var i = 1;
     function add_item(){
-            var a = $('#sample-item').clone().removeClass("hidden").attr("id", "audit"+i);
+            var a = $('#sample-item').clone().attr({"class":"audit", "id":"audit"+i});
             a.find(".select").attr("class", "select"+i);
             a.find("#date_timepicker_start").attr("id", "date_timepicker_start"+i);
             a.find("#date_timepicker_end").attr("id", "date_timepicker_end"+i);
@@ -35,6 +41,11 @@
               $(ele).attr('name',$(ele).attr('name') + '[' + i + ']');
             });
 
+            if(i==1){
+              a.attr("style", "padding-top: 0px;");
+            }else if(i%2==0){
+              a.attr("style", "background-color: #eee;");
+            }
             a.insertBefore('.add-item');
 
             $('.select'+i).each(function(cnt,ele){
@@ -64,7 +75,7 @@
           }
 
     $(document).ready(function(){
-      
+
       //$('#sample-item').find(".selectpicker").attr("id", "pick");
       $('#audit').find('.select').each(function(cnt,ele){
         ele = $(ele);
@@ -90,7 +101,6 @@
     <div class="col-xs-9">
 
       <div id="sample-item" class="hidden">
-        <hr>
         <div class="form-group">
           <label class="col-sm-2 control-label">受稽單位</label>
           <div class="col-sm-10">
