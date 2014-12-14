@@ -26,6 +26,11 @@
 
   <script type="text/javascript">
 
+    function add_item(){
+      $('#sample-item').clone().removeClass("hidden").insertBefore('.item-end');
+      return false;
+    }
+
     $(document).ready(function(){
       $('.selectpicker').each(function(cnt,ele){
         ele = $(ele);
@@ -33,10 +38,8 @@
         ele.selectpicker('refresh');
       });
 
-      $('.add-item').click(function(){
-        $('#sample-item').clone().removeClass("hidden").insertBefore('.item-end');
-        return false;
-      });
+      $('.add-item').click(add_item);
+      add_item();
 
     });
     jQuery('[type^=date_timepicker]').datetimepicker();
@@ -78,43 +81,29 @@
         <div class="col-sm-10">
           @include('macro/select',array(
             'type' => "report_base",
-            'name' => "ri_base",
+            'name' => "ri_base[]",
             'value' => "",
           ))
         </div>
       </div>
-      <textarea class="form-control" name="ri_recommand" rows="3" placeholder="稽核發現"></textarea>
+      <textarea class="form-control" name="ri_discover[]" rows="3" placeholder="稽核發現"></textarea>
       <div class="row">&nbsp;</div>
-      <textarea class="form-control" name="ri_recommand" rows="3" placeholder="稽核建議"></textarea>
+      <textarea class="form-control" name="ri_recommand[]" rows="3" placeholder="稽核建議"></textarea>
     </div>
 
-      <form class="form-horizontal" role="form" action="{{ route('audit_report',$id) }}" method="POST">
+      {{ Form::open(array('url' => route('audit_report',$audit->a_id), 'class'=>'form-horizontal', 'role'=>'form')) }}
         <div class="form-group">
           <label class="col-sm-2 control-label">紀錄編號</label>
           <div class="col-sm-10">
-            <input type="text" name="r_id" class="form-control" placeholder="紀錄編號" value="">
+            <input type="text" name="r_id" class="form-control" placeholder="紀錄編號" value="{{ $report->r_serial }}">
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">填表日期</label>
           <div class="col-sm-10">
-            <input type="date_timepicker" name="r_id" class="form-control" placeholder="紀錄編號" value="{{ $time }}">
+            <input type="date_timepicker" name="r_id" class="form-control" placeholder="填表日期" value="{{ date('Y-m-d') }}">
           </div>
         </div>
-        <hr>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">標準條文 / 稽核項目</label>
-          <div class="col-sm-10">
-            @include('macro/select',array(
-              'type' => "report_base",
-              'name' => "ri_base",
-              'value' => "",
-            ))
-          </div>
-        </div>
-        <textarea class="form-control" name="ri_recommand" rows="3" placeholder="稽核發現"></textarea>
-        <div class="row">&nbsp;</div>
-        <textarea class="form-control" name="ri_recommand" rows="3" placeholder="稽核建議"></textarea>
         <hr class="item-end">
         <div class="form-group">
           <label class="col-sm-2 control-label">其他建議</label>
@@ -128,7 +117,7 @@
             <button class="btn btn-default add-item">增加稽核發現</button>
           </div>
         </div>
-      </form>
+      {{ Form::close() }}
     </div>
   </div>
   <footer>
