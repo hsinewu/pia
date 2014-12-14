@@ -24,42 +24,32 @@ class PiaReport extends PiaBase {
 	
 	public function save(array $options = array()){
 
-		// hope I can remove this stupid thing in the future...
-		if(is_null($this->a_id))
-			$this->a_id = DB::table($this->table)->max('a_id') + 1;
 		$validator = Validator::make
 		(
 		    array(
-	    		"event_id" => $this->event_id,
-	    		"p_id" => $this->p_id,
-	    		"ad_dept_id" => $this->ad_dept_id,
-	    		"ad_time_from" => $this->ad_time_from,
-	    		"ad_time_end" => $this->ad_time_from
+	    		"r_id" => $this->r_id,
+	    		"r_time" => $this->r_time,
+	    		"a_id" => $this->a_id,
+	    		"a_serial" => $this->a_serial,
+	    		"a_msg" => $this->a_msg,
+	    		//"r_auth_signed" => $this->r_auth_signed,
+	    		//"r_auditor_signed" => $this->r_auditor_signed,
+	    		//"r_comm_signed" => $this->r_comm_signed,
 		    	),
 		    array(
-		        'event_id' => 'required',
-		        'p_id' => 'required',
-		        'ad_dept_id' => 'required',
-				"ad_time_from" => 'required',
-				"ad_time_end" => 'required'
+		        "r_id" => 'required',
+		        "r_time" => 'required',
+		        "a_id" => 'required',
+		        "a_serial" => 'required',
+		        "a_msg" => 'required',
+		        //"r_auth_signed" => 'required',
+		        //"r_auditor_signed" => 'required',
+		        //"r_comm_signed" => 'required',
 		    )
 		);
 		if($validator->fails())
 			throw new Exception($validator->messages());
 		parent::save($options);
 	}
-
-	public $form_fields = array(
-		// name => type, placeholder, display_text
-		'event_id' => array('select.event','稽核事件','稽核事件'),
-		// 'org_id' => array('select.org','組織','組織'),
-		'p_id' => array('select.person','稽核人','稽核人'),
-		//'ad_org_id' => array('select.org','受稽組織','受稽組織'),
-		'ad_dept_id' => array('select.dept','受稽單位','受稽單位'),
-		// 'ad_time_from' => array('date','開始時間','開始時間'),
-		// 'ad_time_end' => array('date','結束時間','結束時間'),
-		'ad_time_from' => array('date_timepicker_start','開始時間','開始時間'),
-		'ad_time_end' => array('date_timepicker_end','結束時間','結束時間'),
-	);
 
 }

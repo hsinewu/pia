@@ -15,7 +15,7 @@ class PiaDept extends PiaBase {
 		"dept_id" => "#",
 		"org_id" => "學校",
 		"code" => "機關代碼",
-		"dept_name" => "單位",
+		"dept_name" => "單位名稱",
 		"group_name" => "院系",
 	);
 	public $info_table_leftJoin = array(
