@@ -112,6 +112,30 @@ class AdminController extends BaseController {
 		return Redirect::route('admin_info',$type);
 	}
 
+	public function add_autitor(){
+		$input = Input::all();
+		$type = 'audit';
+		try {
+			foreach ($input['ad_dept_id'] as $key => $value) {
+				$auditor = new PiaAudit();
+				$auditor->event_id = $input['event_id'];
+				$auditor->p_id = $input['p_id'];
+				$auditor->ad_dept_id = $input['ad_dept_id'][$key];
+				$auditor->ad_time_from = $input['ad_time_from'][$key];
+				$auditor->ad_time_end = $input['ad_time_end'][$key];
+				$auditor->save();
+			}
+			Session::set("message","設定成功!");
+			return Redirect::route('admin_info',$type);
+		} catch (PDOException $e) {
+			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
+			return Redirect::route('admin_edit',$type);
+		} catch (Exception $e) {
+			Session::set("message","設定失敗!請確認您的輸入:"/*.$m*/);
+			return Redirect::route('admin_edit',$type);
+		}
+	}
+
 	public function del($type,$id)
 	{
 		$obj = $this->type2instancd($type);

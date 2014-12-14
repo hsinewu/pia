@@ -60,6 +60,11 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AdminController@edit'
         ));
 
+        Route::post('/admin/edit/auditor' , array(
+            'as' => 'add_autitor_process',
+            'uses' => 'AdminController@add_autitor'
+        ));
+
         Route::post('/admin/edit/{type}/{id?}' , array(
             'as' => 'admin_edit_process',
             'uses' => 'AdminController@edit_process'
