@@ -46,14 +46,18 @@ class AuditController extends Controller {
 			$report->r_time = Input::get('r_time');
 			$report->r_msg = Input::get('r_msg');
 			$report->save();
+			$count = 0;
 			foreach ($input['ri_base'] as $key => $value) {
+				if( $input['ri_base'][$key]=="" || $input['ri_discover'][$key]=="" || $input['ri_recommand'][$key]=="" )
+						continue;
 				$item = $report->new_item();
 				$item->ri_base = $input['ri_base'][$key];
 				$item->ri_discover = $input['ri_discover'][$key];
 				$item->ri_recommand = $input['ri_recommand'][$key];
 				$item->save();
+				++$count;
 			}
-			Session::set("message","回報成功!");
+			Session::set("message","共".$count."筆發現回報成功!");
 			return Redirect::route('audit_tasks');
 		} catch (PDOException $e) {
 			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());

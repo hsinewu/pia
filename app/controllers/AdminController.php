@@ -116,7 +116,10 @@ class AdminController extends BaseController {
 		$input = Input::all();
 		$type = 'audit';
 		try {
+			$count = 0;
 			foreach ($input['ad_dept_id'] as $key => $value) {
+				if( $input['event_id']=="" || $input['p_id']=="" || $input['ad_dept_id'][$key]=="" || $input['ad_time_from'][$key]=="" || $input['ad_time_end'][$key]=="" )
+					continue;
 				$auditor = new PiaAudit();
 				$auditor->event_id = $input['event_id'];
 				$auditor->p_id = $input['p_id'];
@@ -124,8 +127,9 @@ class AdminController extends BaseController {
 				$auditor->ad_time_from = $input['ad_time_from'][$key];
 				$auditor->ad_time_end = $input['ad_time_end'][$key];
 				$auditor->save();
+				++$count;
 			}
-			Session::set("message","設定成功!");
+			Session::set("message","共".$count."筆資料設定成功!");
 			return Redirect::route('admin_info',$type);
 		} catch (PDOException $e) {
 			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
