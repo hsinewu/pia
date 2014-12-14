@@ -20,7 +20,17 @@ class AuditController extends Controller {
 
 	public function report($id)
 	{
-		return View::make('audit/report')->with(array('id' => $id,'title' => "填寫稽核報告","time"=>date("Y-m-d H:i:s")));
+		$audit = PiaAudit::find($id);
+		$report = $audit->new_report();
+
+		// var_dump($report->r_time);
+		// die();
+
+		$result = array(
+			"audit" => $audit,
+			"report" => $report,
+		);
+		return View::make('audit/report')->with($result);
 	}
 
 }
