@@ -27,7 +27,7 @@
   <script type="text/javascript">
 
     $(document).ready(function(){
-      $('.selectpicker').each(function(cnt,ele){
+      $('.select').each(function(cnt,ele){
         ele = $(ele);
         ele.val(ele.attr('value'));
         ele.selectpicker('refresh');
