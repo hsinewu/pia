@@ -17,7 +17,7 @@
       break;
   }
 ?>
-<select class="selectpicker" name="{{ $name }}" value="{{ $value }}" data-live-search="true">
+<select class="select" name="{{ $name }}" value="{{ $value }}" data-live-search="true">
     <option value="">未選擇</option>
   @foreach($select_arr as $opt)
     <option value="{{$opt->value}}">{{$opt->text}}</option>

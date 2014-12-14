@@ -84,8 +84,10 @@ class AdminController extends BaseController {
 		$form_fields = $obj->form_fields;
 
 		$obj->p_pass = "";
-
-		return View::make('admin/edit')->with(array('type' => $type,'id' => $id,'title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
+		if($type=="audit" && $id==NULL)
+			return View::make('admin/audit')->with(array('type' => $type,'id' => $id,'title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
+		else
+			return View::make('admin/edit')->with(array('type' => $type,'id' => $id,'title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
 	}
 
 	public function edit_process($type,$id = null)
