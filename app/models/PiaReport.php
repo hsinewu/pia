@@ -27,21 +27,21 @@ class PiaReport extends PiaBase {
 		$validator = Validator::make
 		(
 		    array(
-	    		"r_id" => $this->r_id,
+	    		// "r_id" => $this->r_id,
 	    		"r_time" => $this->r_time,
 	    		"a_id" => $this->a_id,
-	    		"a_serial" => $this->a_serial,
-	    		"a_msg" => $this->a_msg,
+	    		"r_serial" => $this->r_serial,
+	    		"r_msg" => $this->r_msg,
 	    		//"r_auth_signed" => $this->r_auth_signed,
 	    		//"r_auditor_signed" => $this->r_auditor_signed,
 	    		//"r_comm_signed" => $this->r_comm_signed,
 		    	),
 		    array(
-		        "r_id" => 'required',
+		        // "r_id" => 'required',
 		        "r_time" => 'required',
 		        "a_id" => 'required',
-		        "a_serial" => 'required',
-		        "a_msg" => 'required',
+		        "r_serial" => 'required',
+		        "r_msg" => 'required',
 		        //"r_auth_signed" => 'required',
 		        //"r_auditor_signed" => 'required',
 		        //"r_comm_signed" => 'required',
@@ -50,6 +50,14 @@ class PiaReport extends PiaBase {
 		if($validator->fails())
 			throw new Exception($validator->messages());
 		parent::save($options);
+	}
+
+	public function new_item()
+	{
+		$item = new PiaReportItem();
+		$item->r_id = $this->r_id;
+
+		return $item;
 	}
 
 }

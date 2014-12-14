@@ -92,7 +92,7 @@ Route::group(array('before' => 'auth'), function()
     ));
 
     Route::post('/audit/report/{id}' , array(
-        'as' => 'audit_report',
+        'as' => 'audit_report_process',
         'uses' => 'AuditController@report_process'
     ));
 });

@@ -20,17 +20,49 @@ class AuditController extends Controller {
 
 	public function report($id)
 	{
-		$audit = PiaAudit::find($id);
-		$report = $audit->new_report();
+		try {
+			$audit = PiaAudit::find($id);
+			$report = $audit->new_report();
 
-		// var_dump($report->r_time);
-		// die();
+			$result = array(
+				"audit" => $audit,
+				'report' => $report,
+			);
+			return View::make('audit/report')->with($result);
+		} catch (Exception $e) {
+			Session::set("message",$e->getMessage());
+			return Redirect::route('audit_tasks');
+		}
+	}
 
-		$result = array(
-			"audit" => $audit,
-			"report" => $report,
-		);
-		return View::make('audit/report')->with($result);
+	public function report_process($id)
+	{
+		$input = Input::all();
+		
+		try {
+			$audit = PiaAudit::find($id);
+			$report = $audit->new_report();
+			$report->r_serial = Input::get('r_serial');
+			$report->r_time = Input::get('r_time');
+			$report->r_msg = Input::get('r_msg');
+			$report->save();
+			foreach ($input['ri_base'] as $key => $value) {
+				$item = $report->new_item();
+				$item->ri_base = $input['ri_base'][$key];
+				$item->ri_discover = $input['ri_discover'][$key];
+				$item->ri_recommand = $input['ri_recommand'][$key];
+				$item->save();
+			}
+			Session::set("message","回報成功!");
+			return Redirect::route('audit_tasks');
+		} catch (PDOException $e) {
+			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
+			return Redirect::route('audit_report',$id);
+		} catch (Exception $e) {
+			$report->delete();
+			Session::set("message","設定失敗!請確認您的輸入:...");
+			return Redirect::route('audit_report',$id);
+		}
 	}
 
 }

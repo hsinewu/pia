@@ -15,14 +15,14 @@ class PiaReportItem extends PiaBase {
 		$validator = Validator::make
 		(
 		    array(
-	    		"ri_id" => $this->ri_id,
+	    		// "ri_id" => $this->ri_id,
 	    		"r_id" => $this->r_id,
 	    		"ri_base" => $this->ri_base,
 	    		"ri_discover" => $this->ri_discover,
 	    		"ri_recommand" => $this->ri_recommand,
 		    	),
 		    array(
-		        "ri_id" => 'required',
+		        // "ri_id" => 'required',
 		        "r_id" => 'required',
 		        "ri_base" => 'required',
 		        "ri_discover" => 'required',
