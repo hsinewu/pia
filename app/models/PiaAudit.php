@@ -27,9 +27,9 @@ class PiaAudit extends PiaBase {
 		// hope I can remove this stupid thing in the future...
 		if(is_null($this->a_id))
 			$this->a_id = DB::table($this->table)->max('a_id') + 1;
-		if($this->org_id)
+		if(!$this->org_id)
 			$this->org_id = "NCHU";
-		if($this->ad_org_id)
+		if(!$this->ad_org_id)
 			$this->ad_org_id = "NCHU";
 		$validator = Validator::make
 		(
@@ -63,7 +63,7 @@ class PiaAudit extends PiaBase {
 			$report = new PiaReport();
 			$report->a_id = $this->a_id;
 			$report->r_time = date("Y-m-d H:i:s");
-			$report->r_serial = $this->ad_org_id . "-" . $this->ad_dept_id . "-" . ($this->count_dept_report() + 1);
+			$report->r_serial = $this->ad_org_id . "-" . $this->dept()->first()->code . "-" . ($this->count_dept_report() + 1);
 		}
 		return $report;
 	}
