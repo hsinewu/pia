@@ -38,14 +38,16 @@ class AuditController extends Controller {
 	public function report_process($id)
 	{
 		$input = Input::all();
-		var_dump($input);
-		die();
+		//var_dump($input);
+		//die();
 		try {
 			$audit = PiaAudit::find($id);
 			$report = $audit->new_report();
 			$report->r_serial = Input::get('r_serial');
 			$report->r_time = Input::get('r_time');
 			$report->r_msg = Input::get('r_msg');
+			if(Input::get('status')==0) $report->status = '暫存';
+			else $report->status = '儲存';
 			$report->save();
 			$count = 0;
 			foreach ($input['ri_base'] as $key => $value) {

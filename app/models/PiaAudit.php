@@ -21,7 +21,7 @@ class PiaAudit extends PiaBase {
 		array('person','p_id','p_id'),
 		array('dept','ad_dept_id','dept_id')
 	);
-	
+
 	public function save(array $options = array()){
 
 		// hope I can remove this stupid thing in the future...
@@ -56,10 +56,15 @@ class PiaAudit extends PiaBase {
 	public function new_report()
 	{
 		$report = $this->report();
+		//var_dump($report);
+		//die();
+		if($report->count()){
+			$report = $report->first();
+			if($report->status!='暫存'){
+				throw new Exception("this audit is already reported!");
+			}
 
-		if($report->count())
-			throw new Exception("this audit is already reported!");
-		else{
+		}else{
 			$report = new PiaReport();
 			$report->a_id = $this->a_id;
 			$report->r_time = date("Y-m-d H:i:s");
