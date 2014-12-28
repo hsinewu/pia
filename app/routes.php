@@ -8,13 +8,13 @@
 | Here is where you can register all of the routes for an application.
 | It's a breeze. Simply tell Laravel the URIs it should respond to
 | and give it the Closure to execute when that URI is requested.
-|
+| 
 */
 
 Route::group(array('before' => 'guest'), function()
 {
     ## 登入頁面
-    Route::get('/', function()  { return Redirect::route('login'); });
+    Route::get('/', function(){ /*redirect by filter*/ });
     Route::get('/login' , array(
         'as' => 'login',
         function() { return View::make('guest/login'); }
@@ -25,9 +25,9 @@ Route::group(array('before' => 'guest'), function()
         function() {
             $person = PiaPerson::get(Input::get('user'),md5(Input::get('pwd')));
             if($person){
-                Session::set("message","login success!");
+                Session::set("message","登入成功!");
                 Session::set('user',$person);
-                return Redirect::route('admin');
+                return Redirect::to('/');
             }
             else{
                 Session::set("message","帳號或密碼錯誤");
@@ -39,8 +39,8 @@ Route::group(array('before' => 'guest'), function()
 
 Route::group(array('before' => 'auth'), function()
 {
-    // Route::group(array('before' => 'admin'), function()
-    // {
+    Route::group(array('before' => 'is_admin'), function()
+    {
         Route::get('/admin' , array(
             'as' => 'admin',
             function() { return Redirect::route('admin_info',"dept"); }
@@ -74,27 +74,31 @@ Route::group(array('before' => 'auth'), function()
             'as' => 'admin_del',
             'uses' => 'AdminController@del'
         ));
-    // });
+    });
 
-    Route::get('/audit' , array(
-        'as' => 'audit',
-        function() { return Redirect::route('audit_tasks'); }
-    ));
+    Route::group(array('before' => 'is_audit'), function()
+    {
+        Route::get('/audit' , array(
+            'as' => 'audit',
+            function() { return Redirect::route('audit_tasks'); }
+        ));
 
-    Route::get('/audit/tasks' , array(
-        'as' => 'audit_tasks',
-        'uses' => 'AuditController@tasks'
-    ));
+        Route::get('/audit/tasks' , array(
+            'as' => 'audit_tasks',
+            'uses' => 'AuditController@tasks'
+        ));
 
-    Route::get('/audit/report/{id}' , array(
-        'as' => 'audit_report',
-        'uses' => 'AuditController@report'
-    ));
+        Route::get('/audit/report/{id}' , array(
+            'as' => 'audit_report',
+            'uses' => 'AuditController@report'
+        ));
 
-    Route::post('/audit/report/{id}' , array(
-        'as' => 'audit_report_process',
-        'uses' => 'AuditController@report_process'
-    ));
+        Route::post('/audit/report/{id}' , array(
+            'as' => 'audit_report_process',
+            'uses' => 'AuditController@report_process'
+        ));
+    });
+
 });
 
 Route::get('/logout' , array(

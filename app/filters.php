@@ -70,10 +70,41 @@ Route::filter('auth.basic', function()
 Route::filter('guest', function()
 {
 	// if (Auth::check()) return Redirect::to('/');
-	if(Session::get('user'))
-		return Redirect::route('admin');
+	$person = Session::get('user');
+	if($person){
+		switch ($person->p_level) {
+			case 0:
+				dd("Level 0 page not ready");
+		    case 1:
+		        return Redirect::route('audit');
+		        break;
+		    case 2:
+		        return Redirect::route('admin');
+		        break;
+		    default:
+		        dd("Unexpected person level in routes.");
+		        break;
+		}
+	}
 });
 
+Route::filter('is_admin', function()
+{
+	if (Session::get('user')->p_level!=2)
+	{
+		Session::set("message","您沒有造訪該網頁的權限");
+		return Redirect::to('/');
+	}
+});
+
+Route::filter('is_audit', function()
+{
+	if (Session::get('user')->p_level!=1)
+	{
+		Session::set("message","您沒有造訪該網頁的權限");
+		return Redirect::to('/');
+	}
+});
 /*
 |--------------------------------------------------------------------------
 | CSRF Protection Filter
