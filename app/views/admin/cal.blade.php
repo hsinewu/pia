@@ -64,8 +64,7 @@
       @include("menu")
     </div>
     <div class="col-xs-9">
-
-      <div class="alert alert-info">{{ $title }}</div>
+S
       <div id="calendar"></div>
     </div>
   </div>

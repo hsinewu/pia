@@ -151,7 +151,7 @@
         </div>
 
         <div class="pull-right add-item">
-          <a href="#">+ 新增稽核單位</a>
+          <a href="#">+ 新增更多受稽單位</a>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">

@@ -38,7 +38,8 @@ class AuditController extends Controller {
 	public function report_process($id)
 	{
 		$input = Input::all();
-		
+		var_dump($input);
+		die();
 		try {
 			$audit = PiaAudit::find($id);
 			$report = $audit->new_report();
