@@ -34,4 +34,12 @@ class PiaReportItem extends PiaBase {
 		parent::save($options);
 	}
 
+	public function get_base_str(){
+		$src = Config::get('pia_report');
+		foreach ($src as $key => $value) {
+			if($value->value == $this->ri_base)
+				return $value->text;
+		}
+	}
+
 }

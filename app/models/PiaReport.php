@@ -60,4 +60,19 @@ class PiaReport extends PiaBase {
 		return $item;
 	}
 
+	public function items()
+	{
+		return $this->hasMany('PiaReportItem','r_id','r_id');
+	}
+
+	public function gen_view(){
+		return View::make('paper/report', ['report' => $this, 'items' => $this->items()->get()->all()]);
+	}
+
+	public function gen_paper(){
+		$pdf = App::make('dompdf');
+		$pdf->loadHTML($this->gen_view()->render());
+		return $pdf->stream();
+	}
+
 }
