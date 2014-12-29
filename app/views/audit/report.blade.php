@@ -13,6 +13,16 @@
     table.table tr.sample{
       display: none;
     }
+    .add-item{
+      padding-bottom: 10px;
+    }
+
+    div.item{
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-radius: 6px;
+    }
+
   </style>
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.datetimepicker.css'); }}"/ >
 @stop
@@ -28,16 +38,19 @@
     var i = 1;
 
     function add_item(){
-      var new_item = $('#sample-item').clone();
+      var new_item = $('#sample-item').clone().attr({"class":"item", "id":"item"+i});
       new_item.find("textarea,select").each(function(cnt,ele){
         $(ele).attr('name',$(ele).attr('name') + '[' + i + ']');
       });
+      if(i%2==0){
+        new_item.attr("style", "background-color: #eee;");
+      }
       new_item.find('select').each(function(cnt,ele){
         ele = $(ele);
         ele.val(ele.attr('value'));
         ele.selectpicker('refresh');
       });
-      new_item.removeClass("hidden").insertBefore('.item-end');
+      new_item.removeClass("hidden").insertBefore('.add-item');
       i++;
       return false;
     }
@@ -69,7 +82,6 @@
     <div class="col-xs-9">
 
     <div id="sample-item" class="hidden">
-      <hr>
       <div class="form-group">
         <label class="col-sm-2 control-label">標準條文 / 稽核項目</label>
         <div class="col-sm-10">
@@ -97,7 +109,10 @@
             <input type="date_timepicker" name="r_time" class="form-control" placeholder="填表日期" value="{{ $report->r_time }}">
           </div>
         </div>
-        <hr class="item-end">
+        <div class="col-md-12 add-item">
+          <a href="#" class="pull-right">+ 新增稽核發現</a>
+        </div>
+        <hr>
         <div class="form-group">
           <label class="col-sm-2 control-label">其他建議</label>
           <div class="col-sm-10">
@@ -106,8 +121,8 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">送出</button>
-            <button class="btn btn-default add-item">增加稽核發現</button>
+            <button type="submit" name="status" value="1" class="btn btn-default">送出</button>
+            <button type="submit" name="status" value="0" class="btn btn-default">暫存</button>
           </div>
         </div>
       {{ Form::close() }}

@@ -56,7 +56,7 @@
               @foreach($columns as $v)
                 <td>{{ $v }}</td>
               @endforeach
-              <td class="action">動作</td>
+              <td>動作</td>
             </tr>
           </thead>
           <tbody>

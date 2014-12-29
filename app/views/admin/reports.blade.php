@@ -39,9 +39,7 @@
         {{ $title }}
 
           <!-- Button trigger modal -->
-          <a class="btn btn-primary pull-right create" href="{{ route('admin_edit', $type) }}">
-            ＋ 新增
-          </a>
+
           <!-- Modal -->
         </div>
 
@@ -59,22 +57,18 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              @foreach($columns as $v)
-                <td>{{ $v }}</td>
-              @endforeach
+              <td>流水號</td>
+              <td>狀態</td>
               <td>動作</td>
             </tr>
           </thead>
           <tbody>
-            @foreach($info as $i)
+            @foreach($reports as $r)
               <tr>
-                @foreach($columns as $c => $v)
-                  <td>{{ $i->$c }}</td>
-                @endforeach
+                  <td>{{ $r->r_serial }}</td>
+                  <td>{{ $r->status }}</td>
                 <td>
-                  <a href="{{ route('admin_edit', array($type,$i->{$obj->getPK()})) }}">Edit</a>
-                  or
-                  <a href="{{ route('admin_del', array($type,$i->{$obj->getPK()})) }}">Delete</a>
+                  -
                 </td>
               </tr>
             @endforeach
