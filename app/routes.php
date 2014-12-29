@@ -10,11 +10,15 @@
 | and give it the Closure to execute when that URI is requested.
 | 
 */
-
+Route::get('/admin/reports' , array(
+    'as' => 'admin_reports',
+    'uses' => 'AdminController@reports'
+    #function() { return Redirect::route('admin'); }
+));
 Route::group(array('before' => 'guest'), function()
 {
     ## 登入頁面
-    Route::get('/', function(){ /*redirect by filter*/ });
+    Route::get('/', function(){ return Redirect::route('login'); });
     Route::get('/login' , array(
         'as' => 'login',
         function() { return View::make('guest/login'); }
@@ -50,6 +54,12 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AdminController@cal'
         ));
 
+        // Route::get('/admin/reports' , array(
+        //     'as' => 'admin_reports',
+        //     #'uses' => 'AdminController@reports'
+        //     function() { return Redirect::route('admin'); }
+        // ));
+
         Route::get('/admin/{type}' , array(
             'as' => 'admin_info',
             'uses' => 'AdminController@info'
@@ -74,6 +84,8 @@ Route::group(array('before' => 'auth'), function()
             'as' => 'admin_del',
             'uses' => 'AdminController@del'
         ));
+        
+        //Route::get('/test', function(){ return Redirect::route('admin'); });
     });
 
     Route::group(array('before' => 'is_audit'), function()
