@@ -13,6 +13,10 @@
     @else
     <option value="{{$opt->value}}">{{$opt->value}} {{$opt->text}}</option>
     @endif
+
+    @if( $is_head == count($select_arr) )
+    </optgroup>
+    @endif
   @endforeach
 </select>
 

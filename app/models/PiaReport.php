@@ -21,7 +21,7 @@ class PiaReport extends PiaBase {
 	// 	array('person','p_id','p_id'),
 	// 	array('dept','ad_dept_id','dept_id')
 	// );
-	
+
 	public function save(array $options = array()){
 
 		$validator = Validator::make
@@ -58,6 +58,10 @@ class PiaReport extends PiaBase {
 		$item->r_id = $this->r_id;
 
 		return $item;
+	}
+
+	public function item(){
+		return $this->hasMany("PiaReportItem","r_id");
 	}
 
 }

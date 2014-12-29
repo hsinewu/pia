@@ -23,10 +23,12 @@ class AuditController extends Controller {
 		try {
 			$audit = PiaAudit::find($id);
 			$report = $audit->new_report();
+			$obj=$report->item();
 
 			$result = array(
 				"audit" => $audit,
 				'report' => $report,
+				'obj'=>$obj,
 			);
 			return View::make('audit/report')->with($result);
 		} catch (Exception $e) {
