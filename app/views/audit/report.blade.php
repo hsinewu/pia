@@ -56,7 +56,7 @@
     }
 
     $(document).ready(function(){
-      $('form .selectpicker').each(function(cnt,ele){
+      $('form .select').each(function(cnt,ele){
         ele = $(ele);
         ele.val(ele.attr('value'));
         ele.selectpicker('refresh');
@@ -109,6 +109,22 @@
             <input type="date_timepicker" name="r_time" class="form-control" placeholder="填表日期" value="{{ $report->r_time }}">
           </div>
         </div>
+        @foreach($obj->get() as $k )
+          <div class="item">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">標準條文 / 稽核項目</label>
+              <div class="col-sm-10">
+                @include('macro/select_report',array(
+                  'name' => "ri_base",
+                  'value' => $k->ri_base,
+                ))
+              </div>
+            </div>
+            <textarea class="form-control" name="ri_discover" rows="3" placeholder="稽核發現">{{ $k->ri_discover }}</textarea>
+            <div class="row">&nbsp;</div>
+            <textarea class="form-control" name="ri_recommand" rows="3" placeholder="稽核建議">{{ $k->ri_recommand }}</textarea>
+          </div>
+        @endforeach
         <div class="col-md-12 add-item">
           <a href="#" class="pull-right">+ 新增稽核發現</a>
         </div>
