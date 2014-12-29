@@ -149,4 +149,12 @@ class AdminController extends BaseController {
 		return Redirect::route('admin_info',$type);
 	}
 
+	public function reports(){
+		$reports = PiaReport::all();
+		return View::make('admin/reports')->with(
+			array(
+				'reports' => $reports,
+				'title' => '回報狀態',
+				));
+	}
 }
