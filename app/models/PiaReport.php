@@ -60,6 +60,11 @@ class PiaReport extends PiaBase {
 		return $item;
 	}
 
+	public function audit()
+	{
+		return $this->hasOne('PiaAudit','a_id','a_id');
+	}
+
 	public function items()
 	{
 		return $this->hasMany('PiaReportItem','r_id','r_id');
@@ -73,6 +78,33 @@ class PiaReport extends PiaBase {
 		$pdf = App::make('dompdf');
 		$pdf->loadHTML($this->gen_view()->render());
 		return $pdf->stream();
+	}
+
+	public function send_email(){
+		$dept = $this->audit()->first()->dept()->first();
+		$mail_addr = $dept->email;
+		$dept_name = $dept->dept_name;
+
+		define("mail_addr", $mail_addr);
+		define("dept_name", $dept_name);
+
+		$pdf_name = storage_path("pdf_tmp/" . rand() . ".pdf");
+		file_put_contents($pdf_name, $this->gen_paper());
+		define("pdf_name", $pdf_name);
+
+		$es = new PiaEmailSign();
+		$es->r_id = $this->r_id;
+		$es->es_code = md5($this->r_time . $this->r_msg . rand());
+		$es->es_used = false;
+		$es->save();
+
+		Mail::send('emails/sign', ['sign_url' => route("email_sign",$es->es_code)], function($message)
+		{
+			$message
+			->to( mail_addr, dept_name )
+			->subject("您好，這是個資稽核系統，這裏有份稽核報告請您確認")
+			->attach(pdf_name, array('as' => "個資稽核報告.pdf"));
+		});
 	}
 
 }

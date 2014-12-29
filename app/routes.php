@@ -122,9 +122,32 @@ Route::get('/logout' , array(
     }
 ));
 
+Route::get('/sign/{code}' , array(
+    'as' => 'email_sign',
+    function($code) {
+        try {
+            $es = PiaEmailSign::where('es_code', '=', $code)->firstOrFail();
+            if($es->es_used)
+                throw new Exception("已經確認過了！", 1);
+
+            $es->es_used = true;
+            $es->save();
+
+            // TODO: 把這個部分寫進 Controller 裡頭
+            Session::set("message","確認成功！");
+        } catch (Exception $e) {
+            Session::set("message",$e->getMessage());
+        }
+        return Redirect::to('/');
+    }
+));
+
 Route::get('/test' , array(
     'as' => 'test',
     function() {
-        return PiaReport::all()->first()->gen_view();
+        // return PiaReport::all()->first()->gen_paper();
+
+        PiaReport::all()->first()->send_email();
+        return "Success ... perhaps.";
     }
 ));

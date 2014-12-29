@@ -4,7 +4,7 @@
 <style>
   body { font-family: DejaVu Sans, sans-serif; }
 </style>
-<title>個資</title>
+<title>個人資料管理制度內部稽核報告</title>
 </head>
 <body>
   <h1 style="text-align: center;">個人資料管理制度內部稽核報告</h1>

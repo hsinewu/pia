@@ -42,7 +42,7 @@ class PiaDept extends PiaBase {
 	    		//"code" => $this->code,
 		    	),
 		    array(
-		        'group_name' => 'required',
+		        'group_id' => 'required',
 				'dept_name' => 'required',
 				'email' => 'required|email',
 				//'code' => 'required',
