@@ -23,7 +23,7 @@ class AuditController extends Controller {
 		try {
 			$audit = PiaAudit::find($id);
 			$report = $audit->new_report();
-			$obj=$report->item();
+			$obj=$report->items();
 
 			$result = array(
 				"audit" => $audit,
