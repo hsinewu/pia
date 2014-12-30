@@ -36,15 +36,12 @@
 
   <script type="text/javascript">
     var i = 1;
-
     function add_item(){
-      var new_item = $('#sample-item').clone().attr({"class":"item", "id":"item"+i});
+      var new_item = $('#sample-item').clone().attr({class:"item", id:"item"+i});
       new_item.find("textarea,select").each(function(cnt,ele){
         $(ele).attr('name',$(ele).attr('name') + '[' + i + ']');
       });
-      if(i%2==0){
-        new_item.attr("style", "background-color: #eee;");
-      }
+
       new_item.find('select').each(function(cnt,ele){
         ele = $(ele);
         ele.val(ele.attr('value'));
@@ -52,6 +49,8 @@
       });
       new_item.removeClass("hidden").insertBefore('.add-item');
       i++;
+
+      $('.item').filter(':odd').css('background-color', '#eee');
       return false;
     }
 
@@ -61,11 +60,22 @@
         ele.val(ele.attr('value'));
         ele.selectpicker('refresh');
       });
+      $('.item').filter(':odd').css('background-color', '#eee');
 
       jQuery('form [type^=date_timepicker]').datetimepicker();
 
       $('.add-item').click(add_item);
-      add_item();
+      if($('.item').length==0) add_item();
+      else{
+        for(i=0; i<$('.item').length; i++){
+          $('.item').eq(i).attr({"id":"item"+(i+1)});
+          $('.item').eq(i).find("textarea,select").each(function(cnt,ele){
+            $(ele).attr('name',$(ele).attr('name') + '[' + (i+1) + ']');
+          });
+        }
+        i++;
+      }
+
 
     });
 
