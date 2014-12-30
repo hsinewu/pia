@@ -13,7 +13,10 @@
 Route::get('/admin/reports' , array(
     'as' => 'admin_reports',
     'uses' => 'AdminController@reports'
-    #function() { return Redirect::route('admin'); }
+));
+Route::get('/audit/calendar' , array(
+    'as' => 'audit_calendar',
+    'uses' => 'AuditController@calendar'
 ));
 Route::group(array('before' => 'guest'), function()
 {

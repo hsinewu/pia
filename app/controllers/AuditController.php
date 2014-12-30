@@ -74,4 +74,19 @@ class AuditController extends Controller {
 		}
 	}
 
+	public function calendar(){
+		$person = Session::get('user');
+		//TODO: select corresponding records, passing&rendering
+		$obj = new PiaAudit();
+		$audits = DB::table('auditor')
+			->where('p_id', $person->p_id)
+			->join('dept','auditor.ad_dept_id','=','dept.dept_id')
+			->get();
+		//dd($audits);
+		$info = $obj->info_table(array('ad_time_end'));
+		return View::make('audit/calendar')->with(array(
+			"info" => $info,
+			"audits" => $audits,
+		));
+	}
 }
