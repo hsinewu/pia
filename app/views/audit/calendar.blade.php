@@ -42,11 +42,11 @@
 
         },
         events: [
-          @foreach($info as $row)
+          @foreach($audits as $a)
           {
-            title: '{{ $row->p_name }} => {{ $row->dept_name }}',
-            start: '{{ $row->ad_time_from }}',
-            end: '{{ $row->ad_time_end }}'
+            title: '{{ $a->dept_name }}',
+            start: '{{ $a->ad_time_from }}',
+            end: '{{ $a->ad_time_end }}'
           },
           @endforeach
         ]
@@ -61,7 +61,7 @@
 
   <div class="row">
     <div class="col-xs-3">
-      @include("menu")
+      @include("audit_menu")
     </div>
     <div class="col-xs-9">
       <div id="calendar"></div>

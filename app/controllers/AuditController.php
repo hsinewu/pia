@@ -74,4 +74,13 @@ class AuditController extends Controller {
 		}
 	}
 
+	public function calendar(){
+		$audits = DB::table('auditor')
+			->where('p_id', Session::get('user')->p_id)
+			->join('dept','auditor.ad_dept_id','=','dept.dept_id')
+			->get();
+		return View::make('audit/calendar')->with(array(
+			"audits" => $audits,
+		));
+	}
 }
