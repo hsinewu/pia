@@ -148,9 +148,16 @@ Route::get('/sign/{code}' , array(
 Route::get('/test' , array(
     'as' => 'test',
     function() {
-        // return PiaReport::all()->first()->gen_paper();
+        // $pdf_name = storage_path("pdf_tmp/000.pdf");
+        // PDF::setOutputMode('F');
+        // PiaReport::all()->first()->gen_paper($pdf_name);
+        // return Response::download($pdf_name);
 
         PiaReport::all()->first()->send_email();
         return "Success ... perhaps.";
+        
+        // PDF::setOutputMode('F');
+        // PDF::url('http://taichunmin.idv.tw',$pdf_name);
+        // return Response::download($pdf_name . ".pdf");
     }
 ));

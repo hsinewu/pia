@@ -74,10 +74,8 @@ class PiaReport extends PiaBase {
 		return View::make('paper/report', ['report' => $this, 'items' => $this->items()->get()->all()]);
 	}
 
-	public function gen_paper(){
-		$pdf = App::make('dompdf');
-		$pdf->loadHTML($this->gen_view()->render());
-		return $pdf->stream();
+	public function gen_paper($fname){
+		PDF::html('paper/report', ['report' => $this, 'items' => $this->items()->get()->all()], $fname);
 	}
 
 	public function send_email(){
@@ -88,9 +86,12 @@ class PiaReport extends PiaBase {
 		define("mail_addr", $mail_addr);
 		define("dept_name", $dept_name);
 
-		$pdf_name = storage_path("pdf_tmp/" . rand() . ".pdf");
-		file_put_contents($pdf_name, $this->gen_paper());
-		define("pdf_name", $pdf_name);
+		$pdf_path = storage_path("pdf_tmp/" . rand());
+		$full_pdf_path = $pdf_path . ".pdf";
+		if(file_exists($full_pdf_path))
+			unlink($full_pdf_path);
+		$this->gen_paper($pdf_path);
+		define("pdf_name", $full_pdf_path);
 
 		$es = new PiaEmailSign();
 		$es->r_id = $this->r_id;

@@ -5,8 +5,14 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"barryvdh/laravel-dompdf": "0.4.*"
+		"nitmedia/wkhtml2pdf": "dev-master"
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/chgu82837/wkhtml2pdf"
+		}
+	],
 	"autoload": {
 		"classmap": [
 			"app/commands",

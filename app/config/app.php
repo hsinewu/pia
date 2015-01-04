@@ -121,7 +121,9 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-		'Barryvdh\DomPDF\ServiceProvider',
+		// 'Barryvdh\DomPDF\ServiceProvider',
+		// 'Anouar\Fpdf\FpdfServiceProvider',
+		'Nitmedia\Wkhtml2pdf\Wkhtml2pdfServiceProvider',
 
 	),
 
@@ -189,7 +191,9 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-		'PDF'             => 'Barryvdh\DomPDF\Facade',
+		// 'PDF'             => 'Barryvdh\DomPDF\Facade',
+		// 'Fpdf'            => 'Anouar\Fpdf\Fpdf',
+		'PDF'             => 'Nitmedia\Wkhtml2pdf\Facades\Wkhtml2pdf',
 
 	),
 
