@@ -105,6 +105,15 @@ Route::filter('is_audit', function()
 		return Redirect::to('/');
 	}
 });
+
+Route::filter('is_auditee', function()
+{
+	if (Session::get('user')->p_level!=0)
+	{
+		Session::set("message","您沒有造訪該網頁的權限");
+		return Redirect::to('/');
+	}
+});
 /*
 |--------------------------------------------------------------------------
 | CSRF Protection Filter
