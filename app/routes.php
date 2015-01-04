@@ -134,37 +134,12 @@ Route::get('/logout' , array(
 
 Route::get('/sign/{code}' , array(
     'as' => 'email_sign',
-    function($code) {
-        try {
-            $es = PiaEmailSign::where('es_code', '=', $code)->firstOrFail();
-            if($es->es_used)
-                throw new Exception("已經確認過了！", 1);
-
-            $es->es_used = true;
-            $es->save();
-
-            // TODO: 把這個部分寫進 Controller 裡頭
-            Session::set("message","確認成功！");
-        } catch (Exception $e) {
-            Session::set("message",$e->getMessage());
-        }
-        return Redirect::to('/');
-    }
+    'uses' => 'AuditController@sign'
 ));
 
 Route::get('/test' , array(
     'as' => 'test',
     function() {
-        // $pdf_name = storage_path("pdf_tmp/000.pdf");
-        // PDF::setOutputMode('F');
-        // PiaReport::all()->first()->gen_paper($pdf_name);
-        // return Response::download($pdf_name);
-
-        PiaReport::all()->first()->send_email();
-        return "Success ... perhaps.";
-        
-        // PDF::setOutputMode('F');
-        // PDF::url('http://taichunmin.idv.tw',$pdf_name);
-        // return Response::download($pdf_name . ".pdf");
+        return "preserved for testing";
     }
 ));

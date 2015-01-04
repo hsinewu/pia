@@ -22,6 +22,8 @@ class PiaReport extends PiaBase {
 	// 	array('dept','ad_dept_id','dept_id')
 	// );
 
+	public $level2status = ['暫存','儲存','受稽主管已簽','稽核小組已簽','完成簽署'];
+
 	public function save(array $options = array()){
 
 		$validator = Validator::make
@@ -52,6 +54,35 @@ class PiaReport extends PiaBase {
 		parent::save($options);
 	}
 
+	public function set_state_level($level)
+	{
+		if(!in_array($level, array_keys($this->level2status)))
+			throw new Exception("Unknown level!");
+		$this->status = $this->level2status[$level];
+	}
+
+	public function is_temp()
+	{
+		return $this->status == '暫存';
+	}
+
+	public function is_saved()
+	{
+		return $this->status == '儲存';
+	}
+
+	public function is_finished()
+	{
+		return $this->status == '完成簽署';
+	}
+
+	public function next_level()
+	{
+		$this->set_state_level(array_flip($this->level2status)[$this->status] + 1);
+		$this->save();
+		return $this->is_finished();
+	}
+
 	public function new_item()
 	{
 		$item = new PiaReportItem();
@@ -79,9 +110,26 @@ class PiaReport extends PiaBase {
 	}
 
 	public function send_email(){
-		$dept = $this->audit()->first()->dept()->first();
-		$mail_addr = $dept->email;
-		$dept_name = $dept->dept_name;
+		switch ($this->status) {
+			case '儲存':
+				$dept = $this->audit()->first()->dept()->first();
+				$mail_addr = $dept->email;
+				$dept_name = $dept->dept_name;
+				break;
+			case '受稽主管已簽':
+				$person = PiaPerson::get_pia_team();
+				$mail_addr = $person->p_mail;
+				$dept_name = "資安暨 個資保護 稽核小組:" . $person->p_name;
+				break;
+			case '稽核小組已簽':
+				$person = PiaPerson::get_pia_committee();
+				$mail_addr = $person->p_mail;
+				$dept_name = "資訊安全暨 個人資料保護 推動委員會:" . $person->p_name;
+				break;
+			default:
+				throw new Exception("Invalid status!");
+				break;
+		}
 
 		define("mail_addr", $mail_addr);
 		define("dept_name", $dept_name);

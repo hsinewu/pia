@@ -60,7 +60,7 @@ class PiaAudit extends PiaBase {
 		//die();
 		if($report->count()){
 			$report = $report->first();
-			if($report->status!='暫存'){
+			if(!$report->is_temp()){
 				throw new Exception("this audit is already reported!");
 			}
 

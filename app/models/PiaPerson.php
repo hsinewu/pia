@@ -98,4 +98,14 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 	public function isAdmin(){
 		return $this->p_level == 2;
 	}
+
+	public static function get_pia_team()
+	{
+		return self::where('p_level','=',3)->firstOrFail();
+	}
+
+	public static function get_pia_committee()
+	{
+		return self::where('p_level','=',4)->firstOrFail();
+	}
 }

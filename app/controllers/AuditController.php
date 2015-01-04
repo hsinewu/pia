@@ -47,8 +47,11 @@ class AuditController extends Controller {
 			$report->r_serial = $input['r_serial'];
 			$report->r_time = $input['r_time'];
 			$report->r_msg = $input['r_msg'];
-			if(Input::get('status')==0) $report->status = '暫存';
-			else $report->status = '儲存';
+
+			if(!in_array(Input::get('status'), [0,1]))
+				throw new Exception("Illegal status!");
+
+			$report->set_state_level(Input::get('status'));
 			$report->save();
 
 			$count=0;
@@ -86,7 +89,16 @@ class AuditController extends Controller {
 				$item->save();
 				++$count;
 			}*/
-			Session::set("message","共".$count."筆發現回報成功!");
+			
+
+			if($report->is_saved()){
+				$report->send_email();
+				Session::set("message","共".$count."筆發現已儲存，並且發信通知成功!");
+			}
+			else{
+				Session::set("message","共".$count."筆發現暫存成功!");
+			}
+
 			return Redirect::route('audit_tasks');
 		} catch (PDOException $e) {
 			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
@@ -106,5 +118,28 @@ class AuditController extends Controller {
 		return View::make('audit/calendar')->with(array(
 			"audits" => $audits,
 		));
+	}
+
+	public function sign($code)
+	{
+		try {
+		    $es = PiaEmailSign::where('es_code', '=', $code)->firstOrFail();
+		    if($es->es_used)
+		        throw new Exception("已經確認過了！", 1);
+
+		    $es->es_used = true;
+		    $es->save();
+
+		    $report = $es->report()->firstOrFail();
+		    if(!$report->next_level()){
+		    	$report->send_email();
+		    	Session::set("message","確認成功，並成功通知下一位主管！");
+		    }
+		    else
+		    	Session::set("message","確認成功！");
+		} catch (Exception $e) {
+		    Session::set("message",$e->getMessage());
+		}
+		return Redirect::to('/');
 	}
 }

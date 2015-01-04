@@ -40,4 +40,9 @@ class PiaEmailSign extends PiaBase {
 	// 	}
 	// }
 
+	public function report()
+	{
+		return $this->hasOne("PiaReport","r_id","r_id");
+	}
+
 }
