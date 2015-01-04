@@ -18,6 +18,14 @@ Route::get('/audit/calendar' , array(
     'as' => 'audit_calendar',
     'uses' => 'AuditController@calendar'
 ));
+Route::get('/auditee' , array(
+    'as' => 'auditee',
+    function() { return Redirect::route('auditee_status'); }
+));
+Route::get('/auditee/status' , array(
+    'as' => 'auditee_status',
+    'uses' => 'AuditeeController@status'
+));
 Route::group(array('before' => 'guest'), function()
 {
     ## 登入頁面

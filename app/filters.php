@@ -74,7 +74,7 @@ Route::filter('guest', function()
 	if($person){
 		switch ($person->p_level) {
 			case 0:
-				dd("Level 0 page not ready");
+				return Redirect::route('auditee');
 		    case 1:
 		        return Redirect::route('audit');
 		        break;
