@@ -54,21 +54,19 @@ class AuditController extends Controller {
 			$count=0;
 			foreach ($input['ri_base'] as $key => $value){
 				$items[ $key ] = [
-					'ri_id' => isset($input['ri_id'][$key]) ? $input['ri_id'][$key] : null ,
+					// 'ri_id' => isset($input['ri_id'][$key]) ? $input['ri_id'][$key] : null ,
 					'ri_base' => $input['ri_base'][$key],
 					'ri_discover' => $input['ri_discover'][$key],
 					'ri_recommand' => $input['ri_recommand'][$key],
 				];
-				if($items[$key]['ri_id'] == null)
-					$item = $report->new_item();
-				else
+				if(!isset($input['ri_id'][$key])){
+					$item = new PiaReportItem($items[ $key ]);
+					$report->items()->save($item);
+				}
+				else{
 					$item = PiaReportItem::find($input['ri_id'][$key]);
-				$item->ri_base = $input['ri_base'][$key];
-				$item->ri_discover = $input['ri_discover'][$key];
-				$item->ri_recommand = $input['ri_recommand'][$key];
-				$item->save();
-
-
+					$item->update($items[ $key ]);
+				}
 				++$count;
 			}
 			//echo '<pre>'.var_export($items, true).'</pre>';
