@@ -10,14 +10,7 @@
 | and give it the Closure to execute when that URI is requested.
 | 
 */
-Route::get('/admin/reports' , array(
-    'as' => 'admin_reports',
-    'uses' => 'AdminController@reports'
-));
-Route::get('/audit/calendar' , array(
-    'as' => 'audit_calendar',
-    'uses' => 'AuditController@calendar'
-));
+
 Route::group(array('before' => 'guest'), function()
 {
     ## 登入頁面
@@ -57,11 +50,10 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AdminController@cal'
         ));
 
-        // Route::get('/admin/reports' , array(
-        //     'as' => 'admin_reports',
-        //     #'uses' => 'AdminController@reports'
-        //     function() { return Redirect::route('admin'); }
-        // ));
+        Route::get('/admin/reports' , array(
+            'as' => 'admin_reports',
+            'uses' => 'AdminController@reports'
+        ));
 
         Route::get('/admin/{type}' , array(
             'as' => 'admin_info',
@@ -88,7 +80,6 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AdminController@del'
         ));
         
-        //Route::get('/test', function(){ return Redirect::route('admin'); });
     });
 
     Route::group(array('before' => 'is_audit'), function()
@@ -103,6 +94,11 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AuditController@tasks'
         ));
 
+        Route::get('/audit/calendar' , array(
+            'as' => 'audit_calendar',
+            'uses' => 'AuditController@calendar'
+        ));
+
         Route::get('/audit/report/{id}' , array(
             'as' => 'audit_report',
             'uses' => 'AuditController@report'
@@ -111,6 +107,17 @@ Route::group(array('before' => 'auth'), function()
         Route::post('/audit/report/{id}' , array(
             'as' => 'audit_report_process',
             'uses' => 'AuditController@report_process'
+        ));
+    });
+
+    Route::group(array('before' => 'is_auditee'), function(){
+        Route::get('/auditee' , array(
+            'as' => 'auditee',
+            function() { return Redirect::route('auditee_status'); }
+        ));
+        Route::get('/auditee/status' , array(
+            'as' => 'auditee_status',
+            'uses' => 'AuditeeController@status'
         ));
     });
 

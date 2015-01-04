@@ -23,12 +23,12 @@ class AuditController extends Controller {
 		try {
 			$audit = PiaAudit::find($id);
 			$report = $audit->new_report();
-			$obj=$report->items();
+			$items=$report->items();
 
 			$result = array(
 				"audit" => $audit,
 				'report' => $report,
-				'obj'=>$obj,
+				'items'=>$items,
 			);
 			return View::make('audit/report')->with($result);
 		} catch (Exception $e) {
@@ -40,36 +40,60 @@ class AuditController extends Controller {
 	public function report_process($id)
 	{
 		$input = Input::all();
-		//var_dump($input);
-		//die();
+		// var_dump($input);
 		try {
 			$audit = PiaAudit::find($id);
 			$report = $audit->new_report();
-			$report->r_serial = Input::get('r_serial');
-			$report->r_time = Input::get('r_time');
-			$report->r_msg = Input::get('r_msg');
+			$report->r_serial = $input['r_serial'];
+			$report->r_time = $input['r_time'];
+			$report->r_msg = $input['r_msg'];
 			if(Input::get('status')==0) $report->status = '暫存';
 			else $report->status = '儲存';
 			$report->save();
-			$count = 0;
+
+			$count=0;
+			foreach ($input['ri_base'] as $key => $value){
+				$items[ $key ] = [
+					// 'ri_id' => isset($input['ri_id'][$key]) ? $input['ri_id'][$key] : null ,
+					'ri_base' => $input['ri_base'][$key],
+					'ri_discover' => $input['ri_discover'][$key],
+					'ri_recommand' => $input['ri_recommand'][$key],
+				];
+				if(!isset($input['ri_id'][$key])){
+					$item = new PiaReportItem($items[ $key ]);
+					$report->items()->save($item);
+				}
+				else{
+					$item = PiaReportItem::find($input['ri_id'][$key]);
+					$item->update($items[ $key ]);
+				}
+				++$count;
+			}
+			//echo '<pre>'.var_export($items, true).'</pre>';
+			//die();
+			/*$count = 0;
+			$items = $report->items();
+			$items->delete();
 			foreach ($input['ri_base'] as $key => $value) {
 				if( $input['ri_base'][$key]=="" || $input['ri_discover'][$key]=="" || $input['ri_recommand'][$key]=="" )
 						continue;
-				$item = $report->new_item();
+				//if() $item = $report->items()::find($input['ri_id'][$key]);
+				//else
+					$item = $report->new_item();
 				$item->ri_base = $input['ri_base'][$key];
 				$item->ri_discover = $input['ri_discover'][$key];
 				$item->ri_recommand = $input['ri_recommand'][$key];
 				$item->save();
 				++$count;
-			}
+			}*/
 			Session::set("message","共".$count."筆發現回報成功!");
 			return Redirect::route('audit_tasks');
 		} catch (PDOException $e) {
 			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
 			return Redirect::route('audit_report',$id);
 		} catch (Exception $e) {
-			$report->delete();
-			Session::set("message","設定失敗!請確認您的輸入:...");
+			//$report->delete();
+			Session::set("message","設定失敗!請確認您的輸入:...".$e->getMessage());
 			return Redirect::route('audit_report',$id);
 		}
 	}

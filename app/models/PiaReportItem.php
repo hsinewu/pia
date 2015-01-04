@@ -8,8 +8,9 @@ class PiaReportItem extends PiaBase {
 	 * @var string
 	 */
 	protected $table = 'report_item';
+  protected $guarded = array('ri_id', 'r_id');
 	protected $primaryKey = 'ri_id';
-	
+
 	public function save(array $options = array()){
 
 		$validator = Validator::make

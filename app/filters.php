@@ -74,7 +74,7 @@ Route::filter('guest', function()
 	if($person){
 		switch ($person->p_level) {
 			case 0:
-				dd("Level 0 page not ready");
+				return Redirect::route('auditee');
 		    case 1:
 		        return Redirect::route('audit');
 		        break;
@@ -100,6 +100,15 @@ Route::filter('is_admin', function()
 Route::filter('is_audit', function()
 {
 	if (Session::get('user')->p_level!=1)
+	{
+		Session::set("message","您沒有造訪該網頁的權限");
+		return Redirect::to('/');
+	}
+});
+
+Route::filter('is_auditee', function()
+{
+	if (Session::get('user')->p_level!=0)
 	{
 		Session::set("message","您沒有造訪該網頁的權限");
 		return Redirect::to('/');

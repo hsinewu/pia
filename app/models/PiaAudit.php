@@ -41,11 +41,11 @@ class PiaAudit extends PiaBase {
 	    		"ad_time_end" => $this->ad_time_from
 		    	),
 		    array(
-		        'event_id' => 'required',
-		        'p_id' => 'required',
-		        'ad_dept_id' => 'required',
-				"ad_time_from" => 'required',
-				"ad_time_end" => 'required'
+	        'event_id' => 'required',
+	        'p_id' => 'required',
+	        'ad_dept_id' => 'required',
+					"ad_time_from" => 'required',
+					"ad_time_end" => 'required'
 		    )
 		);
 		if($validator->fails())

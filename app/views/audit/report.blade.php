@@ -35,7 +35,7 @@
 
 
   <script type="text/javascript">
-    var i = 1;
+    var i = 0;
     function add_item(){
       var new_item = $('#sample-item').clone().attr({class:"item", id:"item"+i});
       new_item.find("textarea,select").each(function(cnt,ele){
@@ -68,12 +68,9 @@
       if($('.item').length==0) add_item();
       else{
         for(i=0; i<$('.item').length; i++){
-          $('.item').eq(i).attr({"id":"item"+(i+1)});
-          $('.item').eq(i).find("textarea,select").each(function(cnt,ele){
-            $(ele).attr('name',$(ele).attr('name') + '[' + (i+1) + ']');
-          });
+          $('.item').eq(i).attr({"id":"item"+i});
+
         }
-        i++;
       }
 
 
@@ -119,20 +116,21 @@
             <input type="date_timepicker" name="r_time" class="form-control" placeholder="填表日期" value="{{ $report->r_time }}">
           </div>
         </div>
-        @foreach($obj->get() as $k )
+        @foreach($items->get() as $k => $v )
           <div class="item">
+            <input name="ri_id[{{ $k }}]" type="hidden" value="{{ $v->ri_id }}">
             <div class="form-group">
               <label class="col-sm-2 control-label">標準條文 / 稽核項目</label>
               <div class="col-sm-10">
                 @include('macro/select_report',array(
-                  'name' => "ri_base",
-                  'value' => $k->ri_base,
+                  'name' => "ri_base[$k]",
+                  'value' => $v->ri_base,
                 ))
               </div>
             </div>
-            <textarea class="form-control" name="ri_discover" rows="3" placeholder="稽核發現">{{ $k->ri_discover }}</textarea>
+            <textarea class="form-control" name="ri_discover[{{ $k }}]" rows="3" placeholder="稽核發現">{{ $v->ri_discover }}</textarea>
             <div class="row">&nbsp;</div>
-            <textarea class="form-control" name="ri_recommand" rows="3" placeholder="稽核建議">{{ $k->ri_recommand }}</textarea>
+            <textarea class="form-control" name="ri_recommand[{{ $k }}]" rows="3" placeholder="稽核建議">{{ $v->ri_recommand }}</textarea>
           </div>
         @endforeach
         <div class="col-md-12 add-item">
