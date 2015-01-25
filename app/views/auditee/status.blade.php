@@ -93,7 +93,7 @@
                   <td>{{ $i->ri_base }}</td>
                   <td>{{ $i->ri_discover }}</td>
                   <td>{{ $i->ri_recommand }}</td>
-                  <td>#</td>
+                  <td><a href="{{ route('auditee_feedback',$i->ri_id) }}">填寫矯正預防</a></td>
                 </tr>
                 @endforeach
                 </div>
