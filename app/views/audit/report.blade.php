@@ -84,7 +84,7 @@
 
   <div class="row">
     <div class="col-xs-3">
-      @include("audit_menu")
+      @include("menu")
     </div>
     <div class="col-xs-9">
 

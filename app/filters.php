@@ -72,25 +72,30 @@ Route::filter('guest', function()
 	// if (Auth::check()) return Redirect::to('/');
 	$person = Session::get('user');
 	if($person){
-		switch ($person->p_level) {
-			case 0:
-				return Redirect::route('auditee');
-		    case 1:
-		        return Redirect::route('audit');
-		        break;
-		    case 2:
-		        return Redirect::route('admin');
-		        break;
-		    default:
-		        dd("Unexpected person level in routes.");
-		        break;
-		}
+		if($person->is("admin"))
+		    return Redirect::route('admin');
+		if($person->is("audit"))
+		    return Redirect::route('audit');
+		if($person->is("auditee"))
+		    return Redirect::route('auditee');
+		dd("filters.php: Person level mismatch");
+		// switch ($person->p_level) {
+		// 	case 0:
+		// 		return Redirect::route('auditee');
+		//     case 1:
+		//         return Redirect::route('audit');
+		//     case 2:
+		//         return Redirect::route('admin');
+		//     default:
+		//         dd("Unexpected person level in routes.");
+		//         break;
+		// }
 	}
 });
 
 Route::filter('is_admin', function()
 {
-	if (Session::get('user')->p_level!=2)
+	if (!Session::get('user')->is("admin"))
 	{
 		Session::set("message","您沒有造訪該網頁的權限");
 		return Redirect::to('/');
@@ -99,7 +104,7 @@ Route::filter('is_admin', function()
 
 Route::filter('is_audit', function()
 {
-	if (Session::get('user')->p_level!=1)
+	if (!Session::get('user')->is("audit"))
 	{
 		Session::set("message","您沒有造訪該網頁的權限");
 		return Redirect::to('/');
@@ -108,7 +113,7 @@ Route::filter('is_audit', function()
 
 Route::filter('is_auditee', function()
 {
-	if (Session::get('user')->p_level!=0)
+	if (!Session::get('user')->is("auditee"))
 	{
 		Session::set("message","您沒有造訪該網頁的權限");
 		return Redirect::to('/');
