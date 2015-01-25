@@ -89,7 +89,7 @@ class AuditController extends Controller {
 				$item->save();
 				++$count;
 			}*/
-			
+
 
 			if($report->is_saved()){
 				$report->send_email();
@@ -141,5 +141,20 @@ class AuditController extends Controller {
 		    Session::set("message",$e->getMessage());
 		}
 		return Redirect::to('/');
+	}
+
+	public function view_report($id){
+		$report = PiaReport::findOrFail($id);
+		return View::make('report')->with(
+		array(
+			'report' => $report,
+			'items' => $report->items()->get(),
+			'title' => '稽核報告預覽：' . $report->r_serial,
+		));
+	}
+
+	public function download_report($id){
+		$report = PiaReport::findOrFail($id);
+		return Response::download($report->gen_paper(), $report->r_serial);
 	}
 }

@@ -157,4 +157,19 @@ class AdminController extends BaseController {
 				'title' => '回報狀態',
 				));
 	}
+
+	public function preview_report($id){
+		$report = PiaReport::findOrFail($id);
+		return View::make('report')->with(
+		array(
+			'report' => $report,
+			'items' => $report->items()->get(),
+			'title' => '稽核報告預覽：' . $report->r_serial,
+		));
+	}
+
+	public function download_report($id){
+		$report = PiaReport::findOrFail($id);
+		return Response::download($report->gen_paper(), $report->r_serial);
+	}
 }

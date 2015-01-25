@@ -53,11 +53,20 @@ class PiaAudit extends PiaBase {
 		parent::save($options);
 	}
 
+	public function is_reported()
+	{
+		$report = $this->report();
+		if($report->count()){
+			$report = $report->first();
+			if(!$report->is_temp())
+				return true;
+		}
+		return false;
+	}
+
 	public function new_report()
 	{
 		$report = $this->report();
-		//var_dump($report);
-		//die();
 		if($report->count()){
 			$report = $report->first();
 			if(!$report->is_temp()){
@@ -94,6 +103,10 @@ class PiaAudit extends PiaBase {
 	public function dept()
 	{
 		return $this->hasOne("PiaDept","dept_id","ad_dept_id");
+	}
+
+	public function event(){
+		return $this->hasOne("PiaEvent","event_id","event_id");
 	}
 
 	public function report()

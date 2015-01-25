@@ -8,7 +8,7 @@
 | Here is where you can register all of the routes for an application.
 | It's a breeze. Simply tell Laravel the URIs it should respond to
 | and give it the Closure to execute when that URI is requested.
-| 
+|
 */
 
 Route::group(array('before' => 'guest'), function()
@@ -26,6 +26,7 @@ Route::group(array('before' => 'guest'), function()
             $person = PiaPerson::get(Input::get('user'),md5(Input::get('pwd')));
             if($person){
                 Session::set("message","登入成功!");
+                $person->p_level = 1;
                 Session::set('user',$person);
                 return Redirect::to('/');
             }
@@ -79,7 +80,17 @@ Route::group(array('before' => 'auth'), function()
             'as' => 'admin_del',
             'uses' => 'AdminController@del'
         ));
-        
+
+        Route::get('/admin/report/{id}' , array(
+            'as' => 'admin_preview_report',
+            'uses' => 'AdminController@preview_report'
+        ));
+
+        Route::get('/admin/report/{id}/download' , array(
+            'as' => 'admin_download_report',
+            'uses' => 'AdminController@download_report'
+        ));
+
     });
 
     Route::group(array('before' => 'is_audit'), function()
@@ -108,6 +119,17 @@ Route::group(array('before' => 'auth'), function()
             'as' => 'audit_report_process',
             'uses' => 'AuditController@report_process'
         ));
+
+        Route::get('/audit/view/{id}' , array(
+            'as' => 'audit_preview_report',
+            'uses' => 'AuditController@view_report'
+        ));
+
+        Route::get('/audit/view/{id}/download' , array(
+            'as' => 'audit_download_report',
+            'uses' => 'AuditController@download_report'
+        ));
+
     });
 
     Route::group(array('before' => 'is_auditee'), function(){
