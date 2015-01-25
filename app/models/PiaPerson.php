@@ -38,7 +38,7 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 			(object)array("value" => 4, "text" => "資訊安全暨 個人資料保護 推動委員會"),
 		);
 	}
-	
+
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -60,7 +60,7 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		'p_mail' => array('email','信箱','信箱'),
 		'p_title' => array('text','職稱','職稱'),
 		'p_pass' => array('password','更改密碼','密碼'),
-		'p_level' => array('select.level','權限','權限'),
+		'p_level' => array('checkbox.level','權限','權限'),
 	);
 	public function save(array $options = array()){
 		$validator = Validator::make

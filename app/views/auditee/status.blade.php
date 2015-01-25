@@ -73,14 +73,31 @@
                   @if( !is_null($r = $a->report()->first()))
                   <td>{{ $r->r_serial }}</td>
                   <td>{{ $r->status }}</td>
+                  <td onclick="$('.{{ $r->r_serial }}').slideToggle()"><a href="#">細則</a></td>
                   @else
                   <td>未有回報</td>
                   <td>未有回報</td>
+                  <td>-</td>
                   @endif
-                <td>
-                  -
-                </td>
               </tr>
+              @if( !is_null($r) && !is_null($items = ($r->items->all())))
+                <tr class="{{ $r->r_serial }}" style="display:none;">
+                  <td>\\</td>
+                  <td>條款</td>
+                  <td>發現</td>
+                  <td>建議</td>
+                </tr>
+                @foreach($items as $i)
+                <tr class="{{ $r->r_serial }}" style="display:none;">
+                  <td>--</td>
+                  <td>{{ $i->ri_base }}</td>
+                  <td>{{ $i->ri_discover }}</td>
+                  <td>{{ $i->ri_recommand }}</td>
+                  <td><a href="{{ route('auditee_feedback',$i->ri_id) }}">填寫矯正預防</a></td>
+                </tr>
+                @endforeach
+                </div>
+              @endif
             @endforeach
           </tbody>
         </table>

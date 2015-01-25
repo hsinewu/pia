@@ -9,4 +9,12 @@ class AuditeeController extends Controller {
 				'title' => '稽核狀況'
 				));
 	}
+	public function feedback($ri_id){
+		// dd($ri_id);
+		return View::make('auditee/feedback')->with(
+			array(
+				'title' => '矯正/預防填寫',
+				'report' => PiaReportItem::find($ri_id)
+			));
+	}
 }

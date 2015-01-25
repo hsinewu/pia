@@ -140,6 +140,11 @@ Route::group(array('before' => 'auth'), function()
             'as' => 'auditee_status',
             'uses' => 'AuditeeController@status'
         ));
+        
+        Route::get('/auditee/feedback/{r_id}' , array(
+            'as' => 'auditee_feedback',
+            'uses' => 'AuditeeController@feedback'
+        ));
     });
 
 });
