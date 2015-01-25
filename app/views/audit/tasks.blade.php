@@ -23,13 +23,14 @@
   @parent
   <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.min.js"></script>
+  <script src="{{ asset('assets/js/filter.js'); }}"></script>
 @stop
 
 @section('content')
 
   <div class="row">
     <div class="col-xs-3">
-      @include("audit_menu")
+      @include("menu")
     </div>
     <div class="col-xs-9">
 
@@ -43,7 +44,7 @@
           <div class="col-lg-12">
             <div class="input-group">
               <span class="input-group-addon">filter</span>
-              <input type="text" class="form-control">
+              <input type="text" class="form-control" id="filter">
             </div><!-- /input-group -->
           </div><!-- /.col-lg-12 -->
 
