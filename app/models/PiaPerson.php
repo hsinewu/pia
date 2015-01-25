@@ -34,8 +34,6 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 			(object)array("value" => 0, "text" => "受稽人員"),
 			(object)array("value" => 1, "text" => "稽核人員"),
 			(object)array("value" => 2, "text" => "管理員"),
-			(object)array("value" => 3, "text" => "資安暨 個資保護 稽核小組"),
-			(object)array("value" => 4, "text" => "資訊安全暨 個人資料保護 推動委員會"),
 		);
 	}
 

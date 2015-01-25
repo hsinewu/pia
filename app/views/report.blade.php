@@ -23,8 +23,8 @@
         {{ $title }}
 
           <!-- Button trigger modal -->
-          <a class="btn btn-primary pull-right" href="{{ route('admin_download_report', $report->r_id) }}">
-              ▽ 下載為 PDF 檔案
+          <a class="btn btn-primary pull-right" href="{{ route($download_route, $report->r_id) }}">
+              下載為 PDF 檔案 ▼
           </a>
           <!-- Modal -->
         </div>

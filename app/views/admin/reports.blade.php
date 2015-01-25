@@ -68,7 +68,7 @@
                   <td>{{ $r->r_serial }}</td>
                   <td>{{ $r->status }}</td>
                 <td>
-                  <a href="{{ route('admin_preview_report',$r->r_id) }}" class="preview">觀看回報內容</a>
+                  <a href="{{ route('admin_view_report',$r->r_id) }}" class="preview">觀看回報內容</a>
                 </td>
               </tr>
             @endforeach

@@ -60,7 +60,7 @@
     //if(val & 1)  $('#checkbox_1').prop("checked", true);
     //if(val & 2)  $('#checkbox_2').prop("checked", true);
     //if(val & 4)  $('#checkbox_4').prop("checked", true);
-    for(var i=1; i<=16; i*=2){
+    for(var i=1; i<=4; i*=2){
       if(val & i)  $('#checkbox_'+i).prop("checked", true);
     }
 

@@ -73,7 +73,7 @@
                   @if( !is_null($r = $a->report()->first()))
                   <td>{{ $r->r_serial }}</td>
                   <td>{{ $r->status }}</td>
-                  <td onclick="$('.{{ $r->r_serial }}').slideToggle()"><a href="#">細則</a></td>
+                  <td><a onclick="$('.{{ $r->r_serial }}').slideToggle()" href="#">細則</a> or <a href="{{ route('auditee_view_report', $r->r_id) }}">觀看報告</a></td>
                   @else
                   <td>未有回報</td>
                   <td>未有回報</td>

@@ -17,4 +17,20 @@ class AuditeeController extends Controller {
 				'report' => PiaReportItem::find($ri_id)
 			));
 	}
+
+	public function view_report($id){
+		$report = PiaReport::findOrFail($id);
+		return View::make('report')->with(
+		array(
+			'report' => $report,
+			'items' => $report->items()->get(),
+			"download_route" => 'auditee_download_report',
+			'title' => '稽核報告預覽：' . $report->r_serial,
+		));
+	}
+
+	public function download_report($id){
+		$report = PiaReport::findOrFail($id);
+		return Response::download($report->gen_paper(), "$report->r_serial 稽核報告.pdf");
+	}
 }

@@ -81,8 +81,8 @@ Route::group(array('before' => 'auth'), function()
         ));
 
         Route::get('/admin/report/{id}' , array(
-            'as' => 'admin_preview_report',
-            'uses' => 'AdminController@preview_report'
+            'as' => 'admin_view_report',
+            'uses' => 'AdminController@view_report'
         ));
 
         Route::get('/admin/report/{id}/download' , array(
@@ -120,7 +120,7 @@ Route::group(array('before' => 'auth'), function()
         ));
 
         Route::get('/audit/view/{id}' , array(
-            'as' => 'audit_preview_report',
+            'as' => 'audit_view_report',
             'uses' => 'AuditController@view_report'
         ));
 
@@ -140,10 +140,20 @@ Route::group(array('before' => 'auth'), function()
             'as' => 'auditee_status',
             'uses' => 'AuditeeController@status'
         ));
-        
+
         Route::get('/auditee/feedback/{r_id}' , array(
             'as' => 'auditee_feedback',
             'uses' => 'AuditeeController@feedback'
+        ));
+
+        Route::get('/auditee/report/{id}' , array(
+            'as' => 'auditee_view_report',
+            'uses' => 'AuditeeController@view_report'
+        ));
+
+        Route::get('/auditee/report/{id}/download' , array(
+            'as' => 'auditee_download_report',
+            'uses' => 'AuditeeController@download_report'
         ));
     });
 

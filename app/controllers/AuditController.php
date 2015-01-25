@@ -136,6 +136,7 @@ class AuditController extends Controller {
 		array(
 			'report' => $report,
 			'items' => $report->items()->get(),
+			"download_route" => 'audit_download_report',
 			'title' => '稽核報告預覽：' . $report->r_serial,
 		));
 	}

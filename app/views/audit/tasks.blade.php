@@ -68,7 +68,7 @@
                 @endforeach
                 <td>
                   @if($i->is_reported())
-                    <a href="{{ route('audit_preview_report', $i->report()->first()->r_id) }}">觀看報告</a>
+                    <a href="{{ route('audit_view_report', $i->report()->first()->r_id) }}">觀看報告</a>
                   @else
                     <a href="{{ route('audit_report', $i->a_id) }}">填寫稽核報告</a>
                   @endif
