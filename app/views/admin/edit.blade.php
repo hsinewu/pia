@@ -55,6 +55,13 @@
 
   </script>
 
+  <script>
+    var val=$('#level').attr('value');
+    if(val & 1)  $('#checkbox_1').prop("checked", true);
+    if(val & 2)  $('#checkbox_2').prop("checked", true);
+    if(val & 4)  $('#checkbox_4').prop("checked", true);
+  </script>
+
 @stop
 
 @section('content')
@@ -72,6 +79,17 @@
               <label class="col-sm-2 control-label">{{ $v[2] }}</label>
               <div class="col-sm-10">
                 @include('macro/select',array(
+                  'type' => str_replace("select.", "", $v[0]),
+                  'name' => $k,
+                  'value' => $obj->$k,
+                ))
+              </div>
+            </div>
+          @elseif(strpos($v[0],"checkbox") !== false)
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{ $v[2] }}</label>
+              <div class="col-sm-10">
+                @include('macro/checkbox',array(
                   'type' => str_replace("select.", "", $v[0]),
                   'name' => $k,
                   'value' => $obj->$k,
