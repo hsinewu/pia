@@ -94,7 +94,18 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 	public function audit(){
 		return $this->hasMany("PiaAudit","p_id","p_id")->join('dept','ad_dept_id','=','dept_id');
 	}
-
+	public function is($type){
+		switch ($type) {
+			case 'admin':
+				return $this->p_level & 1;
+			case 'audit':
+				return $this->p_level & 2;
+			case 'auditee':
+				return $this->p_level & 4;
+			default:
+				dd('In PiaPerson.php unknown user type');
+		}
+	}
 	public function isAdmin(){
 		return $this->p_level == 2;
 	}
