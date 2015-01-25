@@ -24,10 +24,8 @@ class PiaReportItem extends PiaBase {
 		    	),
 		    array(
 		        // "ri_id" => 'required',
-		        "r_id" => 'required',
+		        // "r_id" => 'required',
 		        "ri_base" => 'required',
-		        "ri_discover" => 'required',
-		        "ri_recommand" => 'required',
 		    )
 		);
 		if($validator->fails())

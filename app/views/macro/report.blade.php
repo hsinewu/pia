@@ -85,34 +85,36 @@
 </p>
 <h4>6. 附件</h4>
 <p>6.1 個人資料內部稽核底稿</p>
-<table class="table table-bordered">
-    <tbody>
-        <tr>
-            <td>
-            </td>
-            <td>
-                受稽單位 權責主管
-            </td>
-            <td>
-                資安暨 個資保護 稽核小組
-            </td>
-            <td>
-                資訊安全暨 個人資料保護 推動委員會
-            </td>
-        </tr>
-        <tr>
-            <td>
-                日期
-            </td>
-            <td>
-                {{ $report->r_auth_signed ? $report->r_auth_signed : "尚未簽署" }}
-            </td>
-            <td>
-                {{ $report->r_auditor_signed ? $report->r_auditor_signed : "尚未簽署" }}
-            </td>
-            <td>
-                {{ $report->r_comm_signed ? $report->r_comm_signed : "尚未簽署" }}
-            </td>
-        </tr>
-    </tbody>
-</table>
+@if(!isset($hide_sign))
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    受稽單位 權責主管
+                </td>
+                <td>
+                    資安暨 個資保護 稽核小組
+                </td>
+                <td>
+                    資訊安全暨 個人資料保護 推動委員會
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    日期
+                </td>
+                <td>
+                    {{ $report->r_auth_signed ? $report->r_auth_signed : "尚未簽署" }}
+                </td>
+                <td>
+                    {{ $report->r_auditor_signed ? $report->r_auditor_signed : "尚未簽署" }}
+                </td>
+                <td>
+                    {{ $report->r_comm_signed ? $report->r_comm_signed : "尚未簽署" }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+@endif

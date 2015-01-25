@@ -9,7 +9,7 @@ class PiaEmailSign extends PiaBase {
 	 */
 	protected $table = 'email_sign';
 	protected $primaryKey = 'es_id';
-	
+
 	public function save(array $options = array()){
 
 		$validator = Validator::make
@@ -43,6 +43,22 @@ class PiaEmailSign extends PiaBase {
 	public function report()
 	{
 		return $this->hasOne("PiaReport","r_id","r_id");
+	}
+
+	public function sign()
+	{
+		if($this->es_used)
+			throw new Exception("已經確認過了！");
+
+		$key = PiaReport::get_key2sign()[$this->es_type];
+
+		$report = $this->report()->firstOrFail();
+		$report->$key = date("Y-m-d H:i:s");
+		$report->update_level();
+		$report->save();
+
+		$this->es_used = true;
+		$this->save();
 	}
 
 }

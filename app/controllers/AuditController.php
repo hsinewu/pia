@@ -55,6 +55,7 @@ class AuditController extends Controller {
 			$report->save();
 
 			$count=0;
+			$fail_cnt = 0;
 			foreach ($input['ri_base'] as $key => $value){
 				$items[ $key ] = [
 					// 'ri_id' => isset($input['ri_id'][$key]) ? $input['ri_id'][$key] : null ,
@@ -62,50 +63,47 @@ class AuditController extends Controller {
 					'ri_discover' => $input['ri_discover'][$key],
 					'ri_recommand' => $input['ri_recommand'][$key],
 				];
-				if(!isset($input['ri_id'][$key])){
-					$item = new PiaReportItem($items[ $key ]);
-					$report->items()->save($item);
+				try{
+					if(!isset($input['ri_id'][$key])){
+						$item = new PiaReportItem($items[ $key ]);
+						$report->items()->save($item);
+					}
+					else{
+						$item = PiaReportItem::find($input['ri_id'][$key]);
+						$item->update($items[ $key ]);
+					}
+					++$count;
+				} catch (Exception $e) {
+					$report->set_state_level(Input::get('status'));
+					$report->save();
+					$fail_cnt++;
+					continue;
 				}
-				else{
-					$item = PiaReportItem::find($input['ri_id'][$key]);
-					$item->update($items[ $key ]);
-				}
-				++$count;
 			}
-			//echo '<pre>'.var_export($items, true).'</pre>';
-			//die();
-			/*$count = 0;
-			$items = $report->items();
-			$items->delete();
-			foreach ($input['ri_base'] as $key => $value) {
-				if( $input['ri_base'][$key]=="" || $input['ri_discover'][$key]=="" || $input['ri_recommand'][$key]=="" )
-						continue;
-				//if() $item = $report->items()::find($input['ri_id'][$key]);
-				//else
-					$item = $report->new_item();
-				$item->ri_base = $input['ri_base'][$key];
-				$item->ri_discover = $input['ri_discover'][$key];
-				$item->ri_recommand = $input['ri_recommand'][$key];
-				$item->save();
-				++$count;
-			}*/
-
 
 			if($report->is_saved()){
+				if($fail_cnt && count($input['ri_base']) != 1)
+					throw new Exception("成功儲存 $count 筆發現，但有 $fail_cnt 筆發現有問題，已經強制改以暫存方式儲存");
 				$report->send_email();
 				Session::set("message","共".$count."筆發現已儲存，並且發信通知成功!");
 			}
-			else{
+			else
 				Session::set("message","共".$count."筆發現暫存成功!");
-			}
-
+			//dd($count);
 			return Redirect::route('audit_tasks');
 		} catch (PDOException $e) {
 			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
+			$report->set_state_level(0);
+			$report->save();
+			dd("234");
 			return Redirect::route('audit_report',$id);
 		} catch (Exception $e) {
-			//$report->delete();
-			Session::set("message","設定失敗!請確認您的輸入:...".$e->getMessage());
+			Session::set("message",$e->getMessage());
+			if(isset($report)){
+				$report->set_state_level(0);
+				$report->save();
+			}
+			dd($e->getMessage());
 			return Redirect::route('audit_report',$id);
 		}
 	}
@@ -124,19 +122,8 @@ class AuditController extends Controller {
 	{
 		try {
 		    $es = PiaEmailSign::where('es_code', '=', $code)->firstOrFail();
-		    if($es->es_used)
-		        throw new Exception("已經確認過了！", 1);
-
-		    $es->es_used = true;
-		    $es->save();
-
-		    $report = $es->report()->firstOrFail();
-		    if(!$report->next_level()){
-		    	$report->send_email();
-		    	Session::set("message","確認成功，並成功通知下一位主管！");
-		    }
-		    else
-		    	Session::set("message","確認成功！");
+		    $es->sign();
+		    Session::set("message","確認成功！");
 		} catch (Exception $e) {
 		    Session::set("message",$e->getMessage());
 		}
@@ -155,6 +142,6 @@ class AuditController extends Controller {
 
 	public function download_report($id){
 		$report = PiaReport::findOrFail($id);
-		return Response::download($report->gen_paper(), $report->r_serial);
+		return Response::download($report->gen_paper(), "$report->r_serial 稽核報告.pdf");
 	}
 }

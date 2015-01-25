@@ -170,6 +170,6 @@ class AdminController extends BaseController {
 
 	public function download_report($id){
 		$report = PiaReport::findOrFail($id);
-		return Response::download($report->gen_paper(), $report->r_serial);
+		return Response::download($report->gen_paper(), "$report->r_serial 稽核報告.pdf");
 	}
 }
