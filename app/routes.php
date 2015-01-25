@@ -26,7 +26,6 @@ Route::group(array('before' => 'guest'), function()
             $person = PiaPerson::get(Input::get('user'),md5(Input::get('pwd')));
             if($person){
                 Session::set("message","登入成功!");
-                $person->p_level = 1;
                 Session::set('user',$person);
                 return Redirect::to('/');
             }
