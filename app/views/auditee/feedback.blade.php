@@ -23,6 +23,7 @@
   @parent
   <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.min.js"></script>
+  <script src="{{ asset('assets/js/filter.js'); }}"></script>
 @stop
 
 @section('content')
@@ -36,44 +37,11 @@
       <div class="panel panel-default">
         <!-- Default panel contents -->
         <div class="panel-heading" style="height: 55px; line-height: 34px;">
-        {{ $title }}
-
-          <!-- Button trigger modal -->
-
-          <!-- Modal -->
+          {{ $title }}
         </div>
 
-        <div class="panel-body">
-          <div class="col-lg-12">
-            <div class="input-group">
-              <span class="input-group-addon">filter</span>
-              <input type="text" class="form-control">
-            </div><!-- /input-group -->
-          </div><!-- /.col-lg-12 -->
-
-        </div>
-
-        <!-- Table -->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <td>流水號</td>
-              <td>狀態</td>
-              <td>動作</td>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($reports as $r)
-              <tr>
-                  <td>{{ $r->r_serial }}</td>
-                  <td>{{ $r->status }}</td>
-                <td>
-                  <a href="{{ route('admin_preview_report',$r->r_id) }}" class="preview">觀看回報內容</a>
-                </td>
-              </tr>
-            @endforeach
-          </tbody>
-        </table>
+        <p>Contents</p>
+          <p>問題缺失: <input type="text" name="" id=""></p>
       </div>
     </div>
   </div>

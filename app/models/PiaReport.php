@@ -101,15 +101,17 @@ class PiaReport extends PiaBase {
 		return $this->hasMany('PiaReportItem','r_id','r_id');
 	}
 
-	public function gen_view(){
-		return View::make('paper/report', ['report' => $this, 'items' => $this->items()->get()->all()]);
-	}
-
-	public function gen_paper($fname){
-		PDF::html('paper/report', ['report' => $this, 'items' => $this->items()->get()->all()], $fname);
+	public function gen_paper(){
+		$pdf_path = storage_path("report_pdf/" . $this->r_id );
+		$full_pdf_path = $pdf_path . ".pdf";
+		if(file_exists($full_pdf_path))
+			unlink($full_pdf_path);
+		PDF::html('paper/report', ['report' => $this, 'items' => $this->items()->get()->all()], $pdf_path);
+		return $full_pdf_path;
 	}
 
 	public function send_email(){
+
 		switch ($this->status) {
 			case '儲存':
 				$dept = $this->audit()->first()->dept()->first();
@@ -133,13 +135,7 @@ class PiaReport extends PiaBase {
 
 		define("mail_addr", $mail_addr);
 		define("dept_name", $dept_name);
-
-		$pdf_path = storage_path("pdf_tmp/" . rand());
-		$full_pdf_path = $pdf_path . ".pdf";
-		if(file_exists($full_pdf_path))
-			unlink($full_pdf_path);
-		$this->gen_paper($pdf_path);
-		define("pdf_name", $full_pdf_path);
+		define("pdf_name", $this->gen_paper());
 
 		$es = new PiaEmailSign();
 		$es->r_id = $this->r_id;
