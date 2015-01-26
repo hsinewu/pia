@@ -46,7 +46,10 @@ class PiaBase extends Eloquent {
         foreach ($this->form_fields as $key => $value) {
             switch ($value[0]) {
                 case 'password':
-                    $data[$key] = md5($data[$key]);
+                    if(strlen($data[$key]))
+                        $data[$key] = md5($data[$key]);
+                    else
+                        $data[$key] = $this->$key;
                     break;
             }
             $this->$key = $data[$key];

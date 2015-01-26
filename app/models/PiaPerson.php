@@ -31,9 +31,9 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		$object = new stdClass();
 
 		return array(
-			(object)array("value" => 0, "text" => "受稽人員"),
-			(object)array("value" => 1, "text" => "稽核人員"),
-			(object)array("value" => 2, "text" => "管理員"),
+			(object)array("value" => 4, "text" => "受稽人員"),
+			(object)array("value" => 2, "text" => "稽核人員"),
+			(object)array("value" => 1, "text" => "管理員"),
 		);
 	}
 
@@ -61,6 +61,7 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 		'p_level' => array('checkbox.level','權限','權限'),
 	);
 	public function save(array $options = array()){
+
 		$validator = Validator::make
 		(
 		    array(

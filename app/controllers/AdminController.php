@@ -93,20 +93,14 @@ class AdminController extends BaseController {
 	public function edit_process($type,$id = null)
 	{
 		$obj = $this->type2instancd($type,$id);
-		//die(is_null($id));
-		// if(!is_null($id))
-		// 	$obj = $obj->find($id);
 		try {
 			$obj->fill_field(Input::all())->save();
 		} catch (PDOException $e) {
 			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
-			return Redirect::route('admin_edit',$type);
+			return Redirect::refresh();
 		} catch (Exception $e) {
-			//$m = "";
-			//foreach($e->getMessage() as $k => $v) $m.=$v;
-			die($e->getMessage());
-			Session::set("message","設定失敗!請確認您的輸入:"/*.$m*/);
-			return Redirect::route('admin_edit',$type);
+			Session::set("message","設定失敗!請確認您的輸入!");
+			return Redirect::refresh();
 		}
 		Session::set("message","設定成功!");
 		return Redirect::route('admin_info',$type);
