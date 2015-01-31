@@ -119,6 +119,42 @@ Route::filter('is_auditee', function()
 		return Redirect::to('/');
 	}
 });
+
+Route::filter('audit_has_report', function($route)
+{
+	$id = $route->getParameter('id');
+	try {
+		$report = PiaReport::find($id);
+		$audit = PiaAudit::find($report->a_id);
+	} catch (Exception $e) {
+		Session::set("message","Error");
+		// App::abort(404);
+		return Redirect::to('/');
+	}
+	if (Session::get('user')->p_id != $audit->p_id)
+	{
+		Session::set("message","Oops");
+		return Redirect::to('/');
+	}
+});
+
+Route::filter('auditee_has_report', function($route)
+{
+	$id = $route->getParameter('id');
+	try {
+		$report = PiaReport::find($id);
+		$audit = PiaAudit::find($report->a_id);
+	} catch (Exception $e) {
+		Session::set("message","Error");
+		// App::abort(404);
+		return Redirect::to('/');
+	}
+	if (Session::get('user')->dept_id != $audit->ad_dept_id)
+	{
+		Session::set("message","Oops");
+		return Redirect::to('/');
+	}
+});
 /*
 |--------------------------------------------------------------------------
 | CSRF Protection Filter
