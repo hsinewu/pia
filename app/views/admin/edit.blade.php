@@ -36,7 +36,7 @@
     jQuery('[type^=date_timepicker]').datetimepicker();
     jQuery(function(){
       jQuery('#date_timepicker_start').datetimepicker({
-        format:'Y/m/d H:i',
+        format:'Y-m-d H:i:s',
         onShow:function( ct ){
           this.setOptions({
             maxDate:jQuery('#date_timepicker_end').val()?jQuery('#date_timepicker_end').val():false
@@ -44,7 +44,7 @@
         },
       });
       jQuery('#date_timepicker_end').datetimepicker({
-        format:'Y/m/d H:i',
+        format:'Y-m-d H:i:s',
         onShow:function( ct ){
           this.setOptions({
             minDate:jQuery('#date_timepicker_start').val()?jQuery('#date_timepicker_start').val():false

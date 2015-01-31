@@ -55,7 +55,7 @@
             });
 
             jQuery('#date_timepicker_start'+i).datetimepicker({
-              format:'Y/m/d H:i',
+              format:'Y-m-d H:i:s',
               onShow:function( ct ){
                 this.setOptions({
                   maxDate:jQuery('#date_timepicker_end'+i).val()?jQuery('#date_timepicker_end'+i).val():false
@@ -63,7 +63,7 @@
               },
             });
             jQuery('#date_timepicker_end'+i).datetimepicker({
-              format:'Y/m/d H:i',
+              format:'Y-m-d H:i:s',
               onShow:function( ct ){
                 this.setOptions({
                   minDate:jQuery('#date_timepicker_start'+i).val()?jQuery('#date_timepicker_start'+i).val():false
