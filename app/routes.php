@@ -109,25 +109,28 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AuditController@calendar'
         ));
 
-        Route::get('/audit/report/{id}' , array(
-            'as' => 'audit_report',
-            'uses' => 'AuditController@report'
-        ));
+        Route::group(array('before' => 'audit_has_report'),function()
+        {
+            Route::get('/audit/report/{id}' , array(
+                'as' => 'audit_report',
+                'uses' => 'AuditController@report'
+            ));
 
-        Route::post('/audit/report/{id}' , array(
-            'as' => 'audit_report_process',
-            'uses' => 'AuditController@report_process'
-        ));
+            Route::post('/audit/report/{id}' , array(
+                'as' => 'audit_report_process',
+                'uses' => 'AuditController@report_process'
+            ));
 
-        Route::get('/audit/view/{id}' , array(
-            'as' => 'audit_view_report',
-            'uses' => 'AuditController@view_report'
-        ));
+            Route::get('/audit/view/{id}' , array(
+                'as' => 'audit_view_report',
+                'uses' => 'AuditController@view_report'
+            ));
 
-        Route::get('/audit/view/{id}/download' , array(
-            'as' => 'audit_download_report',
-            'uses' => 'AuditController@download_report'
-        ));
+            Route::get('/audit/view/{id}/download' , array(
+                'as' => 'audit_download_report',
+                'uses' => 'AuditController@download_report'
+            ));
+        });
 
     });
 
@@ -146,15 +149,17 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AuditeeController@feedback'
         ));
 
-        Route::get('/auditee/report/{id}' , array(
-            'as' => 'auditee_view_report',
-            'uses' => 'AuditeeController@view_report'
-        ));
+        Route::group(array('before' => 'auditee_has_report'), function(){
+            Route::get('/auditee/report/{id}' , array(
+                'as' => 'auditee_view_report',
+                'uses' => 'AuditeeController@view_report'
+            ));
 
-        Route::get('/auditee/report/{id}/download' , array(
-            'as' => 'auditee_download_report',
-            'uses' => 'AuditeeController@download_report'
-        ));
+            Route::get('/auditee/report/{id}/download' , array(
+                'as' => 'auditee_download_report',
+                'uses' => 'AuditeeController@download_report'
+            ));
+        });
     });
 
 });
