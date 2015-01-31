@@ -11,7 +11,7 @@ wget -q -O /tmp/wkhtmltox.rpm http://downloads.sourceforge.net/project/wkhtmltop
 # install wkhtmltopdf
 yum localinstall -y /tmp/wkhtmltox.rpm
 
-# download the open source noto font from https://www.google.com/get/noto/
+# download the open source font "Source Han Sans" from https://github.com/adobe-fonts/source-han-sans
 mkdir -p /usr/share/fonts/source-han-sans
 wget -q -O /usr/share/fonts/source-han-sans/SourceHanSans-Regular.ttc https://github.com/adobe-fonts/source-han-sans/raw/release/OTC/SourceHanSans-Regular.ttc
 
