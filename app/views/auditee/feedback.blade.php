@@ -46,23 +46,23 @@
       @include("menu")
     </div>
     <div class="col-xs-9">
-      <form class="form-horizontal" role="form" action="http://localhost:8000/admin/edit/dept" method="POST">
+      <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process') }}" method="POST">
         <div class="form-group">
           <label class="col-sm-2 control-label">提出單位</label>
           <div class="col-sm-10">
-            <input type="text" id="audit_dept" name="audit_dept" class="form-control" placeholder="" value="" readonly>
+            <input type="text" id="auditor_dept" name="auditor_dept" class="form-control" placeholder="{{ $auditor_dept->dept_name }}" value="" readonly>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">提出人員</label>
           <div class="col-sm-10">
-            <input type="text" id="audit" name="audit" class="form-control" placeholder="" value="" readonly>
+            <input type="text" id="auditor" name="auditor" class="form-control" placeholder="{{ $auditor->p_name }}" value="" readonly>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">處理單位</label>
           <div class="col-sm-10">
-            <input type="text" id="auditee_dept" name="auditee_dept" class="form-control" placeholder="" value="" readonly>
+            <input type="text" id="auditee_dept" name="auditee_dept" class="form-control" placeholder="{{ $auditee_dept->dept_name }}" value="" readonly>
           </div>
         </div>
         <div class="form-group">
@@ -86,7 +86,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label">問題或缺失說明</label>
           <div class="col-sm-10">
-            <textarea class="form-control" name="problem" rows="3" placeholder="" readonly></textarea>
+            <textarea class="form-control" name="problem" rows="3" placeholder="{{ $reportItem->ri_discover }}" readonly></textarea>
           </div>
         </div>
         <div class="form-group">

@@ -113,6 +113,16 @@ class PiaReport extends PiaBase {
 		return $this->hasMany('PiaReportItem','r_id','r_id');
 	}
 
+	public function auditor()
+	{
+		return $this->audit()->first()->hasOne("PiaPerson","p_id","p_id");
+	}
+
+	public function auditee()
+	{
+		return $this->audit()->first()->hasOne("PiaDept","dept_id","ad_dept_id");
+	}
+
 	public function gen_paper($hide_sign = false){
 		$pdf_path = storage_path("report_pdf/" . $this->r_id );
 		$full_pdf_path = $pdf_path . ".pdf";

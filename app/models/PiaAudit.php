@@ -111,7 +111,12 @@ class PiaAudit extends PiaBase {
 
 	public function report()
 	{
-		return $this->hasOne("PiaReport","a_id");
+		return $this->hasOne("PiaReport","a_id") ;
+	}
+
+	public function person()
+	{
+		return $this->hasOne("PiaPerson","p_id","p_id");
 	}
 
 }

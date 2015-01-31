@@ -118,4 +118,8 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 	{
 		return self::where('p_level','=',4)->firstOrFail();
 	}
+
+	public function dept(){
+		return $this->hasOne('PiaDept', 'dept_id', 'dept_id');
+	}
 }

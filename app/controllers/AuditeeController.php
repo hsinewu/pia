@@ -10,12 +10,22 @@ class AuditeeController extends Controller {
 				));
 	}
 	public function feedback($ri_id){
-		// dd($ri_id);
+		$item = PiaReportItem::find($ri_id);
+		$report = $item->report()->first();
+		$auditor = $report->auditor()->first();
+		$auditee = $report->auditee()->first();
 		return View::make('auditee/feedback')->with(
 			array(
-				'title' => '矯正/預防填寫',
-				'report' => PiaReportItem::find($ri_id)
+				'report' => $report,
+				'auditor' => $auditor,
+				'auditor_dept' => $auditor->dept()->first(),
+				'auditee_dept'=> $auditee,
+				'reportItem' => $item,
 			));
+	}
+
+	public function feedback_process($ri_id){
+
 	}
 
 	public function view_report($id){

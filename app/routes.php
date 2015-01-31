@@ -146,6 +146,11 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AuditeeController@feedback'
         ));
 
+        Route::post('/auditee/feedback/{r_id}' , array(
+                'as' => 'auditee_feedback_process',
+                'uses' => 'AuditeeController@feedback_process'
+        ));
+
         Route::get('/auditee/report/{id}' , array(
             'as' => 'auditee_view_report',
             'uses' => 'AuditeeController@view_report'
