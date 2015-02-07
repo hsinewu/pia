@@ -59,6 +59,7 @@ class PiaEmailSign extends PiaBase {
 
 		$this->es_used = true;
 		$this->save();
+		return $report;
 	}
 
 }

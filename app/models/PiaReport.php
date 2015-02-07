@@ -26,7 +26,7 @@ class PiaReport extends PiaBase {
 		return ["r_auth_signed","r_auditor_signed","r_comm_signed"];
 	}
 
-	public $level2status = ['暫存','儲存，等待簽署','尚餘兩個簽署','尚餘一個簽署','完成簽署'];
+	public $level2status = ['暫存','儲存，等待簽署','受稽主管已簽','稽核小組已簽','完成簽署'];
 
 	public function save(array $options = array()){
 
@@ -136,50 +136,47 @@ class PiaReport extends PiaBase {
 	}
 
 	public function send_email(){
-		$dept = $this->audit()->first()->dept()->first();
-		$pia_team_email = PiaGlobal::get_pia_team_email();
-		$pia_committee_email = PiaGlobal::get_pia_committee_email();
-		if(!filter_var($dept->email, FILTER_VALIDATE_EMAIL))
-			throw new Exception("$dept->dept_name 的主管信箱不正確：$dept->email");
-		if(!filter_var($pia_team_email, FILTER_VALIDATE_EMAIL))
-			throw new Exception("資安暨 個資保護 稽核小組的信箱不正確：$pia_team_email");
-		if(!filter_var($pia_committee_email, FILTER_VALIDATE_EMAIL))
-			throw new Exception("資訊安全暨 個人資料保護 推動委員會的信箱不正確：$pia_committee_email");
-		$GLOBALS['mail_des'] = [
-			["mail_addr" => $dept->email, "rcv_name" => $dept->dept_name],
-			["mail_addr" => $pia_team_email, "rcv_name" => "資安暨 個資保護 稽核小組"],
-			["mail_addr" => $pia_committee_email, "rcv_name" => "資訊安全暨 個人資料保護 推動委員會:"],
-		];
-
-		define("pdf_name", $this->gen_paper(true));
-
-		for($i = 0; $i < 3; $i++){
-			$GLOBALS['mail_des']["cur"] = $i;
-
-			$es = new PiaEmailSign();
-			$es->r_id = $this->r_id;
-			$es->es_code = md5($this->r_time . $this->r_msg . rand());
-			$es->es_used = false;
-			$es->es_type = $i;
-			$es->es_to = $GLOBALS['mail_des'][$GLOBALS['mail_des']["cur"]]["mail_addr"];
-			$es->save();
-
-			Mail::send('emails/sign',
-				['sign_url' => route("email_sign",$es->es_code),'report' => $this, 'items' => $this->items()->get()->all(),"hide_sign" => true],
-				function($message)
-				{
-					$message
-					->to(
-						$GLOBALS['mail_des'][$GLOBALS['mail_des']["cur"]]["mail_addr"],
-						$GLOBALS['mail_des'][$GLOBALS['mail_des']["cur"]]["rcv_name"]
-					)
-					->subject("您好，這是個資稽核系統，這裏有份稽核報告請您確認")
-					->attach(pdf_name, array('as' => "個資稽核報告.pdf"));
-				}
-			);
+		switch ($this->status) {
+			case '儲存，等待簽署':
+				$dept = $this->audit()->first()->dept()->first();
+				$mail_addr = $dept->email;
+				$dept_name = $dept->dept_name;
+				$es_type = 0;
+				break;
+			case '受稽主管已簽':
+				$mail_addr = PiaGlobal::get_pia_team_email();
+				$dept_name = "資安暨 個資保護 稽核小組:";
+				$es_type = 1;
+				break;
+			case '稽核小組已簽':
+				$mail_addr = PiaGlobal::get_pia_committee_email();
+				$dept_name = "資訊安全暨 個人資料保護 推動委員會:";
+				$es_type = 2;
+				break;
+			default:
+				throw new Exception("Invalid status!");
+				break;
 		}
+		define("mail_addr", $mail_addr);
+		define("dept_name", $dept_name);
+		define("pdf_name", $this->gen_paper());
+		$es = new PiaEmailSign();
+		$es->r_id = $this->r_id;
+		$es->es_code = md5($this->r_time . $this->r_msg . rand());
+		$es->es_used = false;
+		$es->es_type = $es_type;
+		$es->es_to = mail_addr;
+		$es->save();
 
-
+		Mail::send('emails/sign',
+			['sign_url' => route("email_sign",$es->es_code),'report' => $this, 'items' => $this->items()->get()->all()],
+			function($message)
+		{
+			$message
+			->to( mail_addr, dept_name )
+			->subject("您好，這是個資稽核系統，這裏有份稽核報告請您確認")
+			->attach(pdf_name, array('as' => "個資稽核報告.pdf"));
+		});
 	}
 
 }

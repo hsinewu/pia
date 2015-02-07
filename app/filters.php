@@ -124,6 +124,7 @@ Route::filter('audit_has_report', function($route)
 {
 	$id = $route->getParameter('id');
 	try {
+		return; // TODO: error filter when just want to fill the form.
 		$report = PiaReport::find($id);
 		$audit = PiaAudit::find($report->a_id);
 	} catch (Exception $e) {

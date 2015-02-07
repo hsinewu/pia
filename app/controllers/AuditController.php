@@ -122,8 +122,13 @@ class AuditController extends Controller {
 	{
 		try {
 		    $es = PiaEmailSign::where('es_code', '=', $code)->firstOrFail();
-		    $es->sign();
-		    Session::set("message","確認成功！");
+			$report = $es->sign();
+			if(!$report->is_finished()){
+				$report->send_email();
+		    	Session::set("message","確認成功，並成功通知下一位主管！");
+			}
+			else
+				Session::set("message","確認成功");
 		} catch (Exception $e) {
 		    Session::set("message",$e->getMessage());
 		}
