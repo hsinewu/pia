@@ -39,12 +39,16 @@ class PiaDept extends PiaBase {
 	    		"group_id" => $this->group_id,
 	    		"dept_name" => $this->dept_name,
 	    		"email" => $this->email,
+				"manager_name" => $this->manager_name,
+				"manager_rank" => $this->manager_rank,
 	    		//"code" => $this->code,
 		    	),
 		    array(
 		        'group_id' => 'required',
 				'dept_name' => 'required',
 				'email' => 'required|email',
+				"manager_name" => 'required',
+				"manager_rank" => 'required',
 				//'code' => 'required',
 		    )
 		);
@@ -58,6 +62,8 @@ class PiaDept extends PiaBase {
 		'group_id' => array('select.dept','院系','院系'),
 		// 'org_id' => array('select.org','學校','學校'),
 		'dept_name' => array('text','單位名稱','單位名稱'),
+		'manager_name' => array('text','主管姓名','主管姓名'),
+		'manager_rank' => array('text','主管稱謂','主管稱謂'),
 		'email' => array('email','主管信箱','主管信箱'),
 		'code' => array('text','機關代碼','機關代碼'),
 	);

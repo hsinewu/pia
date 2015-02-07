@@ -93,7 +93,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">{{ $v[2] }}</label>
             <div class="col-sm-10">
-              <input type="{{ $v[0] }}" id="{{ $v[0] }}" name="{{ $k }}" class="form-control" placeholder="{{ $v[1] }}" value="{{ $obj->$k }}">
+              <input type="{{ str_replace('readonly_','',$v[0]) }}" id="{{ $v[0] }}" name="{{ $k }}" class="form-control" placeholder="{{ $v[1] }}" value="{{ $obj->$k }}" {{ strpos($v[0],'readonly_') === 0 ? "readonly" : "" }}>
             </div>
           </div>
           @endif

@@ -40,9 +40,11 @@
         {{ $title }}
 
           <!-- Button trigger modal -->
-          <a class="btn btn-primary pull-right create" href="{{ route('admin_edit', $type) }}">
-            ＋ 新增
-          </a>
+          @if($obj->creatable)
+              <a class="btn btn-primary pull-right create" href="{{ route('admin_edit', $type) }}">
+                ＋ 新增
+              </a>
+          @endif
           <!-- Modal -->
         </div>
 
@@ -74,8 +76,10 @@
                 @endforeach
                 <td>
                   <a href="{{ route('admin_edit', array($type,$i->{$obj->getPK()})) }}">Edit</a>
-                  or
-                  <a href="{{ route('admin_del', array($type,$i->{$obj->getPK()})) }}">Delete</a>
+                  @if($obj->deletable)
+                      or
+                      <a href="{{ route('admin_del', array($type,$i->{$obj->getPK()})) }}">Delete</a>
+                  @endif
                 </td>
               </tr>
             @endforeach

@@ -41,6 +41,6 @@ class AuditeeController extends Controller {
 
 	public function download_report($id){
 		$report = PiaReport::findOrFail($id);
-		return Response::download($report->gen_paper(), "$report->r_serial 稽核報告.pdf");
+		return Response::download($report->get_paper(), "$report->r_serial 稽核報告.pdf");
 	}
 }

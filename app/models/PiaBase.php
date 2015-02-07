@@ -3,6 +3,8 @@
 class PiaBase extends Eloquent {
 
     public $timestamps = false;
+    public $creatable = true;
+    public $deletable = true;
 
     public function info_table($more_columns = array()){
         $query = DB::table($this->table);

@@ -56,6 +56,7 @@ class PiaReport extends PiaBase {
 		if($validator->fails())
 			throw new Exception($validator->messages());
 		parent::save($options);
+		$this->gen_paper();
 	}
 
 	public function set_state_level($level)
@@ -92,6 +93,7 @@ class PiaReport extends PiaBase {
 			$level = 1 + $signed_cnt;
 		}
 		$this->set_state_level($level);
+		$this->gen_paper();
 		return $this->is_finished();
 	}
 
@@ -123,8 +125,20 @@ class PiaReport extends PiaBase {
 		return $this->audit()->first()->hasOne("PiaDept","dept_id","ad_dept_id");
 	}
 
+	protected function get_paper_path(){
+		return storage_path("report_pdf/" . $this->audit()->event()->first()->event_name . "-" . $this->r_id );
+	}
+
+	public function get_paper(){
+		$full_pdf_path = $this->get_paper_path() . ".pdf";
+		if(file_exists($full_pdf_path))
+			return $full_pdf_path;
+		else
+			return $this->gen_paper();
+	}
+
 	public function gen_paper($hide_sign = false){
-		$pdf_path = storage_path("report_pdf/" . $this->r_id );
+		$pdf_path = $this->get_paper_path();
 		$full_pdf_path = $pdf_path . ".pdf";
 		if(file_exists($full_pdf_path))
 			unlink($full_pdf_path);
@@ -159,7 +173,7 @@ class PiaReport extends PiaBase {
 		}
 		define("mail_addr", $mail_addr);
 		define("dept_name", $dept_name);
-		define("pdf_name", $this->gen_paper());
+		define("pdf_name", $this->get_paper());
 		$es = new PiaEmailSign();
 		$es->r_id = $this->r_id;
 		$es->es_code = md5($this->r_time . $this->r_msg . rand());

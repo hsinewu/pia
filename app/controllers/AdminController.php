@@ -20,7 +20,8 @@ class AdminController extends BaseController {
 		'dept' => '單位資料表',
 		'audit' => '稽核設定',
 		'cal' => '行事曆',
-		'event' => '事件設定'
+		'event' => '事件設定',
+		'global' => '全站設定'
 	);
 
 	private function type2instancd($type,$id = null)
@@ -41,6 +42,10 @@ class AdminController extends BaseController {
 			case 'event':
 				if(!is_null($id))  return PiaEvent::find($id);
 				return new PiaEvent();
+				break;
+			case 'global':
+				if(!is_null($id))  return PiaGlobal::find($id);
+				return new PiaGlobal();
 				break;
 
 			default:
@@ -99,7 +104,7 @@ class AdminController extends BaseController {
 			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
 			return Redirect::refresh();
 		} catch (Exception $e) {
-			Session::set("message","設定失敗!請確認您的輸入!");
+			Session::set("message","設定失敗!請確認您的輸入!\n" . $e->getMessage());
 			return Redirect::refresh();
 		}
 		Session::set("message","設定成功!");
@@ -136,11 +141,16 @@ class AdminController extends BaseController {
 
 	public function del($type,$id)
 	{
-		$obj = $this->type2instancd($type);
-		$obj = $obj->find($id);
-		$obj->delete();
-		Session::set("message","刪除成功!");
-		return Redirect::route('admin_info',$type);
+		try{
+			$obj = $this->type2instancd($type);
+			$obj = $obj->find($id);
+			$obj->delete();
+			Session::set("message","刪除成功!");
+			return Redirect::route('admin_info',$type);
+		} catch (Exception $e) {
+			Session::set("message",$e->getMessage());
+			return Redirect::route('admin_info',$type);
+		}
 	}
 
 	public function reports(){
@@ -165,6 +175,6 @@ class AdminController extends BaseController {
 
 	public function download_report($id){
 		$report = PiaReport::findOrFail($id);
-		return Response::download($report->gen_paper(), "$report->r_serial 稽核報告.pdf");
+		return Response::download($report->get_paper(), "$report->r_serial 稽核報告.pdf");
 	}
 }
