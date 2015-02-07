@@ -1,3 +1,4 @@
+<p>+已新增feedback欄位於report_item</p>
 <ul>TODOs
 	<li>機關.add(主管名,頭銜)</li>
 	<li>程序結束後的pdf儲存</li>
