@@ -120,13 +120,29 @@ Route::filter('is_auditee', function()
 	}
 });
 
-Route::filter('audit_has_report', function($route)
+Route::filter('audit_has_report_r', function($route)
 {
 	$id = $route->getParameter('id');
 	try {
-		return; // TODO: error filter when just want to fill the form.
 		$report = PiaReport::find($id);
 		$audit = PiaAudit::find($report->a_id);
+	} catch (Exception $e) {
+		Session::set("message","Error");
+		// App::abort(404);
+		return Redirect::to('/');
+	}
+	if (Session::get('user')->p_id != $audit->p_id)
+	{
+		Session::set("message","Oops");
+		return Redirect::to('/');
+	}
+});
+
+Route::filter('audit_has_report_a', function($route)
+{
+	$id = $route->getParameter('id');
+	try {
+		$audit = PiaAudit::find($id);
 	} catch (Exception $e) {
 		Session::set("message","Error");
 		// App::abort(404);

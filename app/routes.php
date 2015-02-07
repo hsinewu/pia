@@ -109,24 +109,27 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AuditController@calendar'
         ));
 
-        Route::group(array('before' => 'audit_has_report'),function()
+        Route::group(array('before' => 'audit_has_report_a'),function()
         {
-            Route::get('/audit/report/{id}' , array(
+            Route::get('/audit/report/{id}' , array(  //aid
                 'as' => 'audit_report',
                 'uses' => 'AuditController@report'
             ));
 
-            Route::post('/audit/report/{id}' , array(
+            Route::post('/audit/report/{id}' , array(  //aid
                 'as' => 'audit_report_process',
                 'uses' => 'AuditController@report_process'
             ));
+        });
 
-            Route::get('/audit/view/{id}' , array(
+        Route::group(array('before' => 'audit_has_report_r'),function()
+        {
+            Route::get('/audit/view/{id}' , array(  //rid
                 'as' => 'audit_view_report',
                 'uses' => 'AuditController@view_report'
             ));
 
-            Route::get('/audit/view/{id}/download' , array(
+            Route::get('/audit/view/{id}/download' , array(  //rid
                 'as' => 'audit_download_report',
                 'uses' => 'AuditController@download_report'
             ));
