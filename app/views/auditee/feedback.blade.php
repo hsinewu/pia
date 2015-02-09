@@ -17,6 +17,26 @@
     table.table tr.sample{
       display: none;
     }
+
+    div#assign{display: none;}
+
+    .toogle-hide {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      visibility: hidden;
+    }
+
+    .assign label:before {
+      content: "+ 指定處理人員";
+      font-weight: normal;
+    }
+
+    /* Change Icon */
+    input[type=checkbox]:checked ~ .assign label:before {
+        content: "X 取消指定人員";
+    }
+
   </style>
 @stop
 
@@ -36,6 +56,24 @@
       format:'Y-m-d H:i:s',
       minDate:'0'
     });
+    jQuery(document).ready(function(){
+    jQuery('a.assign').click(function(){
+      jQuery('#assign').slideToggle();
+        if(!jQuery('#toggle').prop("checked")){
+          jQuery('fieldset').attr('disabled', '');
+        }
+        else{
+          jQuery('fieldset').removeAttr('disabled');
+        }
+      });
+    });
+
+    jQuery(document).ready(function(){
+      jQuery("#auditee_n").keyup(function(){
+        var str = jQuery("#auditee_n").val();
+        jQuery("#auditee").val(str);
+      });
+    });
   </script>
 @stop
 
@@ -48,80 +86,103 @@
     <div class="col-xs-9">
       <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process') }}" method="POST">
         <div class="form-group">
+          <div class="col-sm-12">
+            <input type="checkbox" class="toogle-hide" id="toggle">
+            <a class="pull-right assign"><label for="toggle"></label></a>
+          </div>
+        </div>
+        <div id="assign">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">處理人員</label>
+            <div class="col-sm-10">
+              <input type="text" id="auditee_n" name="auditee" class="form-control" placeholder="處理人員" value="">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">E-mail</label>
+            <div class="col-sm-10">
+              <input type="text" id="auditee_mail" name="auditee_mail" class="form-control" placeholder="E-mail" value="">
+            </div>
+          </div>
+          <hr>
+        </div>
+        <div class="form-group">
           <label class="col-sm-2 control-label">提出單位</label>
           <div class="col-sm-10">
-            <input type="text" id="auditor_dept" name="auditor_dept" class="form-control" placeholder="{{ $auditor_dept->dept_name }}" value="" readonly>
+            <input type="text" id="auditor_dept" class="form-control" placeholder="" value="{{ $auditor_dept->dept_name }}" readonly>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">提出人員</label>
           <div class="col-sm-10">
-            <input type="text" id="auditor" name="auditor" class="form-control" placeholder="{{ $auditor->p_name }}" value="" readonly>
+            <input type="text" id="auditor" class="form-control" placeholder="" value="{{ $auditor->p_name }}" readonly>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">處理單位</label>
           <div class="col-sm-10">
-            <input type="text" id="auditee_dept" name="auditee_dept" class="form-control" placeholder="{{ $auditee_dept->dept_name }}" value="" readonly>
+            <input type="text" id="auditee_dept" class="form-control" placeholder="" value="{{ $auditee_dept->dept_name }}" readonly>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">處理人員</label>
           <div class="col-sm-10">
-            <input type="text" id="auditee" name="auditee" class="form-control" placeholder="" value="" readonly>
+            <input type="text" id="auditee" class="form-control" placeholder="" value="" readonly>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">事件分類</label>
           <div class="col-sm-10">
-            <input type="text" id="event" name="event" class="form-control" placeholder="" value="" readonly>
+            <input type="text" id="event" class="form-control" placeholder="" value="" readonly>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">事件來源</label>
           <div class="col-sm-10">
-            <input type="text" id="source" name="source" class="form-control" placeholder="" value="" readonly>
+            <input type="text" id="source" class="form-control" placeholder="" value="" readonly>
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">問題或缺失說明</label>
           <div class="col-sm-10">
-            <textarea class="form-control" name="problem" rows="3" placeholder="{{ $reportItem->ri_discover }}" readonly></textarea>
+            <textarea class="form-control" id="problem" name="problem" rows="3" placeholder="{{ $reportItem->ri_discover }}" readonly></textarea>
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">原因分析</label>
-          <div class="col-sm-10">
-            <textarea class="form-control" name="reason" rows="3" placeholder="原因分析"></textarea>
+        <fieldset>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">原因分析</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="原因分析"></textarea>
+            </div>
           </div>
-        </div>
-        <hr>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">矯正措施</label>
-          <div class="col-sm-10">
-            <textarea class="form-control" name="rectify" rows="3" placeholder="矯正措施"></textarea>
-            <input type="checkbox" name="rectify_check"> <span style="color: red;">須計算機及資訊網路中心協助進行主機弱點掃描作業。(請照會計算機及資訊網路中心)</span>
+          <hr>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">矯正措施</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="rectify" name="rectify" rows="3" placeholder="矯正措施"></textarea>
+              <input type="checkbox" name="rectify_check"> <span style="color: red;">須計算機及資訊網路中心協助進行主機弱點掃描作業。(請照會計算機及資訊網路中心)</span>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">預定完成日期</label>
-          <div class="col-sm-10">
-            <input type="date_timepicker" id="rectify_time" name="rectify_time" class="form-control" placeholder="預定完成日期">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">預定完成日期</label>
+            <div class="col-sm-10">
+              <input type="date_timepicker" id="rectify_time" name="rectify_time" class="form-control" placeholder="預定完成日期">
+            </div>
           </div>
-        </div>
-        <hr>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">預防措施</label>
-          <div class="col-sm-10">
-            <textarea class="form-control" name="prevent" rows="3" placeholder="預防措施"></textarea>
+          <hr>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">預防措施</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="prevent" name="prevent" rows="3" placeholder="預防措施"></textarea>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label">預定完成日期</label>
-          <div class="col-sm-10">
-            <input type="date_timepicker" id="prevent_time" name="prevent_time" class="form-control" placeholder="預定完成日期">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">預定完成日期</label>
+            <div class="col-sm-10">
+              <input type="date_timepicker" id="prevent_time" name="prevent_time" class="form-control" placeholder="預定完成日期">
+            </div>
           </div>
-        </div>
+        </fieldset>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
             <button type="submit" class="btn btn-default">送出</button>
