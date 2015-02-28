@@ -22,6 +22,7 @@ class GlobalSettingInit extends Migration {
 					echo "Please input the " . $e[0] . " data: \n";
 					$tmp->value = readline();
 					$tmp->save();
+					break;
 				}catch(Exception $ex){
 					echo $ex->getMessage() . "\n";
 				}

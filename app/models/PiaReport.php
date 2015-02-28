@@ -126,7 +126,7 @@ class PiaReport extends PiaBase {
 	}
 
 	protected function get_paper_path(){
-		return storage_path("report_pdf/" . $this->audit()->event()->first()->event_name . "-" . $this->r_id );
+		return storage_path("report_pdf/" . $this->audit()->first()->event()->first()->event_name . "-" . $this->r_id );
 	}
 
 	public function get_paper(){

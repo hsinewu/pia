@@ -36,7 +36,7 @@ class Init extends Migration {
 			$table->string('dept_name')->unique();
 		});
 
-		echo "Please input the dept source data: (input nothing to ignore importing)\n";
+		echo "Please input the dept source data table name: (input nothing to ignore importing)\n";
 		$src_tbl = "";
 		$src_tbl = readline();
 		if($src_tbl){
@@ -54,7 +54,7 @@ class Init extends Migration {
 		}
 
 		$this->def_dept = DB::table($this->dept_tbl)->insertGetId(array(
-			// 'dept_id' => 0, 
+			// 'dept_id' => 0,
 			'group_id' => null,
 			'org_id' => $this->def_org,
 			'dept_name' => "Default"
@@ -77,7 +77,7 @@ class Init extends Migration {
 			$table->integer('p_level');
 		});
 
-		echo "Please input the person source data: (input nothing to ignore importing)\n";
+		echo "Please input the person source data table name: (input nothing to ignore importing)\n";
 		$src_tbl = "";
 		$src_tbl = readline();
 
@@ -94,7 +94,7 @@ class Init extends Migration {
 					'p_name' => $value->user_name,
 					'p_mail' => $value->user_mail,
 					'p_pass' => $value->user_passwd,
-					'p_level' => 0 // default level
+					'p_level' => 1 // default admin level
 				);
 			}
 			DB::table($this->person_tbl)->insert($inserts);

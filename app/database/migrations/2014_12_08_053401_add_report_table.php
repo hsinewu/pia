@@ -27,7 +27,7 @@ class AddReportTable extends Migration {
 		Schema::create("report_item", function($table)
 		{
 			$table->increments('ri_id');
-			$table->integer('a_id');
+			$table->integer('r_id');
 			$table->string('ri_base');
 			$table->string('ri_discover');
 			$table->string('ri_recommand');
@@ -41,7 +41,8 @@ class AddReportTable extends Migration {
 	 */
 	public function down()
 	{
-		//
+		Schema::dropIfExists("report");
+		Schema::dropIfExists("report_item");
 	}
 
 }
