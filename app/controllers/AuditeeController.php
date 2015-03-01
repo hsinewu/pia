@@ -19,6 +19,7 @@ class AuditeeController extends Controller {
 				'report' => $report,
 				'auditor' => $auditor,
 				'auditor_dept' => $auditor->dept()->first(),
+				'auditee'=> Session::get('user'),
 				'auditee_dept'=> $auditee,
 				'reportItem' => $item,
 			));
@@ -26,6 +27,24 @@ class AuditeeController extends Controller {
 
 	public function feedback_process($ri_id){
 
+	}
+
+	public function assign_process($ri_id){
+		$input = Input::all();
+		try {
+			$item = PiaReportItem::find($ri_id);
+			$item->handler_name = $input['auditee'];
+			$item->handler_email = $input['auditee_mail'];
+
+			if(!in_array($item->ri_status, ['表單待填', '主管否決', '組長否決']))
+				throw new Exception("Illegal status!");
+
+			$item->ri_status = '代填';
+			$item->save();
+		}catch (Exception $e) {
+			Session::set("message",$e->getMessage());
+			return Redirect::route('auditee_feedback',$ri_id);
+		}
 	}
 
 	public function view_report($id){

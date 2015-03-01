@@ -57,21 +57,27 @@
       minDate:'0'
     });
     jQuery(document).ready(function(){
+    var init = jQuery("#auditee").val();
     jQuery('a.assign').click(function(){
+      var str = jQuery("#auditee_n").val();
       jQuery('#assign').slideToggle();
         if(!jQuery('#toggle').prop("checked")){
           jQuery('fieldset').attr('disabled', '');
+          if(jQuery("#auditee_n").val()!="")  jQuery("#auditee").val(str);
         }
         else{
           jQuery('fieldset').removeAttr('disabled');
+          jQuery("#auditee").val(init);
         }
       });
     });
 
     jQuery(document).ready(function(){
+      var init = jQuery("#auditee").val();
       jQuery("#auditee_n").keyup(function(){
         var str = jQuery("#auditee_n").val();
-        jQuery("#auditee").val(str);
+        if(jQuery("#auditee_n").val()!="")  jQuery("#auditee").val(str);
+        else  jQuery("#auditee").val(init);
       });
     });
   </script>
@@ -84,7 +90,7 @@
       @include("menu")
     </div>
     <div class="col-xs-9">
-      <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process') }}" method="POST">
+      <form class="form-horizontal" role="form" action="{{ route('auditee_assign_process') }}" method="POST">
         <div class="form-group">
           <div class="col-sm-12">
             <input type="checkbox" class="toogle-hide" id="toggle">
@@ -104,8 +110,15 @@
               <input type="text" id="auditee_mail" name="auditee_mail" class="form-control" placeholder="E-mail" value="">
             </div>
           </div>
+          <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">送出</button>
+          </div>
+        </div>
           <hr>
         </div>
+      </form>
+      <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process') }}" method="POST">
         <div class="form-group">
           <label class="col-sm-2 control-label">提出單位</label>
           <div class="col-sm-10">
@@ -127,7 +140,7 @@
         <div class="form-group">
           <label class="col-sm-2 control-label">處理人員</label>
           <div class="col-sm-10">
-            <input type="text" id="auditee" class="form-control" placeholder="" value="" readonly>
+            <input type="text" id="auditee" class="form-control" placeholder="" value="{{ $auditee->p_name }}" readonly>
           </div>
         </div>
         <div class="form-group">
