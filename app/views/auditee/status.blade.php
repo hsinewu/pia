@@ -92,6 +92,7 @@
                   <td>條款</td>
                   <td>發現</td>
                   <td>建議</td>
+                  <td>動作</td>
                 </tr>
                 @foreach($items as $i)
                 <tr class="{{ $r->r_serial }}" style="display:none;">
@@ -99,7 +100,10 @@
                   <td>{{ $i->ri_base }}</td>
                   <td>{{ $i->ri_discover }}</td>
                   <td>{{ $i->ri_recommand }}</td>
-                  <td><a href="{{ route('auditee_feedback',$i->ri_id) }}">填寫矯正預防</a></td>
+                  <td>
+                      <a href="{{ route('auditee_feedback',$i->ri_id) }}">填寫矯正預防</a>
+                      <a href="{{ route('auditee_view_report_item',$i->ri_id) }}">觀看矯正預防報告</a>
+                  </td>
                 </tr>
                 @endforeach
                 </div>

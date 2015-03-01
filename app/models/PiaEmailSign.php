@@ -10,8 +10,14 @@ class PiaEmailSign extends PiaBase {
 	protected $table = 'email_sign';
 	protected $primaryKey = 'es_id';
 
-	public function save(array $options = array()){
+	public function gen_code(){
+		//TODO: insure no repeated md5 value
+		if( is_null($this->es_code) )
+			$this->es_code = md5( (new DateTime())->getTimestamp() );
+	}
 
+	public function save(array $options = array()){
+		
 		$validator = Validator::make
 		(
 		    array(

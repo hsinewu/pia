@@ -126,7 +126,7 @@ class PiaReport extends PiaBase {
 	}
 
 	protected function get_paper_path(){
-		return storage_path("report_pdf/" . $this->audit()->first()->event()->first()->event_name . "-" . $this->r_id );
+		return storage_path("report_pdf/" . $this->r_id );
 	}
 
 	public function get_paper(){
@@ -137,15 +137,19 @@ class PiaReport extends PiaBase {
 			return $this->gen_paper();
 	}
 
+	public function gen_html($hide_sign = false){
+		if($hide_sign)
+			return View::make('macro/report')->with(["report" => $this,'items' => $this->items()->get(),"hide_sign" => $hide_sign])->render();
+		else
+			return View::make('macro/report')->with(["report" => $this,'items' => $this->items()->get()])->render();
+	}
+
 	public function gen_paper($hide_sign = false){
 		$pdf_path = $this->get_paper_path();
 		$full_pdf_path = $pdf_path . ".pdf";
 		if(file_exists($full_pdf_path))
 			unlink($full_pdf_path);
-		if($hide_sign)
-			PDF::html('paper/report', ['report' => $this, 'items' => $this->items()->get()->all(),"hide_sign" => true], $pdf_path);
-		else
-			PDF::html('paper/report', ['report' => $this, 'items' => $this->items()->get()->all()], $pdf_path);
+		PDF::html('paper', ['content' => $this->gen_html($hide_sign), 'title' => "個人資料管理制度內部稽核報告"], $pdf_path);
 		return $full_pdf_path;
 	}
 

@@ -4,7 +4,7 @@ class AuditeeController extends Controller {
 
 	private $status = array(
 		'new' => '表單待填',
-		'mail' => '待電郵代填',
+		'mail' => '代填',
 		'confirm1' => '待主管簽署',
 		'reject1' => '主管否決',
 		'confirm2' => '待組長簽署',
@@ -12,28 +12,48 @@ class AuditeeController extends Controller {
 		'finish' => '完成'
 	);
 
-	private function sendMail1($reportItem){
+	private function sendMail($reportItem,$type){
+		switch ($type) {
+			case 'confirm1':
+				$url_alias = 'rectify_email_sign';
+				break;
+			case 'confirm2':
+				$url_alias = 'rectify_email_sign2';
+				break;
+			default:
+				dd('wtf sendmail type');
+				break;
+		}
 		//set up a new PiaEmailSign
 		$es = new PiaEmailSign();
 		$es->r_id = $reportItem->r_id;
-		//WARNING: encrypt what
-		$es->es_code = md5( date("Y-m-d H:i:s") );
+		$es->gen_code();
 		$es->es_used = false;
 		$es->es_type = 3;
+		//TODO: param to be fixed
 		$es->es_to = PiaGlobal::get_test_email();
 		$es->save();
+
+		//Update ri's es_id field
+		$reportItem->es_id = $es->es_id;
+		$reportItem->save();
+
+		//Actually send the email
+		define("pdf_name", $reportItem->get_paper());
+
 		Mail::send('emails/yes_no',
 			[
-			'url_alias' => 'rectify_email_sign',
+			'url_alias' => $url_alias,
 			'es_code' => $es->es_code,
-			// 'sign_url' => route("rectify_email_sign",$es->es_code),
+			'content' => $reportItem->gen_html(),
 			'type' => '矯正報告',
 			],
 			function($message){
 				$message
-				->to( PiaGlobal::get_test_email(), '$Receiver' )
+				//TODO: param to be fixed
+				->to( PiaGlobal::get_test_email(), '收件人' )
 				->subject("個資稽核系統--矯正回報之確認")
-				// ->attach(pdf_name, array('as' => "個資稽核報告.pdf"))
+				->attach(pdf_name, array('as' => "矯正回報.pdf"))
 				;
 		});
 	}
@@ -79,7 +99,7 @@ class AuditeeController extends Controller {
 		$item -> ri_status = $this->status['confirm1'];
 		$item -> save();
 
-		$this -> sendMail1($item);
+		$this -> sendMail($item,'confirm1');
 
 		return Redirect::route('auditee_status');
 	}
@@ -169,11 +189,10 @@ class AuditeeController extends Controller {
 
 	public function view_report($id){
 		$report = PiaReport::findOrFail($id);
-		return View::make('report')->with(
+		return View::make('preview')->with(
 		array(
-			'report' => $report,
-			'items' => $report->items()->get(),
-			"download_route" => 'auditee_download_report',
+			'content' => $report->gen_html(),
+			"download_url" => route('auditee_view_report', $id),
 			'title' => '稽核報告預覽：' . $report->r_serial,
 		));
 	}
@@ -184,11 +203,85 @@ class AuditeeController extends Controller {
 	}
 
 	public function sign($code,$yes_no){
-		//TODO
-		if($yes_no == 'yes')
+		try {
+		    $es = PiaEmailSign::where('es_code', '=', $code)->firstOrFail();
+		} catch (Exception $e) {
+		    Session::set("message",$e->getMessage());
+		}
+		//Is link used?Is type wrong?
+		if($es->es_used == true)  dd("Link were used");
+		if($es->es_type != 3)  dd("type error");
+
+		//Find corresponding ri
+		$ri = PiaReportItem::where('es_id','=',$es->es_id)->firstOrFail();
+		//Check status
+		if($ri->ri_status == $this->status['confirm2'] ||
+			$ri->ri_status == $this->status['reject1'])
+			dd("先前已簽署過");
+		//Disable link
+		$es->es_used = true;
+		$es->save();
+
+		$ri->confirm_timestamp1 = date("Y-m-d H:i:s");
+		if($yes_no == 'yes'){
+			$ri->ri_status = $this->status['confirm2'];
+			$ri->save();
+			$this -> sendMail($ri,'confirm2');
 			dd('You say yes');
-		else if($yes_no == 'no')
+		}
+		else if($yes_no == 'no'){
+			$ri->ri_status = $this->status['reject1'];
+			$ri->save();
 			dd('You say no');
+		}
 		dd($yes_no);
+	}
+
+	public function sign2($code,$yes_no){
+		try {
+		    $es = PiaEmailSign::where('es_code', '=', $code)->firstOrFail();
+		} catch (Exception $e) {
+		    Session::set("message",$e->getMessage());
+		}
+		//Is link used?Is type wrong?
+		if($es->es_used == true)  dd("Link were used");
+		if($es->es_type != 3)  dd("type error");
+
+		//Find corresponding ri
+		$ri = PiaReportItem::where('es_id','=',$es->es_id)->firstOrFail();
+		if($ri->ri_status == $this->status['finish'] ||
+			$ri->ri_status == $this->status['reject2'])
+			dd("先前已簽署過");
+		//Disable link
+		$es->es_used = true;
+		$es->save();
+
+		$ri->confirm_timestamp2 = date("Y-m-d H:i:s");
+		if($yes_no == 'yes'){
+			$ri->ri_status = $this->status['finish'];
+			$ri->save();
+			dd('You say yes');
+		}
+		else if($yes_no == 'no'){
+			$ri->ri_status = $this->status['reject2'];
+			$ri->save();
+			dd('You say no');
+		}
+		dd($yes_no);
+	}
+
+	public function report_item($id){
+		$item = PiaReportItem::findOrFail($id);
+		return View::make('preview')->with(
+		array(
+			'content' => $item->gen_html(),
+			"download_url" => route('auditee_download_report_item',$id),
+			'title' => '校正預防報告預覽：',
+		));
+	}
+
+	public function download_report_item($id){
+		$item = PiaReportItem::findOrFail($id);
+		return Response::download($item->get_paper(), $item->get_serial() . " 矯正預防報告.pdf");
 	}
 }

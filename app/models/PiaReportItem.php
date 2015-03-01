@@ -55,7 +55,9 @@ class PiaReportItem extends PiaBase {
 			];
 			break;
 		default:
-			throw new Exception("Invalid status!");
+			// throw new Exception("Invalid status!");
+			$data_to_validate = [];
+			$rule = [];
 		}
 		$validator = Validator::make($data_to_validate,$rule);
 		if($validator->fails())
@@ -73,5 +75,61 @@ class PiaReportItem extends PiaBase {
 
 	public function report(){
 		return $this->hasOne('PiaReport','r_id','r_id');
+	}
+
+	public function get_number(){
+		return self::where("r_id","=",$this->r_id)->where("ri_id","<=",$this->ri_id)->count();
+	}
+
+	public function get_serial(){
+		return $this->report()->first()->r_serial . "-" . $this->get_number();
+	}
+
+	protected function get_paper_path(){
+		return storage_path("report_item_pdf/" . $this->ri_id );
+	}
+
+	public function get_paper(){
+		$full_pdf_path = $this->get_paper_path() . ".pdf";
+		if(file_exists($full_pdf_path))
+			return $full_pdf_path;
+		else
+			return $this->gen_paper();
+	}
+
+	public function gen_html($hide_sign = false){
+		$report = $this->report()->first();
+		$audit = $report->audit()->first();
+		$auditor = $audit->person()->first();
+		$dept = $audit->dept()->first();
+
+		if($hide_sign)
+			return View::make('macro/report_item')->with([
+				"item" => $this,
+				"report" => $report,
+				"audit" => $audit,
+				"auditor" => $auditor,
+				"dept" => $dept,
+				"raise_depart" => PiaGlobal::grab('pia_team_name'),
+				"hide_sign" => $hide_sign,
+			])->render();
+		else
+			return View::make('macro/report_item')->with([
+				"item" => $this,
+				"report" => $report,
+				"audit" => $audit,
+				"auditor" => $auditor,
+				"dept" => $dept,
+				"raise_depart" => PiaGlobal::grab('pia_team_name'),
+			])->render();
+	}
+
+	public function gen_paper($hide_sign = false){
+		$pdf_path = $this->get_paper_path();
+		$full_pdf_path = $pdf_path . ".pdf";
+		if(file_exists($full_pdf_path))
+			unlink($full_pdf_path);
+		PDF::html('paper', ['content' => $this->gen_html($hide_sign), 'title' => "個人資料管理制度矯正預防處理單"], $pdf_path);
+		return $full_pdf_path;
 	}
 }

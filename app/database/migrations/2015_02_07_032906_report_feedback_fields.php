@@ -14,6 +14,7 @@ class ReportFeedbackFields extends Migration {
 	{
 		Schema::table('report_item', function($table)
 		{
+			$table->datetime('fill_date')->nullable();
 		    $table->string('handler_name')->nullable();
 		    $table->string('handler_email')->nullable();
 		    $table->string('analysis')->nullable();
