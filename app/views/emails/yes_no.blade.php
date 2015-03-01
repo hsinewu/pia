@@ -12,8 +12,8 @@
 		<p>put something here</p>
 		<p>put something here</p>
 		<hr>
-		<p><a href="{{ route( $url_alias, $es_code, 'yes') }}">通過</a>這份文件</p>
-		<p><a href="{{ route( $url_alias, $es_code, 'no') }}">否決</a>這份文件</p>
+		<p><a href="{{ route( $url_alias, [$es_code, 'yes']) }}">通過</a>這份文件</p>
+		<p><a href="{{ route( $url_alias, [$es_code, 'no']) }}">否決</a>這份文件</p>
 
 	</body>
 </html>
