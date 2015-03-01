@@ -39,19 +39,21 @@ class AuditeeController extends Controller {
 		$reportItem->save();
 
 		//Actually send the email
+		define("pdf_name", $reportItem->get_paper());
+
 		Mail::send('emails/yes_no',
 			[
 			'url_alias' => $url_alias,
 			'es_code' => $es->es_code,
-			// 'sign_url' => route("rectify_email_sign",$es->es_code),
+			'content' => $reportItem->gen_html(),
 			'type' => '矯正報告',
 			],
 			function($message){
 				$message
 				//TODO: param to be fixed
-				->to( PiaGlobal::get_test_email(), '$Receiver' )
+				->to( PiaGlobal::get_test_email(), '收件人' )
 				->subject("個資稽核系統--矯正回報之確認")
-				// ->attach(pdf_name, array('as' => "個資稽核報告.pdf"))
+				->attach(pdf_name, array('as' => "矯正回報.pdf"))
 				;
 		});
 	}
