@@ -57,17 +57,88 @@ class PiaReportItem extends PiaBase {
 			];
 			$rule = [
 				// "ri_id" => 'required',
-				// "r_id" => 'required',
+				"r_id" => 'required',
 				"ri_base" => 'required',
 				"ri_status" => 'required',
 				"handler_name" => 'required',
 				"handler_email" => 'required|email',
 			];
 			break;
+		case '待主管簽署':
+		case '待組長簽署':
+			$data_to_validate = [
+				// "ri_id" => $this->ri_id,
+				"r_id" => $this->r_id,
+				"ri_base" => $this->ri_base,
+				"ri_discover" => $this->ri_discover,
+				"ri_recommand" => $this->ri_recommand,
+				"ri_status" => $this->ri_status,
+				"handler_name" => $this->handler_name,
+				"handler_email" => $this->handler_email,
+				'analysis' => $this->analysis,
+				'rectify_measure' => $this->rectify_measure,
+				'rec_finish_date' => $this->rec_finish_date,
+				'precautionary_measure' => $this->precautionary_measure,
+				'pre_finish_date' => $this->pre_finish_date,
+				'es_id' => $this->es_id,
+				'fill_date' => $this->fill_date,
+			];
+			$rule = [
+				// "ri_id" => 'required',
+				"r_id" => 'required',
+				"ri_base" => 'required',
+				"ri_status" => 'required',
+				"handler_name" => 'required',
+				"handler_email" => 'required|email',
+				'analysis' => 'required',
+				'rectify_measure' => 'required',
+				'rec_finish_date' => 'required',
+				'precautionary_measure' => 'required',
+				'pre_finish_date' => 'required',
+				// 'es_id' => 'required',
+				'fill_date' => 'required',
+			];
+			break;
+		case '完成':
+			$data_to_validate = [
+				// "ri_id" => $this->ri_id,
+				"r_id" => $this->r_id,
+				"ri_base" => $this->ri_base,
+				"ri_discover" => $this->ri_discover,
+				"ri_recommand" => $this->ri_recommand,
+				"ri_status" => $this->ri_status,
+				"handler_name" => $this->handler_name,
+				"handler_email" => $this->handler_email,
+				'analysis' => $this->analysis,
+				'rectify_measure' => $this->rectify_measure,
+				'rec_finish_date' => $this->rec_finish_date,
+				'precautionary_measure' => $this->precautionary_measure,
+				'pre_finish_date' => $this->pre_finish_date,
+				// 'es_id' => $this->es_id,
+				'fill_date' => $this->fill_date,
+				'confirm_timestamp1' => $this->confirm_timestamp1,
+				'confirm_timestamp2' => $this->confirm_timestamp2,
+			];
+			$rule = [
+				// "ri_id" => 'required',
+				"r_id" => 'required',
+				"ri_base" => 'required',
+				"ri_status" => 'required',
+				"handler_name" => 'required',
+				"handler_email" => 'required|email',
+				'analysis' => 'required',
+				'rectify_measure' => 'required',
+				'rec_finish_date' => 'required',
+				'precautionary_measure' => 'required',
+				'pre_finish_date' => 'required',
+				// 'es_id' => 'required',
+				'fill_date' => 'required',
+				'confirm_timestamp1' => 'required',
+				'confirm_timestamp2' => 'required',
+			];
+			break;
 		default:
-			// throw new Exception("Invalid status!");
-			$data_to_validate = [];
-			$rule = [];
+			throw new Exception("Invalid status!");
 		}
 		$validator = Validator::make($data_to_validate,$rule);
 		if($validator->fails())
@@ -92,7 +163,7 @@ class PiaReportItem extends PiaBase {
 	}
 
 	public function get_serial(){
-		return $this->report()->first()->r_serial . "-" . $this->get_number();
+		return (date('Y') - 1911) . "-" . date("m-d") . "-" . ($this->ri_id % 1000);
 	}
 
 	protected function get_paper_path(){

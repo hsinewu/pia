@@ -55,7 +55,6 @@ class PiaReport extends PiaBase {
 		);
 		if($validator->fails())
 			throw new Exception($validator->messages());
-		$this->gen_paper();
 		parent::save($options);
 	}
 

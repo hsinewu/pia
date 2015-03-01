@@ -79,7 +79,7 @@
                 事件分類：<br/>□建議 □觀察 □次要缺失 □主要缺失 □潛在風險<br/>註:內部稽核不填寫此欄位
             </td>
             <td width="50%">
-                事件來源：<br/>■內部稽核 □外部稽核 □個資事件 □自行發現 <br/>□其他＿＿＿＿＿＿＿
+                事件來源：<br/>■內部稽核 □外部稽核 □個資事件 □自行發現 <br/>□其他＿＿＿＿＿＿＿
             </td>
         </tr>
     </tbody>
@@ -184,7 +184,7 @@
                 日期
             </td>
             <td>
-                {{ $item->fill_date ? $item->fill_date . ($item->handler_email ? "由 " . $item->handler_name . " " . $item->handler_email . " 所填寫" : "") . "" : "尚未填寫過" }}
+                {{ $item->fill_date ? $item->fill_date . ($item->handler_email ? "<br/>由 " . $item->handler_name . " 使用 " . $item->handler_email . " 所填寫" : "") . "" : "尚未填寫過" }}
             </td>
             <td>
                 {{ $item->confirm_timestamp1 ? $item->confirm_timestamp1 : "尚未簽署" }}

@@ -95,6 +95,10 @@ class AuditeeController extends Controller {
 		$item -> rec_finish_date = $input['rectify_time'];
 		$item -> precautionary_measure = $input['prevent'];
 		$item -> pre_finish_date = $input['prevent_time'];
+		$item -> fill_date = date("Y-m-d H:i:s");
+
+		$item -> handler_name = Session::get('user')->p_name;
+		$item -> handler_email = Session::get('user')->p_mail;
 
 		$item -> ri_status = $this->status['confirm1'];
 		$item -> save();
@@ -227,14 +231,15 @@ class AuditeeController extends Controller {
 			$ri->ri_status = $this->status['confirm2'];
 			$ri->save();
 			$this -> sendMail($ri,'confirm2');
-			dd('You say yes');
+			Session::set("message","您已經認可這份矯正預防");
 		}
 		else if($yes_no == 'no'){
 			$ri->ri_status = $this->status['reject1'];
 			$ri->save();
-			dd('You say no');
+			Session::set("message","您否決了這份矯正預防");
 		}
-		dd($yes_no);
+		// dd($yes_no);
+		return Redirect::to('/');
 	}
 
 	public function sign2($code,$yes_no){
@@ -260,14 +265,15 @@ class AuditeeController extends Controller {
 		if($yes_no == 'yes'){
 			$ri->ri_status = $this->status['finish'];
 			$ri->save();
-			dd('You say yes');
+			Session::set("message","您已經認可這份矯正預防");
 		}
 		else if($yes_no == 'no'){
 			$ri->ri_status = $this->status['reject2'];
 			$ri->save();
-			dd('You say no');
+			Session::set("message","您否決了這份矯正預防");
 		}
-		dd($yes_no);
+		// dd($yes_no);
+		return Redirect::to('/');
 	}
 
 	public function report_item($id){
