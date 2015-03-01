@@ -84,7 +84,7 @@
       @include("menu")
     </div>
     <div class="col-xs-9">
-      <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process') }}" method="POST">
+      <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process', $reportItem->ri_id) }}" method="POST">
         <div class="form-group">
           <div class="col-sm-12">
             <input type="checkbox" class="toogle-hide" id="toggle">
