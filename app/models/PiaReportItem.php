@@ -55,7 +55,9 @@ class PiaReportItem extends PiaBase {
 			];
 			break;
 		default:
-			throw new Exception("Invalid status!");
+			// throw new Exception("Invalid status!");
+			$data_to_validate = [];
+			$rule = [];
 		}
 		$validator = Validator::make($data_to_validate,$rule);
 		if($validator->fails())
