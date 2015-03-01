@@ -55,8 +55,8 @@ class PiaReport extends PiaBase {
 		);
 		if($validator->fails())
 			throw new Exception($validator->messages());
-		parent::save($options);
 		$this->gen_paper();
+		parent::save($options);
 	}
 
 	public function set_state_level($level)
