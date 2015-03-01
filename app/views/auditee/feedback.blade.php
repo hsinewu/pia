@@ -74,10 +74,17 @@
 
     jQuery(document).ready(function(){
       var init = jQuery("#auditee").val();
+      var str = jQuery("#auditee_n").val();
+      if(str!="") jQuery("#auditee").val(str);
       jQuery("#auditee_n").keyup(function(){
-        var str = jQuery("#auditee_n").val();
-        if(jQuery("#auditee_n").val()!="")  jQuery("#auditee").val(str);
-        else  jQuery("#auditee").val(init);
+        str = jQuery("#auditee_n").val();
+        if(jQuery("#auditee_n").val()=="" && jQuery("#auditee_mail").val()=="")  jQuery("#auditee").val(init);
+        else  jQuery("#auditee").val(str);
+      });
+      jQuery("#auditee_mail").keyup(function(){
+        str = jQuery("#auditee_n").val();
+        if(jQuery("#auditee_n").val()=="" && jQuery("#auditee_mail").val()=="")  jQuery("#auditee").val(init);
+        else  jQuery("#auditee").val(str);
       });
     });
   </script>
@@ -101,13 +108,13 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">處理人員</label>
             <div class="col-sm-10">
-              <input type="text" id="auditee_n" name="auditee" class="form-control" placeholder="處理人員" value="">
+              <input type="text" id="auditee_n" name="auditee" class="form-control" placeholder="處理人員" value="{{ $reportItem->handler_name }}">
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-2 control-label">E-mail</label>
             <div class="col-sm-10">
-              <input type="text" id="auditee_mail" name="auditee_mail" class="form-control" placeholder="E-mail" value="">
+              <input type="text" id="auditee_mail" name="auditee_mail" class="form-control" placeholder="E-mail" value="{{ $reportItem->handler_email }}">
             </div>
           </div>
           <div class="form-group">

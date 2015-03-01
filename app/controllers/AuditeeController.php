@@ -23,14 +23,16 @@ class AuditeeController extends Controller {
 		$item = PiaReportItem::find($ri_id);
 		$report = $item->report()->first();
 		$auditor = $report->auditor()->first();
-		$auditee = $report->auditee()->first();
+		$auditee_dept = $report->auditee()->first();
+		// if($item->handler_name!=NULL) $auditee = $item->handler_name;
+		// else $auditee = Session::get('user');
 		return View::make('auditee/feedback')->with(
 			array(
 				'report' => $report,
 				'auditor' => $auditor,
 				'auditor_dept' => $auditor->dept()->first(),
 				'auditee'=> Session::get('user'),
-				'auditee_dept'=> $auditee,
+				'auditee_dept'=> $auditee_dept,
 				'reportItem' => $item,
 			));
 	}
@@ -59,11 +61,12 @@ class AuditeeController extends Controller {
 			$item->handler_name = $input['auditee'];
 			$item->handler_email = $input['auditee_mail'];
 
-			if(!in_array($item->ri_status, ['表單待填', '主管否決', '組長否決']))
+			if(!in_array($item->ri_status, ['表單待填', '主管否決', '組長否決', '代填']))
 				throw new Exception("Illegal status!");
 
 			$item->ri_status = '代填';
 			$item->save();
+			return Redirect::route('auditee_status');
 		}catch (Exception $e) {
 			Session::set("message",$e->getMessage());
 			return Redirect::route('auditee_feedback',$ri_id);
