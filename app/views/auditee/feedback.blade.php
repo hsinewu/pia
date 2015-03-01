@@ -90,7 +90,7 @@
       @include("menu")
     </div>
     <div class="col-xs-9">
-      <form class="form-horizontal" role="form" action="{{ route('auditee_assign_process') }}" method="POST">
+      <form class="form-horizontal" role="form" action="{{ route('auditee_assign_process', $reportItem->ri_id) }}" method="POST">
         <div class="form-group">
           <div class="col-sm-12">
             <input type="checkbox" class="toogle-hide" id="toggle">
@@ -112,13 +112,13 @@
           </div>
           <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">送出</button>
+            <button type="submit" class="btn btn-default">確認</button>
           </div>
         </div>
           <hr>
         </div>
       </form>
-      <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process') }}" method="POST">
+      <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process', $reportItem->ri_id) }}" method="POST">
         <div class="form-group">
           <label class="col-sm-2 control-label">提出單位</label>
           <div class="col-sm-10">

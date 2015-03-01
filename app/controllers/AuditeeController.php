@@ -2,6 +2,16 @@
 
 class AuditeeController extends Controller {
 
+	private $status = array(
+		'new' => '表單待填',
+		'mail' => '待電郵代填',
+		'confirm1' => '待主管簽署',
+		'reject1' => '主管否決',
+		'confirm2' => '待組長簽署',
+		'reject2' => '組長否決',
+		'finish' => '完成'
+	);
+
 	public function status(){
 		return View::make('auditee/status')->with(
 			array(
@@ -26,7 +36,20 @@ class AuditeeController extends Controller {
 	}
 
 	public function feedback_process($ri_id){
+		$input = Input::all();
+		$item = PiaReportItem::find($ri_id);
 
+		$item -> analysis = $input['reason'];
+		$item -> rectify_measure = $input['rectify'];
+		$item -> scan_help = isset($input['rectify_check']) ? true : false;
+		$item -> rec_finish_date = $input['rectify_time'];
+		$item -> precautionary_measure = $input['prevent'];
+		$item -> pre_finish_date = $input['prevent_time'];
+
+		$item -> ri_status = $this->status['confirm1'];
+		$item -> save();
+
+		return Redirect::route('auditee_status');
 	}
 
 	public function assign_process($ri_id){
