@@ -40,7 +40,7 @@
   $select_arr = (new PiaPerson())->getLevel_key_value();
 ?>
 <div id="level">
-<input type="hidden" name="{{ $name }}" value="{{ $value }}"/>
+<input type="hidden" name="{{ $name }}" value="{{ $value ? $value : 0 }}"/>
   @foreach($select_arr as $opt)
     <div class="col-md-6 row">
       <input type="checkbox" class="level" value="{{ $opt->value }}"> {{$opt->text}}
