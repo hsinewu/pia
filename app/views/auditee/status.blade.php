@@ -74,7 +74,7 @@
                   @if( $show_sub_item = $r->is_finished() )
                   <td>{{ $r->r_serial }}</td>
                   <td>{{ $r->status }}</td>
-                  <td><a onclick="$('.{{ $r->r_serial }}').toggle()" href="#">細則</a> or <a href="{{ route('auditee_view_report', $r->r_id) }}">觀看報告</a></td>
+                  <td><a onclick="$('.{{ $r->r_serial }}').toggle()" href="#">稽核發現</a> ｜ <a href="{{ route('auditee_view_report', $r->r_id) }}">觀看報告</a></td>
                   @else
                   <td>{{ $r->r_serial }}</td>
                   <td>尚未回報完成</td>

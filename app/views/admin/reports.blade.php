@@ -65,12 +65,35 @@
           <tbody>
             @foreach($reports as $r)
               <tr>
-                  <td>{{ $r->r_serial }}</td>
-                  <td>{{ $r->status }}</td>
+                <td>{{ $r->r_serial }}</td>
+                <td>{{ $r->status }}</td>
                 <td>
                   <a href="{{ route('admin_view_report',$r->r_id) }}" class="preview">觀看回報內容</a>
+
+                  @if($show_sub_item = $r->is_finished())
+                    ｜
+                    @if($show_sub_item = count($items = $r->items()->get()->all()))
+                        <a onclick="$('.{{ $r->r_serial }}').toggle()" href="#">稽核發現</a>
+                    @else
+                        沒有稽核發現
+                    @endif
+                  @endif
                 </td>
               </tr>
+              @if($show_sub_item)
+                <tr class="{{ $r->r_serial }}" style="display:none;">
+                  <td>條款</td>
+                  <td>發現</td>
+                  <td>狀態，點擊觀看詳細訊息</td>
+                </tr>
+                @foreach($items as $i)
+                  <tr class="{{ $r->r_serial }}" style="display:none;">
+                    <td>{{ $i->ri_base }}</td>
+                    <td>{{ $i->ri_discover }}</td>
+                    <td><a href="{{ route('auditee_feedback',$i->ri_id) }}">{{ $i->ri_status }}</a></td>
+                  </tr>
+                @endforeach
+              @endif
             @endforeach
           </tbody>
         </table>

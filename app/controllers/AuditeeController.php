@@ -12,6 +12,31 @@ class AuditeeController extends Controller {
 		'finish' => '完成'
 	);
 
+	private function sendMail1($reportItem){
+		//set up a new PiaEmailSign
+		$es = new PiaEmailSign();
+		$es->r_id = $reportItem->r_id;
+		//WARNING: encrypt what
+		$es->es_code = md5( date("Y-m-d H:i:s") );
+		$es->es_used = false;
+		$es->es_type = 3;
+		$es->es_to = PiaGlobal::get_test_email();
+		$es->save();
+		Mail::send('emails/yes_no',
+			[
+			'url_alias' => 'rectify_email_sign',
+			'es_code' => $es->es_code,
+			// 'sign_url' => route("rectify_email_sign",$es->es_code),
+			'type' => '矯正報告',
+			],
+			function($message){
+				$message
+				->to( PiaGlobal::get_test_email(), '$Receiver' )
+				->subject("個資稽核系統--矯正回報之確認")
+				// ->attach(pdf_name, array('as' => "個資稽核報告.pdf"))
+				;
+		});
+	}
 	public function status(){
 		return View::make('auditee/status')->with(
 			array(
@@ -40,6 +65,9 @@ class AuditeeController extends Controller {
 	public function feedback_process($ri_id){
 		$input = Input::all();
 		$item = PiaReportItem::find($ri_id);
+		if(!($item->ri_status == $this->status['new']
+			||$item->ri_status == $this->status['mail']
+			||$item->ri_status == '')) dd('cant not be change again');
 
 		$item -> analysis = $input['reason'];
 		$item -> rectify_measure = $input['rectify'];
@@ -50,6 +78,8 @@ class AuditeeController extends Controller {
 
 		$item -> ri_status = $this->status['confirm1'];
 		$item -> save();
+
+		$this -> sendMail1($item);
 
 		return Redirect::route('auditee_status');
 	}
@@ -87,5 +117,14 @@ class AuditeeController extends Controller {
 	public function download_report($id){
 		$report = PiaReport::findOrFail($id);
 		return Response::download($report->get_paper(), "$report->r_serial 稽核報告.pdf");
+	}
+
+	public function sign($code,$yes_no){
+		//TODO
+		if($yes_no == 'yes')
+			dd('You say yes');
+		else if($yes_no == 'no')
+			dd('You say no');
+		dd($yes_no);
 	}
 }

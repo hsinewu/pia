@@ -78,6 +78,10 @@ class PiaGlobal extends PiaBase {
         return self::grab("pia_committee_email");
     }
 
+    public static function get_test_email(){
+        return self::grab("test_email");
+    }
+
     public function delete(){
         if(array_key_exists($this->key,$this->global_settings))
             throw new Exception("You can not delete this item!");
