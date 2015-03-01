@@ -101,11 +101,9 @@ class AdminController extends BaseController {
 		try {
 			$obj->fill_field(Input::all())->save();
 		} catch (PDOException $e) {
-			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
-			return Redirect::refresh();
+			return Response::make("來自DB的錯誤訊息!\n" . $e->getMessage())->header('Refresh', "3;url=" . route('admin_info',[$type,$id]));
 		} catch (Exception $e) {
-			Session::set("message","設定失敗!請確認您的輸入!\n" . $e->getMessage());
-			return Redirect::refresh();
+			return Response::make("設定失敗!\n" . $e->getMessage())->header('Refresh', "3;url=" . route('admin_info',[$type,$id]));
 		}
 		Session::set("message","設定成功!");
 		return Redirect::route('admin_info',$type);

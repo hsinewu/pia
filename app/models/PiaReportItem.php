@@ -13,6 +13,16 @@ class PiaReportItem extends PiaBase {
 
 	public $status_list = ['表單待填','主管否決','組長否決','代填','待主管簽署','待組長簽署','完成'];
 
+	public function is_finished()
+	{
+		return $this->ri_status == "完成";
+	}
+
+	public function is_editable()
+	{
+		return array_flip($this->status_list)[$this->ri_status] < 3;
+	}
+
 	public function save(array $options = array()){
 		if(!isset($this->ri_status))
 			$this->ri_status = '表單待填';

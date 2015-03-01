@@ -23,6 +23,8 @@ class PiaAudit extends PiaBase {
 	);
 
 	public function save(array $options = array()){
+		if($this->report()->count())
+			throw new Exception("本稽核任務已經有報告產生，無法更動");
 
 		// hope I can remove this stupid thing in the future...
 		if(is_null($this->a_id))

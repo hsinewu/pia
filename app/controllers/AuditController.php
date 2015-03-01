@@ -52,7 +52,6 @@ class AuditController extends Controller {
 				throw new Exception("Illegal status!");
 
 			$report->set_state_level(Input::get('status'));
-			$report->save();
 
 			$count=0;
 			$fail_cnt = 0;
@@ -80,6 +79,8 @@ class AuditController extends Controller {
 					continue;
 				}
 			}
+
+			$report->save();
 
 			if($report->is_saved()){
 				if($fail_cnt && count($input['ri_base']) != 1)
