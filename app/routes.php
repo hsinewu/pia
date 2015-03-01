@@ -196,6 +196,11 @@ Route::get('/rectify_sign/{code}/{yes_no}' , array(
     'uses' => 'AuditeeController@sign'
 ));
 
+Route::get('/feedback/{code}' , array(
+    'as' => 'feedback_assign',
+    'uses' => 'AuditeeController@feedback_assign'
+));
+
 Route::get('/test' , array(
     'as' => 'test',
     function() {

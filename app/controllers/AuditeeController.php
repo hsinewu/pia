@@ -84,6 +84,37 @@ class AuditeeController extends Controller {
 		return Redirect::route('auditee_status');
 	}
 
+	private function assign($reportItem){
+		//set up a new PiaEmailSign
+		$es = new PiaEmailSign();
+		$es->r_id = $reportItem->r_id;
+		//WARNING: encrypt what
+		$es->es_code = md5( date("Y-m-d H:i:s") );
+		$es->es_used = false;
+		$es->es_type = 4;
+		$es->es_to = $reportItem->handler_email;
+		$es->save();
+
+		$reportItem->es_id = $es->es_id;
+		$reportItem->save();
+
+		define("receiver", $reportItem->handler_name);
+		define("mail_addr", $reportItem->handler_email);
+		Mail::send('emails/assign_report',
+			[
+			'es_code' => $es->es_code,
+			// 'sign_url' => route("rectify_email_sign",$es->es_code),
+			'type' => '矯正報告',
+			],
+			function($message){
+				$message
+				->to( mail_addr, receiver )
+				->subject("個資稽核系統--填寫矯正預防處理單")
+				// ->attach(pdf_name, array('as' => "個資稽核報告.pdf"))
+				;
+		});
+	}
+
 	public function assign_process($ri_id){
 		$input = Input::all();
 		try {
@@ -91,15 +122,48 @@ class AuditeeController extends Controller {
 			$item->handler_name = $input['auditee'];
 			$item->handler_email = $input['auditee_mail'];
 
-			if(!in_array($item->ri_status, ['表單待填', '主管否決', '組長否決', '代填']))
+			if(!in_array($item->ri_status, [ $this->status['new'],
+																			 $this->status['mail'],
+																			 $this->status['reject1'],
+																			 $this->status['reject2'] ]))
 				throw new Exception("Illegal status!");
 
-			$item->ri_status = '代填';
+			$item->ri_status = $this->status['mail'];
 			$item->save();
+
+			$this -> assign($item);
+
 			return Redirect::route('auditee_status');
 		}catch (Exception $e) {
 			Session::set("message",$e->getMessage());
 			return Redirect::route('auditee_feedback',$ri_id);
+		}
+	}
+
+
+	public function feedback_assign($code){
+		try {
+			if(PiaEmailSign::where('es_code',$code)->first()==NULL)
+				throw new Exception("The link is invalid.");
+			$es_id = PiaEmailSign::where('es_code',$code)->first()->es_id;
+			if(PiaReportItem::where('es_id',$es_id)->first()==NULL)
+				throw new Exception("The link is invalid.");
+			$ri_id = PiaReportItem::where('es_id',$es_id)->first()->ri_id;
+			$item = PiaReportItem::find($ri_id);
+			$report = $item->report()->first();
+			$auditor = $report->auditor()->first();
+			$auditee_dept = $report->auditee()->first();
+			return View::make('auditee/feedback_assign')->with(
+				array(
+					'report' => $report,
+					'auditor' => $auditor,
+					'auditor_dept' => $auditor->dept()->first(),
+					'auditee'=> $item->handler_name,
+					'auditee_dept'=> $auditee_dept,
+					'reportItem' => $item,
+				));
+		}catch (Exception $e) {
+			echo($e->getMessage());
 		}
 	}
 
