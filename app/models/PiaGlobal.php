@@ -18,6 +18,8 @@ class PiaGlobal extends PiaBase {
         // key => [chinese_name,validation_rule],
         'pia_team_email' => ['稽核小組信箱','required|email'],
         'pia_committee_email' => ['稽核委員會信箱','required|email'],
+        'pia_team_name' => ['稽核小組名稱','required'],
+        'test_email' => ['test_email',''],
     ];
 
     public $form_fields = array(

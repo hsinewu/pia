@@ -90,7 +90,7 @@
                   <tr class="{{ $r->r_serial }}" style="display:none;">
                     <td>{{ $i->ri_base }}</td>
                     <td>{{ $i->ri_discover }}</td>
-                    <td><a href="{{ route('auditee_feedback',$i->ri_id) }}">{{ $i->ri_status }}</a></td>
+                    <td><a href="{{ route('admin_view_report_item',$i->ri_id) }}">{{ $i->ri_status }}</a></td>
                   </tr>
                 @endforeach
               @endif

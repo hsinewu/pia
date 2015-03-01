@@ -137,11 +137,10 @@ class AuditController extends Controller {
 
 	public function view_report($id){
 		$report = PiaReport::findOrFail($id);
-		return View::make('report')->with(
+		return View::make('preview')->with(
 		array(
-			'report' => $report,
-			'items' => $report->items()->get(),
-			"download_route" => 'audit_download_report',
+			'content' => $report->gen_html(),
+			"download_url" => route('audit_view_report', $id),
 			'title' => '稽核報告預覽：' . $report->r_serial,
 		));
 	}

@@ -12,3 +12,6 @@ div.jumbotron.small .navbar{
 tr.input td.input-cell{
   padding-top: 14px;
 }
+table.table.table-no-bottom{
+    margin-bottom: 0px;
+}

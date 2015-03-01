@@ -78,7 +78,8 @@ Route::filter('guest', function()
 		    return Redirect::route('audit');
 		if($person->is("auditee"))
 		    return Redirect::route('auditee');
-		dd("filters.php: Person level mismatch");
+		Session::set("message","您的權限狀態有問題！ p_level = $person->p_level");
+		return Redirect::route('logout');
 		// switch ($person->p_level) {
 		// 	case 0:
 		// 		return Redirect::route('auditee');

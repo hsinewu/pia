@@ -164,11 +164,10 @@ class AdminController extends BaseController {
 
 	public function view_report($id){
 		$report = PiaReport::findOrFail($id);
-		return View::make('report')->with(
+		return View::make('preview')->with(
 		array(
-			'report' => $report,
-			'items' => $report->items()->get(),
-			"download_route" => 'admin_download_report',
+			'content' => $report->gen_html(),
+			"download_url" => route('admin_download_report', $id),
 			'title' => '稽核報告預覽：' . $report->r_serial,
 		));
 	}
@@ -176,5 +175,20 @@ class AdminController extends BaseController {
 	public function download_report($id){
 		$report = PiaReport::findOrFail($id);
 		return Response::download($report->get_paper(), "$report->r_serial 稽核報告.pdf");
+	}
+
+	public function report_item($id){
+		$item = PiaReportItem::findOrFail($id);
+		return View::make('preview')->with(
+		array(
+			'content' => $item->gen_html(),
+			"download_url" => route('admin_download_report_item',$id),
+			'title' => '校正預防報告預覽：',
+		));
+	}
+
+	public function download_report_item($id){
+		$item = PiaReportItem::findOrFail($id);
+		return Response::download($item->get_paper(), $item->get_serial() . " 矯正預防報告.pdf");
 	}
 }

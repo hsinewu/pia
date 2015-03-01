@@ -86,7 +86,7 @@
 <h4>6. 附件</h4>
 <p>6.1 個人資料內部稽核底稿</p>
 @if(!isset($hide_sign))
-    <table class="table table-bordered">
+    <table class="table table-bordered table-no-bottom">
         <tbody>
             <tr>
                 <td>

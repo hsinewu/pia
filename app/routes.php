@@ -90,6 +90,16 @@ Route::group(array('before' => 'auth'), function()
             'uses' => 'AdminController@download_report'
         ));
 
+        Route::get('/admin/report_item/{id}/' , array(
+            'as' => 'admin_view_report_item',
+            'uses' => 'AdminController@report_item'
+        ));
+
+        Route::get('/admin/report_item/{id}/download' , array(
+            'as' => 'admin_download_report_item',
+            'uses' => 'AdminController@download_report_item'
+        ));
+
     });
 
     Route::group(array('before' => 'is_audit'), function()
@@ -173,6 +183,16 @@ Route::group(array('before' => 'auth'), function()
                 'uses' => 'AuditeeController@download_report'
             ));
         });
+
+        // TODO: add a validation to report item
+        Route::get('/auditee/report_item/{id}' , array(
+                'as' => 'auditee_view_report_item',
+                'uses' => 'AuditeeController@report_item'
+        ));
+        Route::get('/auditee/report_item/{id}/download' , array(
+                'as' => 'auditee_download_report_item',
+                'uses' => 'AuditeeController@download_report_item'
+        ));
     });
 
 });
@@ -180,8 +200,9 @@ Route::group(array('before' => 'auth'), function()
 Route::get('/logout' , array(
     'as' => 'logout',
     function() {
+        $err_msg = Session::has("message") ? Session::get("message") : "";
         Session::flush();
-        Session::set("message","已登出！");
+        Session::set("message","$err_msg 已登出！");
         return Redirect::route('login');
     }
 ));
