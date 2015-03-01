@@ -191,6 +191,11 @@ Route::get('/sign/{code}' , array(
     'uses' => 'AuditController@sign'
 ));
 
+Route::get('/rectify_sign/{code}/{yes_no}' , array(
+    'as' => 'rectify_email_sign',
+    'uses' => 'AuditeeController@sign'
+));
+
 Route::get('/test' , array(
     'as' => 'test',
     function() {
