@@ -227,6 +227,11 @@ Route::get('/feedback/{code}' , array(
     'uses' => 'AuditeeController@feedback_assign'
 ));
 
+Route::post('/feedback/{code}' , array(
+    'as' => 'feedback_assign_process',
+    'uses' => 'AuditeeController@feedback_assign_process'
+));
+
 Route::get('/test' , array(
     'as' => 'test',
     function() {

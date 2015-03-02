@@ -20,7 +20,12 @@ class PiaReportItem extends PiaBase {
 
 	public function is_editable()
 	{
-		return array_flip($this->status_list)[$this->ri_status] < 3;
+		return array_flip($this->status_list)[$this->ri_status] <= 3;
+	}
+
+	public function is_assigned()
+	{
+		return array_flip($this->status_list)[$this->ri_status] == 3;
 	}
 
 	public function save(array $options = array()){
@@ -29,6 +34,8 @@ class PiaReportItem extends PiaBase {
 
 		switch($this->ri_status){
 		case "表單待填":
+		case '主管否決':
+		case '組長否決':
 			$data_to_validate = [
 				// "ri_id" => $this->ri_id,
 				"r_id" => $this->r_id,
@@ -212,5 +219,21 @@ class PiaReportItem extends PiaBase {
 			unlink($full_pdf_path);
 		PDF::html('paper', ['content' => $this->gen_html($hide_sign), 'title' => "個人資料管理制度矯正預防處理單"], $pdf_path);
 		return $full_pdf_path;
+	}
+
+	public static function from_es_code($code,$set_used = false){
+		$email_sign = PiaEmailSign::where('es_code',$code)->first();
+		if($email_sign == NULL) throw new Exception("錯誤的驗證碼！");
+		if($set_used){
+			$email_sign->es_used = true;
+			$email_sign->save();
+		}
+
+		if($email_sign == NULL)
+			throw new Exception("The link is invalid.");
+		$report_item = PiaReportItem::where('es_id',$email_sign->es_id)->first();
+		if($report_item == NULL)
+			throw new Exception("The link is invalid.");
+		return $report_item;
 	}
 }

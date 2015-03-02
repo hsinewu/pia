@@ -61,7 +61,7 @@
 @section('content')
 
   <div class="row">
-      <form class="form-horizontal" role="form" action="{{ route('auditee_feedback_process', $reportItem->ri_id) }}" method="POST">
+      <form class="form-horizontal" role="form" action="{{ route('feedback_assign_process', $es_code) }}" method="POST">
         <div class="form-group">
           <label class="col-sm-2 control-label">提出單位</label>
           <div class="col-sm-10">

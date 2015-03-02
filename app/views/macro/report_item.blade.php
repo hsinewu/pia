@@ -27,7 +27,7 @@
         </tr>
     </tbody>
 </table>
-<h6 style="text-align: right;">流水號： {{ $item->get_serial() }}</h3>
+<h6 style="text-align: right;">流水號： {{ $item->get_serial() }}</h6>
 <table class="table table-bordered table-no-bottom">
     <tbody>
         <tr>

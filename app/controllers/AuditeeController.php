@@ -66,6 +66,7 @@ class AuditeeController extends Controller {
 	}
 	public function feedback($ri_id){
 		$item = PiaReportItem::find($ri_id);
+		if(!$item->is_editable()) throw new Exception('cant not be change again');
 		$report = $item->report()->first();
 		$auditor = $report->auditor()->first();
 		$auditee_dept = $report->auditee()->first();
@@ -82,12 +83,9 @@ class AuditeeController extends Controller {
 			));
 	}
 
-	public function feedback_process($ri_id){
+	private function feedback_processing($item,$assigned) // report_item as input
+	{
 		$input = Input::all();
-		$item = PiaReportItem::find($ri_id);
-		if(!($item->ri_status == $this->status['new']
-			||$item->ri_status == $this->status['mail']
-			||$item->ri_status == '')) dd('cant not be change again');
 
 		$item -> analysis = $input['reason'];
 		$item -> rectify_measure = $input['rectify'];
@@ -97,13 +95,27 @@ class AuditeeController extends Controller {
 		$item -> pre_finish_date = $input['prevent_time'];
 		$item -> fill_date = date("Y-m-d H:i:s");
 
-		$item -> handler_name = Session::get('user')->p_name;
-		$item -> handler_email = Session::get('user')->p_mail;
+		if(!$assigned){
+			$item -> handler_name = Session::get('user')->p_name;
+			$item -> handler_email = Session::get('user')->p_mail;
+		}
 
 		$item -> ri_status = $this->status['confirm1'];
-		$item -> save();
 
+		$item -> save();
+		$item -> gen_paper();
 		$this -> sendMail($item,'confirm1');
+		Session::set("message","完成填寫，並且已寄信通知主管");
+	}
+
+	public function feedback_process($ri_id){
+		try{
+			$item = PiaReportItem::find($ri_id);
+			if(!$item->is_editable()) throw new Exception('cant not be change again');
+			$this->feedback_processing($item,false);
+		}catch(Exception $e){
+			Session::set("message","錯誤：" . $e->getMessage());
+		}
 
 		return Redirect::route('auditee_status');
 	}
@@ -120,21 +132,25 @@ class AuditeeController extends Controller {
 		$es->save();
 
 		$reportItem->es_id = $es->es_id;
-		$reportItem->save();
+
+		$report = $reportItem->report()->first();
 
 		define("receiver", $reportItem->handler_name);
 		define("mail_addr", $reportItem->handler_email);
+		define("pdf_path", $report->get_paper());
+		define("pdf_name", "$report->r_serial 稽核報告.pdf");
 		Mail::send('emails/assign_report',
 			[
 			'es_code' => $es->es_code,
-			// 'sign_url' => route("rectify_email_sign",$es->es_code),
+			'report_content' => $report->gen_html(),
+			'report_item_content' => $reportItem->gen_html(true),
 			'type' => '矯正報告',
 			],
 			function($message){
 				$message
 				->to( mail_addr, receiver )
-				->subject("個資稽核系統--填寫矯正預防處理單")
-				// ->attach(pdf_name, array('as' => "個資稽核報告.pdf"))
+				->subject("個資稽核系統 - 您被指定填寫矯正預防處理單")
+				->attach(pdf_path, array('as' => pdf_name))
 				;
 		});
 	}
@@ -147,16 +163,17 @@ class AuditeeController extends Controller {
 			$item->handler_email = $input['auditee_mail'];
 
 			if(!in_array($item->ri_status, [ $this->status['new'],
-																			 $this->status['mail'],
-																			 $this->status['reject1'],
-																			 $this->status['reject2'] ]))
+				$this->status['mail'],
+				$this->status['reject1'],
+				$this->status['reject2'] ]))
 				throw new Exception("Illegal status!");
 
 			$item->ri_status = $this->status['mail'];
 			$item->save();
+			$item->gen_paper();
 
 			$this -> assign($item);
-
+			Session::set("message","已完成矯正預防單填寫指定！");
 			return Redirect::route('auditee_status');
 		}catch (Exception $e) {
 			Session::set("message",$e->getMessage());
@@ -164,16 +181,9 @@ class AuditeeController extends Controller {
 		}
 	}
 
-
 	public function feedback_assign($code){
 		try {
-			if(PiaEmailSign::where('es_code',$code)->first()==NULL)
-				throw new Exception("The link is invalid.");
-			$es_id = PiaEmailSign::where('es_code',$code)->first()->es_id;
-			if(PiaReportItem::where('es_id',$es_id)->first()==NULL)
-				throw new Exception("The link is invalid.");
-			$ri_id = PiaReportItem::where('es_id',$es_id)->first()->ri_id;
-			$item = PiaReportItem::find($ri_id);
+			$item = PiaReportItem::from_es_code($code);
 			$report = $item->report()->first();
 			$auditor = $report->auditor()->first();
 			$auditee_dept = $report->auditee()->first();
@@ -185,10 +195,23 @@ class AuditeeController extends Controller {
 					'auditee'=> $item->handler_name,
 					'auditee_dept'=> $auditee_dept,
 					'reportItem' => $item,
+					'es_code' => $code,
 				));
 		}catch (Exception $e) {
 			echo($e->getMessage());
 		}
+	}
+
+	public function feedback_assign_process($code){
+		try{
+			$item = PiaReportItem::from_es_code($code,true);
+			if(!$item->is_assigned()) throw new Exception('cant not be change again');
+			$this->feedback_processing($item,true);
+		}catch(Exception $e){
+			Session::set("message","錯誤：" . $e->getMessage());
+		}
+
+		return Redirect::to('/');
 	}
 
 	public function view_report($id){
