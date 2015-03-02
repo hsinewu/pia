@@ -229,8 +229,6 @@ class PiaReportItem extends PiaBase {
 			$email_sign->save();
 		}
 
-		if($email_sign == NULL)
-			throw new Exception("The link is invalid.");
 		$report_item = PiaReportItem::where('es_id',$email_sign->es_id)->first();
 		if($report_item == NULL)
 			throw new Exception("The link is invalid.");

@@ -132,6 +132,7 @@ class AuditeeController extends Controller {
 		$es->save();
 
 		$reportItem->es_id = $es->es_id;
+		$reportItem->save();
 
 		$report = $reportItem->report()->first();
 
