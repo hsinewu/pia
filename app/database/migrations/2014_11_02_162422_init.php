@@ -94,7 +94,7 @@ class Init extends Migration {
 					'p_name' => $value->user_name,
 					'p_mail' => $value->user_mail,
 					'p_pass' => $value->user_passwd,
-					'p_level' => 1 // default admin level
+					'p_level' => 4 // default auditee level
 				);
 			}
 			DB::table($this->person_tbl)->insert($inserts);
@@ -107,7 +107,7 @@ class Init extends Migration {
 			'p_name' => "admin",
 			'p_mail' => "admin",
 			'p_pass' => md5("admin"),
-			'p_level' => 2 // admin level
+			'p_level' => 1 // admin level
 		));
 
 		echo "An admin user has been create with p_id,p_name,p_mail and p_pass valuing 'admin'!\n";
