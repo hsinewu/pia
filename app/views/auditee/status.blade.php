@@ -58,6 +58,7 @@
         <table class="table table-hover">
           <thead>
             <tr>
+              <td>所屬事件</td>
               <td>開始時間</td>
               <td>結束時間</td>
               <td>回報流水號</td>
@@ -68,6 +69,7 @@
           <tbody>
             @foreach($audits as $a)
               <tr>
+                  <td>{{ $a->event_id }}</td>
                   <td>{{ $a->ad_time_from }}</td>
                   <td>{{ $a->ad_time_end }}</td>
                   @if( $show_sub_item = !is_null($r = $a->report()->first()))

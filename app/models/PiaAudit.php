@@ -13,6 +13,7 @@ class PiaAudit extends PiaBase {
 
 	public $info_table_columns = array(
 		"a_id" => "#",
+		"event_id" => "所屬事件",
 		"p_name" => "稽核人",
 		"ad_time_from" => "時間",
 		"dept_name" => "受稽單位"
