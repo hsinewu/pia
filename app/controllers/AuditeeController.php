@@ -17,7 +17,7 @@ class AuditeeController extends Controller {
 			case 'confirm1':
 				$url_alias = 'rectify_email_sign';
 				// http://laravel.com/docs/5.0/eloquent#dynamic-properties
-				$email = $reportItem -> report -> auidt -> dept ->email;
+				$email = $reportItem -> report -> audit -> dept ->email;
 				break;
 			case 'confirm2':
 				$url_alias = 'rectify_email_sign2';
@@ -33,18 +33,19 @@ class AuditeeController extends Controller {
 		$es->gen_code();
 		$es->es_used = false;
 		$es->es_type = 3;
-		//TODO: param to be fixed
-		$es->es_to = PiaGlobal::get_test_email();
+		$es->es_to = $email;
 		$es->save();
 
 		//Update ri's es_id field
 		$reportItem->es_id = $es->es_id;
 		$reportItem->save();
+		$reportItem->gen_paper();
 
 		//Actually send the email
 		define("mail_addr", $email);
 		define("pdf_name", $reportItem->get_paper());
 
+		//目測如果看到什麼RFC mail格式不合的例外就是這邊噴的，就當信件掉了
 		Mail::send('emails/yes_no',
 			[
 			'url_alias' => $url_alias,
@@ -69,6 +70,7 @@ class AuditeeController extends Controller {
 	}
 	public function feedback($ri_id){
 		$item = PiaReportItem::find($ri_id);
+		//wtf?
 		if(!$item->is_editable()) throw new Exception('cant not be change again');
 		$report = $item->report()->first();
 		$auditor = $report->auditor()->first();
@@ -105,8 +107,9 @@ class AuditeeController extends Controller {
 
 		$item -> ri_status = $this->status['confirm1'];
 
-		$item -> save();
-		$item -> gen_paper();
+		//Let sendMail save& gen_paper so that state is not updated till all things finished
+		// $item -> save();
+		// $item -> gen_paper();
 		$this -> sendMail($item,'confirm1');
 		Session::set("message","完成填寫，並且已寄信通知主管");
 	}
