@@ -37,7 +37,9 @@ class AdminController extends BaseController {
 				break;
 			case 'audit':
 				if(!is_null($id))  return PiaAudit::find($id);
-				return new PiaAudit();
+				$ret = new PiaAudit();
+				$ret->event_id = PiaGlobal::get_current_event();
+				return $ret;
 				break;
 			case 'event':
 				if(!is_null($id))  return PiaEvent::find($id);
@@ -60,10 +62,6 @@ class AdminController extends BaseController {
 		$info = $obj->info_table();
 		$columns = $obj->info_table_columns;
 
-		// var_dump($info);
-		// var_dump(DB::getQueryLog());
-		// die();
-
 		return View::make('admin/info')->with(array('type' => $type,'title' => $this->type2name[$type],'columns' => $columns, "info" => $info, 'obj' => $obj));
 	}
 
@@ -71,8 +69,6 @@ class AdminController extends BaseController {
 		$type = 'cal';
 		$obj = new PiaAudit();
 		$info = $obj->info_table(array('ad_time_end'));
-		// var_dump($info);
-		// die();
 		return View::make('admin/cal')->with(array(
 			'type' => 'cal',
 			"info" => $info,
@@ -83,12 +79,9 @@ class AdminController extends BaseController {
 	public function edit($type,$id = null)
 	{
 		$obj = $this->type2instancd($type,$id);
-
-		// if(!is_null($id))
-		// 	$obj = $obj->find($id);
 		$form_fields = $obj->form_fields;
-
 		$obj->p_pass = "";
+
 		if($type=="audit" && $id==NULL)
 			return View::make('admin/audit')->with(array('type' => $type,'id' => $id,'title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
 		else

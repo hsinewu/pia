@@ -19,7 +19,7 @@ class PiaGlobal extends PiaBase {
         'pia_team_email' => ['稽核小組信箱','required|email'],
         'pia_committee_email' => ['稽核委員會信箱','required|email'],
         'pia_team_name' => ['稽核小組名稱','required'],
-        'test_email' => ['test_email',''],
+        'current_event' => ['當前主要事件',''],
     ];
 
     public $form_fields = array(
@@ -80,8 +80,8 @@ class PiaGlobal extends PiaBase {
         return self::grab("pia_committee_email");
     }
 
-    public static function get_test_email(){
-        return self::grab("test_email");
+    public static function get_current_event(){
+        return self::grab("current_event");
     }
 
     public function delete(){

@@ -16,9 +16,12 @@ class AuditeeController extends Controller {
 		switch ($type) {
 			case 'confirm1':
 				$url_alias = 'rectify_email_sign';
+				// http://laravel.com/docs/5.0/eloquent#dynamic-properties
+				$email = $reportItem -> report -> auidt -> dept ->email;
 				break;
 			case 'confirm2':
 				$url_alias = 'rectify_email_sign2';
+				$email = PiaGlobal::get_pia_team_email();
 				break;
 			default:
 				dd('wtf sendmail type');
@@ -39,6 +42,7 @@ class AuditeeController extends Controller {
 		$reportItem->save();
 
 		//Actually send the email
+		define("mail_addr", $email);
 		define("pdf_name", $reportItem->get_paper());
 
 		Mail::send('emails/yes_no',
@@ -50,8 +54,7 @@ class AuditeeController extends Controller {
 			],
 			function($message){
 				$message
-				//TODO: param to be fixed
-				->to( PiaGlobal::get_test_email(), '收件人' )
+				->to( mail_addr, '收件人' )
 				->subject("個資稽核系統--矯正回報之確認")
 				->attach(pdf_name, array('as' => "矯正回報.pdf"))
 				;
