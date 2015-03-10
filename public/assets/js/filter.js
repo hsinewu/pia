@@ -1,15 +1,26 @@
+var debug;
 $(document).ready(function(){
-  $("#filter").keyup(function(){
-    var target=document.getElementById('filter').value;
-    for(var i=1; i<$('tr').length; i++){
-      var cur=$('tr').eq(i).find('td');
-      var flag=0;
-      for(var j=0; j<cur.length-1; j++){
-        if(cur.eq(j).text().match(target)!=null)
-          ++flag;
-      }
-      if(flag==0) cur.css('display', 'none');
-      else  cur.css('display', '');
+	//Issue: disable filter selector(html part) when is not relevant
+	//ex: admin/person page
+	var rows = $('tr')
+	var select = 'ALL'	//default, consider using Session::
+	var target = "";
+	function filter(){
+		for(var i=1; i<rows.length; i++){
+			var row = rows.eq(i);
+			var text = row.text();
+            if( text.match(target) && (select == 'ALL' || text.match(select)))
+                row.show();
+            else
+                row.hide();
+		}
     }
-  });
-});
+	$('#filter-event').change(function(){
+		select = $(this).val();
+		filter();
+	})
+	$('#filter').keyup(function(){
+		target = document.getElementById('filter').value;
+        filter();
+	})
+})
