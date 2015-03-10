@@ -27,7 +27,6 @@
 @stop
 
 @section('content')
-
   <div class="row">
     <div class="col-xs-3">
       @include("menu")
@@ -51,6 +50,13 @@
         <div class="panel-body">
           <div class="col-lg-12">
             <div class="input-group">
+              事件過濾
+              <select class="select" id="filter-event">
+                <option value="ALL">全部</option>
+                @foreach(PiaEvent::all() as $e)
+                  <option value="{{$e->event_id}}">{{$e->event_id}}</option>
+                @endforeach
+              </select>
               <span class="input-group-addon">filter</span>
               <input type="text" class="form-control" id='filter'>
             </div><!-- /input-group -->
