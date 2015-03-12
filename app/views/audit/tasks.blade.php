@@ -39,16 +39,16 @@
         <div class="panel-heading" style="height: 55px; line-height: 34px;">
         {{ $title }}
         </div>
-
         <div class="panel-body">
-          <div class="col-lg-12">
-            <div class="input-group">
-              @include("macro/event_filter")
-              <span class="input-group-addon">filter</span>
-              <input type="text" class="form-control" id="filter">
-            </div><!-- /input-group -->
-          </div><!-- /.col-lg-12 -->
-
+            <div class="col-xs-3">
+                @include("macro/event_filter")
+            </div><!-- /.col-lg-9 -->
+            <div class="col-xs-9">
+              <div class="input-group">
+                <span class="input-group-addon">filter</span>
+                <input class="form-control" id="filter" type="text">
+              </div><!-- /input-group -->
+          </div><!-- /.col-lg-9 -->
         </div>
 
         <!-- Table -->

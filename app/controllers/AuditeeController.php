@@ -121,10 +121,10 @@ class AuditeeController extends Controller {
 			if(!$item->is_editable()) throw new Exception('cant not be change again');
 			$this->feedback_processing($item,false);
 		}catch(Exception $e){
-			Session::set("message","錯誤：" . $e->getMessage());
+			return Response::make($e->getMessage())->header('Refresh', "3;url=" . route('auditee_feedback',$ri_id));
 		}
 
-		return Redirect::route('auditee_status');
+		return Response::json(["redirect" => route("auditee_status")]);
 	}
 
 	private function assign($reportItem){
@@ -216,10 +216,10 @@ class AuditeeController extends Controller {
 			if(!$item->is_assigned()) throw new Exception('cant not be change again');
 			$this->feedback_processing($item,true);
 		}catch(Exception $e){
-			Session::set("message","錯誤：" . $e->getMessage());
+			return Response::make($e->getMessage())->header('Refresh', "3;url=" . route('feedback_assign',$code));
 		}
 
-		return Redirect::to('/');
+		return Response::json(["redirect" => route("login")]);
 	}
 
 	public function view_report($id){

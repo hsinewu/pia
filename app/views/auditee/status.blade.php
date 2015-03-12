@@ -45,14 +45,15 @@
         </div>
 
         <div class="panel-body">
-          <div class="col-lg-12">
-            <div class="input-group">
-              @include("macro/event_filter")
-              <span class="input-group-addon">filter</span>
-              <input type="text" class="form-control" id="filter">
-            </div><!-- /input-group -->
-          </div><!-- /.col-lg-12 -->
-
+            <div class="col-xs-3">
+                @include("macro/event_filter")
+            </div><!-- /.col-lg-9 -->
+            <div class="col-xs-9">
+              <div class="input-group">
+                <span class="input-group-addon">filter</span>
+                <input class="form-control" id="filter" type="text">
+              </div><!-- /input-group -->
+          </div><!-- /.col-lg-9 -->
         </div>
 
         <!-- Table -->
@@ -77,7 +78,7 @@
                   @if( $show_sub_item = $r->is_finished() )
                   <td>{{ $r->r_serial }}</td>
                   <td>{{ $r->status }}</td>
-                  <td><a onclick="$('.{{ $r->r_serial }}').toggle()" href="#">展開矯正預防清單</a>｜<a href="{{ route('auditee_view_report', $r->r_id) }}">觀看報告</a></td>
+                  <td><a class="expand" for="{{ $r->r_serial }}" href="#">展開矯正預防清單</a>｜<a href="{{ route('auditee_view_report', $r->r_id) }}">觀看報告</a></td>
                   @else
                   <td>{{ $r->r_serial }}</td>
                   <td>尚未回報完成</td>
@@ -90,7 +91,8 @@
                   @endif
               </tr>
               @if( $show_sub_item && !is_null($items = ($r->items->all())))
-                <tr class="{{ $r->r_serial }}" style="display:none;">
+                <tr class="{{ $r->r_serial }} sub_item">
+                  <td></td>
                   <td>\\</td>
                   <td>條款</td>
                   <td>發現</td>
@@ -98,7 +100,8 @@
                   <td>狀態以及動作</td>
                 </tr>
                 @foreach($items as $i)
-                <tr class="{{ $r->r_serial }}" style="display:none;">
+                <tr class="{{ $r->r_serial }} sub_item">
+                  <td></td>
                   <td>--</td>
                   <td>{{ $i->ri_base }}</td>
                   <td>{{ $i->ri_discover }}</td>

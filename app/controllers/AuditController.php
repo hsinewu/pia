@@ -100,18 +100,14 @@ class AuditController extends Controller {
 			}
 			else
 				Session::set("message","共 $item_suc_cnt 筆發現暫存成功!");
-			return Redirect::route('audit_tasks');
-		} catch (PDOException $e) {
-			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
-			return Redirect::route('audit_tasks');
 		} catch (Exception $e) {
-			Session::set("message",$e->getMessage());
 			if(isset($report)){
 				$report->set_state_level(0);
 				$report->save();
 			}
-			return Redirect::route('audit_tasks');
+			return Response::make($e->getMessage())->header('Refresh', "3;url=" . route('audit_report',$id));
 		}
+		return Response::json(["redirect" => route("audit_tasks")]);
 	}
 
 	public function calendar(){

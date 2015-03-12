@@ -15,3 +15,7 @@ tr.input td.input-cell{
 table.table.table-no-bottom{
     margin-bottom: 0px;
 }
+
+.sub_item:not(.showing){
+    display:none;
+}

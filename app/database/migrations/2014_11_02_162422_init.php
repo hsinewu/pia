@@ -34,20 +34,22 @@ class Init extends Migration {
 			$table->integer('group_id')->nullable();
 			$table->string('org_id')->nullable();
 			$table->string('dept_name')->unique();
+			$table->string('code');
 		});
 
 		echo "Please input the dept source data table name: (input nothing to ignore importing)\n";
 		$src_tbl = "";
 		$src_tbl = readline();
 		if($src_tbl){
-			$data = DB::select("select dpt_id, dept_name,dept_parent from $src_tbl;");
+			$data = DB::select("select dpt_id, dept_name,dept_parent, dept_chr from $src_tbl;");
 			$inserts = array();
 			foreach ($data as $key => $value) {
 				$inserts[] = array(
 					'dept_id' => $value->dpt_id, // not dept_id ...
 					'group_id' => $value->dept_parent,
 					'org_id' => $this->def_org,
-					'dept_name' => $value->dept_name
+					'dept_name' => $value->dept_name,
+					'code' => $value->dept_chr
 				);
 			}
 			DB::table($this->dept_tbl)->insert($inserts);

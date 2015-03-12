@@ -23,6 +23,7 @@
   @parent
   <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.min.js"></script>
+  <script src="{{ asset('assets/js/filter.js'); }}"></script>
 @stop
 
 @section('content')
@@ -44,19 +45,22 @@
         </div>
 
         <div class="panel-body">
-          <div class="col-lg-12">
-            <div class="input-group">
-              <span class="input-group-addon">filter</span>
-              <input type="text" class="form-control">
-            </div><!-- /input-group -->
-          </div><!-- /.col-lg-12 -->
-
+            <div class="col-xs-3">
+                @include("macro/event_filter")
+            </div><!-- /.col-lg-9 -->
+            <div class="col-xs-9">
+              <div class="input-group">
+                <span class="input-group-addon">filter</span>
+                <input class="form-control" id="filter" type="text">
+              </div><!-- /input-group -->
+          </div><!-- /.col-lg-9 -->
         </div>
 
         <!-- Table -->
         <table class="table table-hover">
           <thead>
             <tr>
+              <td>所屬事件</td>
               <td>流水號</td>
               <td>狀態</td>
               <td>動作</td>
@@ -65,6 +69,7 @@
           <tbody>
             @foreach($reports as $r)
               <tr>
+                <td>{{ $r->event_id() }}</td>
                 <td>{{ $r->r_serial }}</td>
                 <td>{{ $r->status }}</td>
                 <td>
@@ -73,7 +78,7 @@
                   @if($show_sub_item = $r->is_finished())
                     ｜
                     @if($show_sub_item = count($items = $r->items()->get()->all()))
-                        <a onclick="$('.{{ $r->r_serial }}').toggle()" href="#">稽核發現</a>
+                        <a class="expand" for="{{ $r->r_serial }}" href="#">稽核發現</a>
                     @else
                         沒有稽核發現
                     @endif
@@ -81,13 +86,15 @@
                 </td>
               </tr>
               @if($show_sub_item)
-                <tr class="{{ $r->r_serial }}" style="display:none;">
+                <tr class="{{ $r->r_serial }} sub_item">
+                  <td></td>
                   <td>條款</td>
                   <td>發現</td>
                   <td>狀態，點擊觀看詳細訊息</td>
                 </tr>
                 @foreach($items as $i)
-                  <tr class="{{ $r->r_serial }}" style="display:none;">
+                  <tr class="{{ $r->r_serial }} sub_item">
+                    <td></td>
                     <td>{{ $i->ri_base }}</td>
                     <td>{{ $i->ri_discover }}</td>
                     <td><a href="{{ route('admin_view_report_item',$i->ri_id) }}">{{ $i->ri_status }}</a></td>

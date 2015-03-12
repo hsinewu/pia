@@ -32,7 +32,7 @@
   <script src="{{ asset('assets/js/jquery.datetimepicker.js'); }}"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/i18n/defaults-zh_TW.min.js"></script>
-
+  <script src="{{ asset('assets/js/form.js'); }}"></script>
 
   <script type="text/javascript">
     var i = 0;

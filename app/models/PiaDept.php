@@ -36,7 +36,7 @@ class PiaDept extends PiaBase {
 		$validator = Validator::make
 		(
 		    array(
-	    		"group_id" => $this->group_id,
+	    		// "group_id" => $this->group_id,
 	    		"dept_name" => $this->dept_name,
 	    		"email" => $this->email,
 				"manager_name" => $this->manager_name,
@@ -44,7 +44,7 @@ class PiaDept extends PiaBase {
 	    		//"code" => $this->code,
 		    	),
 		    array(
-		        'group_id' => 'required',
+		        // 'group_id' => 'required',
 				'dept_name' => 'required',
 				'email' => 'required|email',
 				"manager_name" => 'required',

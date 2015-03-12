@@ -48,16 +48,24 @@
         </div>
 
         <div class="panel-body">
-          <div class="col-lg-12">
-            <div class="input-group">
-              @if($type=='audit')
-                @include("macro/event_filter")
-              @endif
-              <span class="input-group-addon">filter</span>
-              <input type="text" class="form-control" id='filter'>
-            </div><!-- /input-group -->
-          </div><!-- /.col-lg-12 -->
-
+            @if($type=='audit')
+                <div class="col-xs-3">
+                    @include("macro/event_filter")
+                </div><!-- /.col-lg-9 -->
+                <div class="col-xs-9">
+                  <div class="input-group">
+                    <span class="input-group-addon">filter</span>
+                    <input class="form-control" id="filter" type="text">
+                  </div><!-- /input-group -->
+                </div><!-- /.col-lg-9 -->
+            @else
+                <div class="col-lg-12">
+                  <div class="input-group">
+                    <span class="input-group-addon">filter</span>
+                    <input type="text" class="form-control" id='filter'>
+                  </div><!-- /input-group -->
+                </div><!-- /.col-lg-12 -->
+            @endif
         </div>
 
         <!-- Table -->

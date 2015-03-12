@@ -88,6 +88,8 @@ class AdminController extends BaseController {
 		$form_fields = $obj->form_fields;
 		$obj->p_pass = "";
 
+		if($type == "audit" && !isset($id))
+			return View::make("admin/audit");
 		return View::make('admin/edit')->with([
 			'type' => $type,
 			'id' => $id,
@@ -102,13 +104,11 @@ class AdminController extends BaseController {
 		$obj = $this->type2instancd($type,$id);
 		try {
 			$obj->fill_field(Input::all())->save();
-		} catch (PDOException $e) {
-			return Response::make("來自DB的錯誤訊息!\n" . $e->getMessage())->header('Refresh', "3;url=" . route('admin_info',[$type,$id]));
 		} catch (Exception $e) {
-			return Response::make("設定失敗!\n" . $e->getMessage())->header('Refresh', "3;url=" . route('admin_info',[$type,$id]));
+			return Response::make($e->getMessage())->header('Refresh', "3;url=" . route('admin_info',[$type,$id]));
 		}
 		Session::set("message","設定成功!");
-		return Redirect::route('admin_info',$type);
+		return Response::json(["redirect" => route("admin_info",$type)]);
 	}
 
 	public function add_autitor(){
@@ -116,27 +116,33 @@ class AdminController extends BaseController {
 		$type = 'audit';
 		try {
 			$count = 0;
+			$err = 0;
+			$auditor_OK = [];
 			foreach ($input['ad_dept_id'] as $key => $value) {
-				if( $input['event_id']=="" || $input['p_id']=="" || $input['ad_dept_id'][$key]=="" || $input['ad_time_from'][$key]=="" || $input['ad_time_end'][$key]=="" )
-					continue;
-				$auditor = new PiaAudit();
-				$auditor->event_id = $input['event_id'];
-				$auditor->p_id = $input['p_id'];
-				$auditor->ad_dept_id = $input['ad_dept_id'][$key];
-				$auditor->ad_time_from = $input['ad_time_from'][$key];
-				$auditor->ad_time_end = $input['ad_time_end'][$key];
-				$auditor->save();
-				++$count;
+				try{
+					$auditor = new PiaAudit();
+					$auditor->event_id = $input['event_id'];
+					$auditor->p_id = $input['p_id'];
+					$auditor->ad_dept_id = $input['ad_dept_id'][$key];
+					$auditor->ad_time_from = $input['ad_time_from'][$key];
+					$auditor->ad_time_end = $input['ad_time_end'][$key];
+					$auditor->save();
+					$auditor_OK[] = $auditor;
+					++$count;
+				}catch(Exception $e){
+					$err++;
+				}
 			}
+			if($err)
+				throw new Exception("共有 $err 筆錯誤，請檢查！");
 			Session::set("message","共".$count."筆資料設定成功!");
-			return Redirect::route('admin_info',$type);
-		} catch (PDOException $e) {
-			Session::set("message","來自DB的錯誤訊息:".$e->getMessage());
-			return Redirect::route('admin_edit',$type);
 		} catch (Exception $e) {
-			Session::set("message","設定失敗!請確認您的輸入:"/*.$m*/);
-			return Redirect::route('admin_edit',$type);
+			foreach ($auditor_OK as $key => $auditor) { // rollback...
+				$auditor->delete();
+			}
+			return Response::make($e->getMessage())->header('Refresh', "3;url=" . route('admin_info',[$type]));
 		}
+		return Response::json(["redirect" => route("admin_info",$type)]);
 	}
 
 	public function del($type,$id)

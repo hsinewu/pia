@@ -60,7 +60,7 @@ class PiaReport extends PiaBase {
 
 	public function set_state_level($level)
 	{
-		if(!in_array($level, array_keys($this->level2status)))
+		if(!isset($level) || !in_array($level, array_keys($this->level2status)))
 			throw new Exception("Unknown level!");
 		$this->status = $this->level2status[$level];
 	}
@@ -102,6 +102,11 @@ class PiaReport extends PiaBase {
 		$item->r_id = $this->r_id;
 
 		return $item;
+	}
+
+	public function event_id()
+	{
+		return $this->audit()->first()->event_id;
 	}
 
 	public function audit()

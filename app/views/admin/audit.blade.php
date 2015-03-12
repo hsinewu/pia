@@ -28,7 +28,7 @@
   <script src="{{ asset('assets/js/jquery.datetimepicker.js'); }}"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/i18n/defaults-zh_TW.min.js"></script>
-
+  <script src="{{ asset('assets/js/form.js'); }}"></script>
 
   <script type="text/javascript">
     var i = 1;
@@ -108,20 +108,20 @@
             @include('macro/select',array(
               'type' => "dept",
               'name' => "ad_dept_id",
-              'value' => $obj->ad_dept_id,
+              'value' => "",
             ))
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">開始時間</label>
           <div class="col-sm-10">
-            <input type="date_timepicker_start" id="date_timepicker_start" name="ad_time_from" class="form-control" placeholder="開始時間" value="{{ $obj->ad_time_from }}">
+            <input type="date_timepicker_start" id="date_timepicker_start" name="ad_time_from" class="form-control" placeholder="開始時間" value="">
           </div>
         </div>
         <div class="form-group">
           <label class="col-sm-2 control-label">結束時間</label>
           <div class="col-sm-10">
-            <input type="date_timepicker_end" id="date_timepicker_end" name="ad_time_end" class="form-control" placeholder="結束時間" value="{{ $obj->ad_time_end }}">
+            <input type="date_timepicker_end" id="date_timepicker_end" name="ad_time_end" class="form-control" placeholder="結束時間" value="">
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@
               @include('macro/select',array(
                 'type' => "event",
                 'name' => "event_id",
-                'value' => $obj->event_id,
+                'value' => "",
               ))
             </div>
           </div>
@@ -142,9 +142,9 @@
             <label class="col-sm-2 control-label">稽核人</label>
             <div class="col-sm-10">
               @include('macro/select',array(
-                'type' => "person",
+                'type' => "auditor",
                 'name' => "p_id",
-                'value' => $obj->p_id,
+                'value' => "",
               ))
             </div>
           </div>

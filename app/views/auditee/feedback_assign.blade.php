@@ -45,6 +45,7 @@
   <script src="{{ asset('assets/js/jquery.datetimepicker.js'); }}"></script>
   <script src="//code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/bootstrap-tokenfield.min.js"></script>
+  <script src="{{ asset('assets/js/form.js'); }}"></script>
 
   <script>
     jQuery('#rectify_time').datetimepicker({
