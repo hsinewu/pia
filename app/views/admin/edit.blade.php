@@ -71,11 +71,11 @@
             <div class="form-group">
               <label class="col-sm-2 control-label">{{ $v[2] }}</label>
               <div class="col-sm-10">
-                @include('macro/select',array(
+                @include('macro/select',[
                   'type' => str_replace("select.", "", $v[0]),
                   'name' => $k,
                   'value' => $obj->$k,
-                ))
+                ])
               </div>
             </div>
           @elseif(strpos($v[0],"checkbox") !== false)

@@ -23,6 +23,12 @@ class PiaAudit extends PiaBase {
 		array('dept','ad_dept_id','dept_id')
 	);
 
+	public static function get_auditor_key_value(){
+		return PiaPerson::whereRaw('p_level & 2 = 2')
+			->selectRaw("p_id as value, concat(p_name,'--',p_id)  as text")
+			->get();
+	}
+
 	public function save(array $options = array()){
 		if($this->report()->count())
 			throw new Exception("本稽核任務已經有報告產生，無法更動");
@@ -89,7 +95,8 @@ class PiaAudit extends PiaBase {
 		// name => type, placeholder, display_text
 		'event_id' => array('select.event','稽核事件','稽核事件'),
 		// 'org_id' => array('select.org','組織','組織'),
-		'p_id' => array('select.person','稽核人','稽核人'),
+		// 'p_id' => array('select.person','稽核人','稽核人'),
+		'p_id' => array('select.auditor','稽核人','稽核人'),
 		//'ad_org_id' => array('select.org','受稽組織','受稽組織'),
 		'ad_dept_id' => array('select.dept','受稽單位','受稽單位'),
 		// 'ad_time_from' => array('date','開始時間','開始時間'),

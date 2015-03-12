@@ -105,9 +105,9 @@ class PiaPerson extends PiaBase implements UserInterface, RemindableInterface {
 				dd('In PiaPerson.php unknown user type');
 		}
 	}
-	public function isAdmin(){
-		return $this->p_level == 2;
-	}
+	// public function isAdmin(){
+	// 	return $this->p_level == 2;
+	// }
 
 	public static function get_pia_team()
 	{
