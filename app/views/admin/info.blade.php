@@ -50,13 +50,9 @@
         <div class="panel-body">
           <div class="col-lg-12">
             <div class="input-group">
-              事件過濾
-              <select class="select" id="filter-event">
-                <option value="ALL">全部</option>
-                @foreach(PiaEvent::all() as $e)
-                  <option value="{{$e->event_id}}">{{$e->event_id}}</option>
-                @endforeach
-              </select>
+              @if(isset($eventFilter) && $eventFilter)
+                @include("event_filter")
+              @endif
               <span class="input-group-addon">filter</span>
               <input type="text" class="form-control" id='filter'>
             </div><!-- /input-group -->

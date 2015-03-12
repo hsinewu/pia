@@ -62,7 +62,14 @@ class AdminController extends BaseController {
 		$info = $obj->info_table();
 		$columns = $obj->info_table_columns;
 
-		return View::make('admin/info')->with(array('type' => $type,'title' => $this->type2name[$type],'columns' => $columns, "info" => $info, 'obj' => $obj));
+		return View::make('admin/info')->with([
+				'type' => $type,
+				'title' => $this->type2name[$type],
+				'columns' => $columns,
+				'info' => $info,
+				'obj' => $obj,
+				'eventFilter' => $type == 'audit'	//only audit need eventFilter
+			 ]);
 	}
 
 	public function cal(){
@@ -83,9 +90,15 @@ class AdminController extends BaseController {
 		$obj->p_pass = "";
 
 		if($type=="audit" && $id==NULL)
-			return View::make('admin/audit')->with(array('type' => $type,'id' => $id,'title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
+			return Redirect::route('admin_info',$type);
 		else
-			return View::make('admin/edit')->with(array('type' => $type,'id' => $id,'title' => $this->type2name[$type],'fields' => $form_fields, 'obj' => $obj));
+			return View::make('admin/edit')->with([
+				'type' => $type,
+				'id' => $id,
+				'title' => $this->type2name[$type],
+				'fields' => $form_fields,
+				 'obj' => $obj
+				 ]);
 	}
 
 	public function edit_process($type,$id = null)

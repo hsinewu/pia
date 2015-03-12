@@ -65,7 +65,8 @@ class AuditeeController extends Controller {
 		return View::make('auditee/status')->with(
 			array(
 				'audits' => PiaAudit::where('ad_dept_id', Session::get('user')->dept_id)->get(),
-				'title' => '稽核狀況'
+				'title' => '稽核狀況',
+				'eventFilter' => true,
 				));
 	}
 	public function feedback($ri_id){

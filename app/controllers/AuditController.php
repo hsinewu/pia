@@ -16,10 +16,12 @@ class AuditController extends Controller {
 		);
 		$info = $user->audit()->get(array_keys($columns));
 
-		return View::make('audit/tasks')->with(array(
-			'title' => "稽核任務列表",
-			'columns' => $columns,
-			"info" => $info));
+		return View::make('audit/tasks')->with([
+				'title' => "稽核任務列表",
+				'columns' => $columns,
+				'info' => $info,
+				'eventFilter' => true,
+			]);
 	}
 
 	public function report($id)

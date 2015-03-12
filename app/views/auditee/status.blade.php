@@ -47,6 +47,7 @@
         <div class="panel-body">
           <div class="col-lg-12">
             <div class="input-group">
+              @include("macro/event_filter")
               <span class="input-group-addon">filter</span>
               <input type="text" class="form-control" id="filter">
             </div><!-- /input-group -->
