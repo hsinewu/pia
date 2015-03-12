@@ -50,8 +50,8 @@
         <div class="panel-body">
           <div class="col-lg-12">
             <div class="input-group">
-              @if(isset($eventFilter) && $eventFilter)
-                @include("event_filter")
+              @if($type=='audit')
+                @include("macro/event_filter")
               @endif
               <span class="input-group-addon">filter</span>
               <input type="text" class="form-control" id='filter'>
