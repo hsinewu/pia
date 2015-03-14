@@ -88,7 +88,7 @@
                   <a href="{{ route('admin_edit', array($type,$i->{$obj->getPK()})) }}">Edit</a>
                   @if($obj->deletable)
                       or
-                      <a href="{{ route('admin_del', array($type,$i->{$obj->getPK()})) }}">Delete</a>
+                      <a href="{{ route('admin_del', array($type,$i->{$obj->getPK()})) }}"  onclick="return confirm('確定要刪除此筆資料?');">Delete</a>
                   @endif
                 </td>
               </tr>
