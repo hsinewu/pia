@@ -112,50 +112,56 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 
 ## 系統實作與實驗
 
-### 步驟
+## 安裝、部署
+
+#### 需求
+
+ * 建議使用 Linux 作業系統，本專案以 `CentOS 6.5` 開發
+ * 需要之軟體：
+    * Apache / Nginx 等 HTTP 網頁伺服器軟體
+    * PHP 5.4 以後之版本，並有 Extension: cli pdo mysqlnd mbstring mcrypt
+        * 如果 HTTP 伺服器軟體使用的是 Nginx ，則還需要 PHP-fpm
+    * 資料庫管理程式如 MySQL / PostgreSQL / Sqlite
+    * wkhtmltopdf
+ * 如果使用之系統為 `CentOS 6.5`，可以直接執行下方 Shell script 來完成上方軟體之安裝
+    * `sys_setup/setup_cli.sh`
+    * `sys_setup/setup_web_server.sh`
+    * `sys_setup/wkhtml2pdf.sh`
+    * 把本專案放置在 `/var/pia`
+
+#### 安裝部署程序
 
 - 取得本專案程式碼
     - 使用 Git： `git clone <本專案git位址>`
-    - 或者其他管道例如壓縮檔案
-- 將網路伺服器設定根目錄到本專案的public資料夾，或是指定到本專案根目錄的server資料夾。
+    - 或者其他管道例如解壓縮檔案
+- 移動本專案至 HTTP 伺服器目錄之下，並將網路伺服器設定根目錄到本專案的public資料夾。
 - 執行終端指令 `composer update` ，更新vendor (PHP/Laravel 相依套件)，詳細請參照 [Composer](https://getcomposer.org/) 的說明文件。
+- 建立資料庫以及有效之使用者
 - 複製設定示範檔案至正式設定檔：
 
   ```
   cp app/config/database.example.php app/config/database.php
+  cp app/config/mail.example.php app/config/mail.php
   ```
 
 - 編輯 `app/config/database.php` ，修改資料庫連線參數。
-- 執行終端指令 `php artisan migrate` ，建立資料表。(未來預計加入自動從個資系統匯入之功能)
-- 連線到網站，測試是否正常：
-    - 是否能正常看到頁面。
-    - 到處丟測資，看會不會出現系統錯誤訊息，若有，請檢查是否為伺服器環境的問題。若認為是程式問題，請到本專案的頁面提報Issue。
-- 清除各項測資。
+- 編輯 `app/config/mail.php` ，修改信件寄送參數。
+- 執行終端指令 `php artisan migrate` ，建立資料表 Schema
+    - 可以事先把 `PIMS` 之使用者、單位資料表匯入至資料庫，在 migration 執行時會詢問是否要從指定資料表匯入使用者與單位，以及設定全站設定值
+    - 會自動建立一預設管理員，帳號密碼皆為 `admin` 
+- 啟動 HTTP server
 - 編輯 `app/config/app.php` ，將 `debug` 參數改為 `false` 並且依據需求修改各項選項。
-- 開始運作本網站囉！
+- 使用瀏覽器開始使用 PIAS ，登入管理員並修改管理員帳號密碼，便可開始使用。
 
-## Laravel PHP Framework
+#### 開發環境
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+如需加入、修改本專案之功能，有些建議之環境設定
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, and caching.
+- 使用 `Sqlite` 作為測試資料庫即可
+- 可以使用 vagrant 或者 docker 來進行環境的建立 (本專案有附上 `Vagrantfile` / `Dockerfile`)
 
-Laravel aims to make the development process a pleasing one for the developer without sacrificing application functionality. Happy developers make the best code. To this end, we've attempted to combine the very best of what we have seen in other web frameworks, including frameworks implemented in other languages, such as Ruby on Rails, ASP.NET MVC, and Sinatra.
+本專題使用基於 `Laravel 4.2` 撰寫，[請詳閱參考文件](http://laravel.tw/docs/4.2)
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## 參考資料
 
-## Official Documentation
-
-Documentation for the entire framework can be found on the [Laravel website](http://laravel.com/docs).
-
-### Contributing To Laravel
-
-**All issues and pull requests should be filed on the [laravel/framework](http://github.com/laravel/framework) repository.**
-
-### License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+ * [Laravel](http://laravel.tw/)
