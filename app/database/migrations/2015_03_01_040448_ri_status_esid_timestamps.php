@@ -14,7 +14,7 @@ class RiStatusEsidTimestamps extends Migration {
 	{
 		Schema::table('report_item', function($table)
 		{
-		    $table->string('ri_status');
+		    $table->string('ri_status')->default('表單待填');;
 		    $table->integer('es_id')->nullable();
 		    $table->datetime('confirm_timestamp1')->nullable();
 		    $table->datetime('confirm_timestamp2')->nullable();

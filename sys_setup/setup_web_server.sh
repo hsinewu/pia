@@ -10,7 +10,7 @@ bashDir="$( cd "$( dirname "$0" )" && pwd )"
 # isntall web server
 yum localinstall -y $bashDir/remi-release-6.rpm
 yum -y install nginx
-yum -y --enablerepo=remi,remi-php56 install php php-common php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-gd php-mbstring php-mcrypt php-xml php-fpm
+yum -y --enablerepo=remi,remi-php56 install php php-common php-pecl-apcu php-cli php-pear php-pdo php-mysqlnd php-gd php-mbstring php-mcrypt php-xml php-fpm php-sqlite
 yum -y install mysql-server
 curl -sS https://getcomposer.org/installer | /usr/bin/php
 mv composer.phar /usr/local/bin/composer

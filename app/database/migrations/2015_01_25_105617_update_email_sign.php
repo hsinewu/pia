@@ -15,7 +15,7 @@ class UpdateEmailSign extends Migration {
 		Schema::table('email_sign', function($table)
 		{
 			$table->string('es_type')->default('0');
-			$table->string('es_to');
+			$table->string('es_to')->nullable();
 		});
 	}
 

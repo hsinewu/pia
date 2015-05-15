@@ -34,7 +34,7 @@ class Init extends Migration {
 			$table->integer('group_id')->nullable();
 			$table->string('org_id')->nullable();
 			$table->string('dept_name')->unique();
-			$table->string('code');
+			$table->string('code')->default("");
 		});
 
 		echo "Please input the dept source data table name: (input nothing to ignore importing)\n";

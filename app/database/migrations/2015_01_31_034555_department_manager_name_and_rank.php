@@ -14,7 +14,7 @@ class DepartmentManagerNameAndRank extends Migration {
 	{
 		Schema::table('dept', function($table)
 		{
-		    $table->string('manager_name');
+		    $table->string('manager_name')->default('');
 		    $table->string('manager_rank')->default('主管');
 		});
 	}

@@ -14,7 +14,7 @@ class DeptAddCodeEmailColumn extends Migration {
 	{
 		Schema::table('dept', function($table)
 		{
-		    $table->string('email');
+		    $table->string('email')->nullable();
 		});
 	}
 

@@ -9,3 +9,4 @@ composer.lock
 Thumbs.db
 /app/config/database.php
 /app/config/mail.php
+*.sqlite
