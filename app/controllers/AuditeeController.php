@@ -182,11 +182,11 @@ class AuditeeController extends Controller {
 
 			$this -> assign($item);
 			Session::set("message","已完成矯正預防單填寫指定！");
-			return Redirect::route('auditee_status');
 		}catch (Exception $e) {
 			Session::set("message",$e->getMessage());
-			return Redirect::route('auditee_feedback',$ri_id);
+			return Response::make($e->getMessage())->header('Refresh', "3;url=" . route('auditee_feedback',$ri_id));
 		}
+		return Response::json(["redirect" => route("auditee_status")]);
 	}
 
 	public function feedback_assign($code){
