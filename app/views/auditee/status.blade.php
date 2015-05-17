@@ -91,7 +91,7 @@
                   @endif
               </tr>
               @if( $show_sub_item && !is_null($items = ($r->items->all())))
-                <tr class="{{ $r->r_serial }} sub_item">
+                <tr class="{{ $r->r_serial }} sub_item sub_head">
                   <td></td>
                   <td>\\</td>
                   <td>條款</td>

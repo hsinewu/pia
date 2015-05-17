@@ -19,3 +19,11 @@ table.table.table-no-bottom{
 .sub_item:not(.showing){
     display:none;
 }
+
+.sub_item{
+    background-color: #e2e2e2;
+}
+
+.sub_item.sub_head, .table-hover>tbody>tr.sub_head:hover>td{
+    background-color: #bbbbbb;
+}
