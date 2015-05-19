@@ -31,10 +31,10 @@
 
  1. 身份驗證以及登入 - 資料庫存取、 Session 以及存取控管
  2. 管理介面 - 使用者、設定、任務管理
- 3. 稽核人員介面 - 稽核行事曆、稽核報告填寫
+ 3. 稽核人員介面 - 稽核行事曆、稽核報告填寫與暫存
  4. 稽核以及矯正預防報告產生 - PDF 產生器
  5. 單位主管通知簽署 - 藉由信件寄送簽署連結以及稽核報告 PDF 給單位主管確認
- 6. 受稽單位介面 - 受稽行事曆、矯正預防報告填寫
+ 6. 受稽單位介面 - 矯正預防報告填寫或指定其他同仁填寫
 
 （詳細介紹請見下方）
 
@@ -101,6 +101,7 @@ jQuery是最知名的javascript函式庫，提供了相當簡潔的介面用來�
  * Eloquent ORM：能將資料庫內的表視為如同物件的類別，row則如同一個個的變數instance般，提供程式員以最熟悉的物件導向方式操作資料庫的資料。
  * Query builder：隱藏原始的SQL語句，將其融入PHP語言，提供比ORM更加直接的操作。
  * routing：定義連結和路徑的關係，更能動態的改變實體連結，以因應路由的變動。
+ * Templates (Blade)：Blade 是 Laravel 所提供的一個簡單卻又非常強大的模板引擎。不像控制器頁面佈局，Blade 是使用 模板繼承（ template inheritance ）和 區塊（ sections ）。所有的 Blade 模板命名都要以 .blade.php 結尾。
  * RESTful：REST是一主流的web服務實現方案，其模式更加簡潔，可分割同一url下不同http方法（如GET、POST）之邏輯。
  * 表單:對表單輸入的處理，以及輸入的自動驗證等等。
 
@@ -137,7 +138,7 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 
    ![admin](doc_img/admin.png)
 
-   管理員可以透過對單位資料表、人員資料表進行增刪改查來管理本系統之使用者以及校內單位，並透過「全站設定」設定「稽核小組信箱」、「稽核委員會信箱」以及當前事件
+   管理員可以透過對單位資料表、人員資料表進行增刪改查來管理本系統之使用者以及校內單位，並透過「全站設定」設定「稽核小組信箱」、「稽核小組名稱」、「稽核委員會信箱」以及「當前事件」
 
 3. 若要進行稽核規劃，首先選擇「事件設定」，並建立一事件：
 
@@ -178,17 +179,31 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 
 #### 身份驗證以及登入 - 資料庫存取、 Session 以及存取控管
 
- * __資料庫存取__
+ * __資料庫存取__：透過 Laravel 之 `Eloquent ORM` 套件，把資料表包裝成 `Class` / 資料行 (row) 包裝成 `Object`，並且只需設定 `app/config/database.php` 便可更改資料庫種類與連線資訊
 
- * __Session__
+ * __Session__：使用 Session 來進行登入狀態紀錄與簡單跨頁訊息傳遞
+    * 使用者狀態查詢 `Session::get('user')`
+    * 訊息傳遞 `Session::set("message","...");` ，會在下個頁面載入之後透過下方程式碼顯示通知：
 
- * __存取控管__
+      ```html
+      <!-- Line 105 in app/views/master.blade.php -->
+      @if( Session::has('message') )
+      <script>
+        $(document).ready(function(){
+          alert("{{ Session::get('message'); }}");
+        });
+      </script>
+      {{ Session::forget('message'); }}
+      @endif
+      ```
+
+ * __存取控管__：透過 `app/routes.php` 中的群組以及 `app/filters.php` 來規劃存取控制，例如 `app/routes.php` 中之 `is_admin` 群組就必須通過 `app/filters.php` 的對應驗證程序才會繼續進入 `controller` 進行處裡
 
 #### 管理介面 - 使用者、設定、任務管理
 
- * __使用者__
+ * __使用者__：針對 `app/models/PiaPerson.php` 以及資料表 `person` 的增刪改查。
 
- * __設定__
+ * __設定__：針對 `app/models/PiaGlobal.php` 以及資料表 `global` 的改查，可用來設定「稽核小組信箱」、「稽核小組名稱」、「稽核委員會信箱」以及「當前事件」。
 
  * __任務管理__<br>
     * __行事曆__<br>
@@ -225,21 +240,110 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 
         其中 `@foreach` 迴圈中會將資料庫內的每筆稽核事件加入 FullCalendar events 中，再透過 JavaScript 將事件渲染到頁面上。
 
-#### 稽核人員介面 - 稽核行事曆、稽核報告填寫
+#### 稽核人員介面 - 稽核行事曆、稽核報告填寫與暫存
 
- * __稽核行事曆__
+ * __稽核行事曆__：蒐集與此稽核人員相關之稽核任務，並且透過 [FullCalendar](http://fullcalendar.io/) 顯示
 
- * __稽核報告填寫__
+ * __稽核報告填寫__：除了一般之表單填寫與驗證 (Model: `app/models/PiaReport.php` / DB: `report`) ，利用「暫存」的狀態 (`report.status`) 來使存入的資料保留在與未填寫相同之流程階段而非進入下一階段  
+
+![audit_form_saving](doc_img/audit_form_saving.png)  
 
 #### 稽核以及矯正預防報告產生 - PDF 產生器
 
+關於 PDF 產生器的部分，我們使用 [wkhtmltopdf](http://wkhtmltopdf.org/) ，這是一個使用 webkit 作為渲染引擎產生 PDF 的工具，所以可以直接透過 HTML 排版，接著呼叫 `wkhtmltopdf` 即可輸出成 PDF ，甚至 CSS 樣式表以及字體也可以有效作用 (本專題自動部屬程序中安裝並使用之字體為開源字體 [思源正黑體](https://github.com/adobe-fonts/source-han-sans))。  
+
+[wkhtmltopdf](http://wkhtmltopdf.org/) 原本是一個 commandline 執行檔，在 `Laravel` 中，我們透過別人撰寫完成的 `nitmedia/wkhtml2pdf` 套件來呼叫 (由於原作者的錯誤檢查會造成執行失敗，我 fork 成 `chgu82837/wkhtml2pdf` 並取消檢查)，並透過 [Composer](https://getcomposer.org/) 來安裝 (於 `composer.json` 檔案中加入 `nitmedia/wkhtml2pdf` ， `composer update` 時便會執行安裝的動作)。  
+
+在 `app/models/PiaReport.php` 以及 `app/models/PiaReportItem.php` 兩個 Model 中，先直接利用 Laravel 的 template 功能產生好 HTML `gen_html($hide_sign = false)`，並傳入 `PDF::html($template_path,$variable,$pdf_path)` 包裝成 PDF 使用之 HTML 框架並輸出至 `$pdf_path`，程式碼如下：
+
+```php
+// Line 156 in app/models/PiaReport.php
+PDF::html('paper', ['content' => $this->gen_html($hide_sign), 'title' => "個人資料管理制度內部稽核報告"], $pdf_path);
+
+// Line 220 in app/models/PiaReportItem.php
+PDF::html('paper', ['content' => $this->gen_html($hide_sign), 'title' => "個人資料管理制度矯正預防處理單"], $pdf_path);
+```
+
+在 管理員介面的回報狀態 、 稽核人介面之稽核任務列表 以及 受稽人員介面之稽核狀況 中項目的詳細資料頁面右上方按鈕可下載 PDF 檔案  
+
+![pdf_download](doc_img/pdf_download.png)  
+
+產生之稽核報告 PDF 大致如下：  
+
+![report_pdf](doc_img/report_pdf.png)  
+
+產生之矯正預防 PDF 大致如下：  
+
+![reportItem_pdf](doc_img/reportItem_pdf.png)  
+
 #### 單位主管通知簽署 - 藉由信件寄送簽署連結以及稽核報告 PDF 給單位主管確認
 
-#### 受稽單位介面 - 受稽行事曆、矯正預防報告填寫
+為了使各個單位主管通知簽屬的過程電子化，又避免在本系統內建立過多帳號，本系統採用電子郵件通知的方式，因此只需要在各單位資料表中加入主管信箱 (`dept.email`) ，並在電子郵件中附上唯一的簽署連結，主管便可透過連結即可簽屬並使得流程繼續  
 
- * __受稽行事曆__
+本系統中使用 `email_sign` 之資料表來儲存有效之驗證碼 (`es_code` 欄位)，並且透過 Laravel 內建之 `Mail` 套件進行信件的寄送， Laravel 的 `Mail` 套件可以直接整合本身的 Template 模組 (Blade) 來進行信件內容的產生。  
 
- * __矯正預防報告填寫__
+稽核報告簽屬流程部分，在 `app/models/PiaReport.php` 中的 `send_email()` 函式為針對 所有稽核報告 簽屬的流程，會根據當前物件進行到的階段進行信件寄送 (單位主管、資安暨個資保護稽核小組、資訊安全暨個人資料保護推動委員會)：
+
+```php
+// Line 161 in app/models/PiaReport.php
+switch ($this->status) {
+  case '儲存，等待簽署':
+    ...
+  case '受稽主管已簽':
+    ...
+  case '稽核小組已簽':
+    ...
+}
+```
+
+接著使用 `Mail::send($template_path,$variables,$callback)`
+
+```php
+// Line 193 in app/models/PiaReport.php
+Mail::send('emails/sign',
+  ['sign_url' => route("email_sign",$es->es_code),'report' => $this, 'items' => $this->items()->get()->all()],
+  function($message)
+{
+  $message
+  ->to( mail_addr, dept_name )
+  ->subject("您好，這是個資稽核系統，這裏有份稽核報告請您確認")
+  ->attach(pdf_name, array('as' => "個資稽核報告.pdf"));
+});
+```
+
+主管收到之信件內容將附上簽屬連結：  
+
+![email_sign_link](doc_img/email_sign_link.png)  
+
+主管點擊連結後，將會呼叫 `app/models/PiaEmailSign.php` 之 `sign()` 進行確認並且更新流程之狀態  
+
+![next_sign](doc_img/next_sign.png)  
+
+同理於矯正預防之簽屬流程，在 `app/controllers/AuditeeController.php` 中的 `sendMail($reportItem,$type)` ，會根據當前簽屬進行到的階段進行信件寄送，並且同時附上核准與否決之連結：  
+
+![report_confirm_link](doc_img/report_confirm_link.png)  
+
+主管點擊連結後，將會呼叫 `app/controllers/AuditeeController.php` 之 `sign($code,$yes_no)` / `sign2($code,$yes_no)` 對主管之選擇進行流程之進行  
+
+![reportitem_next_sign](doc_img/reportitem_next_sign.png)  
+
+#### 受稽單位介面 - 矯正預防報告填寫或指定其他同仁填寫
+
+除了受稽單位窗口自行填寫矯正預防報告之外，可透過給定同仁 Email 與稱謂來寄送填寫矯正預防之連結 (使用與簽屬時相同之驗證碼) ，來使同仁能自行填寫而非透過窗口進行：  
+
+![assinging](doc_img/assinging.png)  
+
+這將會呼叫 `app/controllers/AuditeeController.php` 之 `assign_process($ri_id)` 來進行驗證碼之產生與 Email 寄送，並於信件中附上相關資訊與填寫連結：  
+
+![assigned_email](doc_img/assigned_email.png)  
+
+點擊連結便會呼叫 `app/controllers/AuditeeController.php` 之 `feedback_assign($code)`，產生對應之矯正預防表單：  
+
+![assigned](doc_img/assigned.png)  
+
+不管由驗證碼指定填寫的表單呼叫 `app/controllers/AuditeeController.php` 之 `feedback_assign_process($code)` ，或者窗口自行填寫時呼叫之 `feedback_process($ri_id)` ，都會呼叫 `feedback_processing($item,$assigned)` 來進行矯正預防 (Model: `app/models/PiaReportItem.php` / DB: `report_item`) 之資料儲存、主管通知與流程進行
+
+![reportitem_filled](doc_img/reportitem_filled.png)  
 
 ## 安裝、部署
 
@@ -251,7 +355,8 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
     * PHP 5.4 以後之版本，並有 Extension: cli pdo mysqlnd mbstring mcrypt
         * 如果 HTTP 伺服器軟體使用的是 Nginx ，則還需要 PHP-fpm
     * 資料庫管理程式如 MySQL / PostgreSQL / Sqlite
-    * wkhtmltopdf
+    * [wkhtmltopdf](http://wkhtmltopdf.org/) 作為 PDF 產生程式
+    * [Composer](https://getcomposer.org/) 作為本專案 PHP 相依性管理工具
  * 如果使用之系統為 `CentOS 6.5`，可以直接執行下方 Shell script 來完成上方軟體之安裝
     * `sys_setup/setup_cli.sh`
     * `sys_setup/setup_web_server.sh`
@@ -287,7 +392,7 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 如需加入、修改本專案之功能，有些建議之環境設定
 
 - 使用 `Sqlite` 作為測試資料庫即可
-- 可以使用 vagrant 或者 docker 來進行環境的建立 (本專案有附上 `Vagrantfile` / `Dockerfile`)
+- 可以使用 [Vagrant](https://www.vagrantup.com/) 或者 [Docker](https://www.docker.com/) 來進行環境的建立 (本專案有附上 `Vagrantfile` / `Dockerfile`)
 
 本專題使用基於 `Laravel 4.2` 撰寫，[請詳閱參考文件](http://laravel.tw/docs/4.2)
 

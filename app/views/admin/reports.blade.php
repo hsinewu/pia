@@ -107,8 +107,5 @@
       </div>
     </div>
   </div>
-  <footer>
-    <p>© Company 2014</p>
-  </footer>
 
 @stop

@@ -77,6 +77,9 @@
 
     <div class="container">
       @yield('content')
+      <footer>
+        <p>© NCHU 2015</p>
+      </footer>
     </div> <!-- /container -->
 
   @section('footer_scripts')
