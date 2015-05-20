@@ -428,4 +428,7 @@ Mail::send('emails/sign',
 
 ## 參考資料
 
- * [Laravel](http://laravel.tw/)
+ * [Laravel http://laravel.tw/](http://laravel.tw/)
+ * [Composer https://getcomposer.org/](https://getcomposer.org/)
+ * [wkhtmltopdf http://wkhtmltopdf.org/](http://wkhtmltopdf.org/)
+ * [FullCalendar http://fullcalendar.io/](http://fullcalendar.io/)
