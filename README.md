@@ -240,6 +240,36 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 
         其中 `@foreach` 迴圈中會將資料庫內的每筆稽核事件加入 FullCalendar events 中，再透過 JavaScript 將事件渲染到頁面上。
 
+    * 每一頁清單都有篩選器，以便使用人員輕鬆找到目標資料。<br>
+        在管理員稽核設定頁面更有事件篩選器，除了關鍵字外，亦可針對事件去做搜尋。
+
+        ![filter1](doc_img/filter1.png)  
+
+        ![filter2](doc_img/filter2.png)  
+
+        透過 javascript 控制，讓關鍵字能在輸入的同時及時將結果回饋給使用者。
+
+        ```javascript
+        function filter(){
+          for(var i=1; i<rows.length; i++){
+            var row = rows.eq(i);
+            var text = row.text();
+                  if( text.match(target) && (select == 'ALL' || text.match(select)))
+                      row.show();
+                  else{
+                      row.hide();
+              var expand = row.find('.expand');
+              if(expand.is('a'))
+                $("." + expand.attr('for')).removeClass("showing");
+            }
+          }
+        }
+        ```
+
+        所有頁面預設 `select` 為 `ALL`，當在篩選器輸入關鍵字時會觸發 `$('#filter').keyup()` 事件，偵測篩選器內的字並存入變數 `target` 再呼叫 `filter()`。<br>
+
+        如果偵測到事件改變便會觸發 `$('#filter-event').change()`，將 `select` 變成 `$(this).val()`（事件篩選器對應的事件值）後呼叫 `filter()`。
+
 #### 稽核人員介面 - 稽核行事曆、稽核報告填寫與暫存
 
  * __稽核行事曆__：蒐集與此稽核人員相關之稽核任務，並且透過 [FullCalendar](http://fullcalendar.io/) 顯示
