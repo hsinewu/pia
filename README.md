@@ -432,3 +432,6 @@ Mail::send('emails/sign',
  * [Composer https://getcomposer.org/](https://getcomposer.org/)
  * [wkhtmltopdf http://wkhtmltopdf.org/](http://wkhtmltopdf.org/)
  * [FullCalendar http://fullcalendar.io/](http://fullcalendar.io/)
+ * [思源正黑體 https://github.com/adobe-fonts/source-han-sans](https://github.com/adobe-fonts/source-han-sans)
+ * [Vagrant https://www.vagrantup.com/](https://www.vagrantup.com/)
+ * [Docker https://www.docker.com/](https://www.docker.com/)
