@@ -15,21 +15,21 @@
 
 ## 簡述
 
-在現在資訊網路已成人們生活中隨處可見的工具，但也衍生出個人資訊洩漏的問題，因而有了「個人資料保護法」，讓公司行號、政府機構在蒐集、擁有個人資料時更多了「保護資料」的基本義務。本校擁有大量之個資，為了確保本校確實保護好這些資料，目前已經建置並導入個資管理系統 (Personal Infomation Management System)，作為個資盤點以及風險評估之用；但各個單位之個資保管需要藉由稽核的方式來確保個資保管恰當，因此本校組織了一個稽核小組來對各個單位進行稽核。
+在現在資訊網路已成人們生活中隨處可見的工具，但也衍生出個人資訊洩漏的問題，因而有了「個人資料保護法」，讓公司行號、政府機構在蒐集、擁有個人資料時更多了「保護資料」的基本義務。本校擁有大量之個資，為了核實資料之使用皆符合法規，預計將導入個資管理系統 (Personal Infomation Management System)，作為個資盤點以及風險評估之用；但各個單位之個資保管需要藉由稽核的方式來確保個資保管恰當，因此本校組織了一個稽核小組來對各個單位進行稽核。
 
-對於稽核小組在稽核進行時，需要到本校各個單位進行稽核任務，本校有大量單位需要稽核，因此在進行時需要排程進行，並搭配書面資料作為通知以及意見的交換，大量書面資料之整理、傳遞造成的麻煩，會導致稽核小組工作量龐大，因此計畫製作一個線上「個資稽核系統」 (Personal Infomation Audition System) 的網頁服務來幫助稽核流程之進行。
+由於稽核小組在稽核進行時，需要到各個單位進行稽核任務，並且本校有大量單位需要稽核，因此在進行時是依排程進行，搭配書面資料作為通知以及記錄，然而大量書面資料之整理、傳遞造成的麻煩，會加重稽核小組之工作負擔，因此計畫製作一個線上「個資稽核系統」 (Personal Infomation Audition System) 的網頁服務來幫助稽核流程之進行。
 
 本專題係研究開發此「個資稽核系統」 (Personal Infomation Audition System) ，把完整之個資稽核流程電子化，利用線上網頁進行個資任務排程規劃、填寫稽核結果以及檢討報告，並配合電子郵件來進行通知以及確認簽署。
 
 ## 專題研究動機與目的
 
-本專題以 Web 為基礎，Client-Server 為架構，使得本服務有雲端之「隨時可存取」特性，而非一本地端之應用程式，所有使用者只需瀏覽器即可操作，我們研究撰寫在伺服器端運作的 PHP 腳本程式加上資料庫來進行邏輯判斷以及流程運作 (接近俗稱的 LAMP)，並且採用 Laravel 作為框架來進行開發，達成稽核流程 (流程如下) 所需之所有功能以及流程之運作。
+本系統是基於 Client-Server 架構之 Web 應用，使得本服務有「隨時可存取」特性，而非一本地端之應用程式，使用者只需以瀏覽器連線即可操作，我們研究撰寫在伺服器端運作的 PHP 腳本程式開發系統邏輯以及流程運作 (接近俗稱的 LAMP)，並且採用 Laravel 作為框架來進行開發，實作稽核流程 (流程如下) 所需之所有功能以及流程之運作。
 
 ![稽核流程](doc_img/flow.png)
 
 本專題需要研究使用的功能有：
 
- 1. 身份驗證以及登入 - 資料庫存取、 Session 以及存取控管
+ 1. 身份驗證以及登入 - 資料庫存取、 Session 記錄以及存取控管
  2. 管理介面 - 使用者、設定、任務管理
  3. 稽核人員介面 - 稽核行事曆、稽核報告填寫與暫存
  4. 稽核以及矯正預防報告產生 - PDF 產生器
@@ -130,15 +130,15 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 
 #### 系統操作流程與實作說明
 
-1. 打開本專題製作之網站之後，可看到登入介面
+1. 打開本專題製作之網站之後，可看到登入介面。
 
    ![login](doc_img/login.png)
 
-2. 以管理員身份登入，左方可以看見管理員可用的功能表
+2. 以管理員身份登入，左方可以看見管理員可用的功能表。
 
    ![admin](doc_img/admin.png)
 
-   管理員可以透過對單位資料表、人員資料表進行增刪改查來管理本系統之使用者以及校內單位，並透過「全站設定」設定「稽核小組信箱」、「稽核小組名稱」、「稽核委員會信箱」以及「當前事件」
+   管理員可以透過對單位資料表、人員資料表進行增刪改查來管理本系統之使用者以及校內單位，並透過「全站設定」設定「稽核小組信箱」、「稽核小組名稱」、「稽核委員會信箱」以及「當前事件」。
 
 3. 若要進行稽核規劃，首先選擇「事件設定」，並建立一事件：
 
@@ -165,7 +165,7 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 
    ![report](doc_img/report.png)
 
-   窗口可點擊填寫填寫矯正預防，自己填寫矯正預防表單或將其指派給他人（透過 e-mail）。若只派給他人，對方將會收到一個一次性的連結。但如果窗口指派給他人後又自己填寫或在另外指派，此連結將失效。
+   窗口可點擊填寫填寫矯正預防，自己填寫矯正預防表單或將其指派給他人（透過 e-mail）。若指派給他人，對方將會收到一個一次性的連結。但如果窗口指派給他人後又自己填寫或在另外指派，此連結將失效。
 
    ![report-assign](doc_img/report-assign.png)
 
@@ -274,15 +274,15 @@ GitHub是一個共享虛擬主機服務，用於存放使用Git版本控制的�
 
  * __稽核行事曆__：蒐集與此稽核人員相關之稽核任務，並且透過 [FullCalendar](http://fullcalendar.io/) 顯示
 
- * __稽核報告填寫__：除了一般之表單填寫與驗證 (Model: `app/models/PiaReport.php` / DB: `report`) ，利用「暫存」的狀態 (`report.status`) 來使存入的資料保留在與未填寫相同之流程階段而非進入下一階段  
+ * __稽核報告填寫__：除了一般之表單填寫與驗證 (Model: `app/models/PiaReport.php` / DB: `report`) ，亦可使用暫存功能方便人員儲存尚未填寫完成之報告
 
 ![audit_form_saving](doc_img/audit_form_saving.png)  
 
 #### 稽核以及矯正預防報告產生 - PDF 產生器
 
-關於 PDF 產生器的部分，我們使用 [wkhtmltopdf](http://wkhtmltopdf.org/) ，這是一個使用 webkit 作為渲染引擎產生 PDF 的工具，所以可以直接透過 HTML 排版，接著呼叫 `wkhtmltopdf` 即可輸出成 PDF ，甚至 CSS 樣式表以及字體也可以有效作用 (本專題自動部屬程序中安裝並使用之字體為開源字體 [思源正黑體](https://github.com/adobe-fonts/source-han-sans))。  
+關於 PDF 產生器的部分，我們使用 [wkhtmltopdf](http://wkhtmltopdf.org/) ，這是一個使用 webkit 作為渲染引擎產生 PDF 的工具，能夠先以 HTML 排版，再執行 `wkhtmltopdf` 即可輸出成 PDF ，甚至 CSS 樣式表以及字體也可以有效作用 (本專題自動部屬程序中安裝並使用之字體為開源字體 [思源正黑體](https://github.com/adobe-fonts/source-han-sans))。  
 
-[wkhtmltopdf](http://wkhtmltopdf.org/) 原本是一個 commandline 執行檔，在 `Laravel` 中，我們透過別人撰寫完成的 `nitmedia/wkhtml2pdf` 套件來呼叫 (由於原作者的錯誤檢查會造成執行失敗，我 fork 成 `chgu82837/wkhtml2pdf` 並取消檢查)，並透過 [Composer](https://getcomposer.org/) 來安裝 (於 `composer.json` 檔案中加入 `nitmedia/wkhtml2pdf` ， `composer update` 時便會執行安裝的動作)。  
+[wkhtmltopdf](http://wkhtmltopdf.org/) 原本是一個命令列執行檔，在 `Laravel` 中，可以直接透過 `nitmedia/wkhtml2pdf` 套件來呼叫 (由於原程式一部份程式碼會造成執行失敗，已略作修改並 fork 至 `chgu82837/wkhtml2pdf` )，並透過 [Composer](https://getcomposer.org/) 來安裝 (於 `composer.json` 檔案中加入 `nitmedia/wkhtml2pdf` ，執行 `composer update` 便會自動完成安裝的動作)。  
 
 在 `app/models/PiaReport.php` 以及 `app/models/PiaReportItem.php` 兩個 Model 中，先直接利用 Laravel 的 template 功能產生好 HTML `gen_html($hide_sign = false)`，並傳入 `PDF::html($template_path,$variable,$pdf_path)` 包裝成 PDF 使用之 HTML 框架並輸出至 `$pdf_path`，程式碼如下：
 
@@ -294,7 +294,7 @@ PDF::html('paper', ['content' => $this->gen_html($hide_sign), 'title' => "個人
 PDF::html('paper', ['content' => $this->gen_html($hide_sign), 'title' => "個人資料管理制度矯正預防處理單"], $pdf_path);
 ```
 
-在 管理員介面的回報狀態 、 稽核人介面之稽核任務列表 以及 受稽人員介面之稽核狀況 中項目的詳細資料頁面右上方按鈕可下載 PDF 檔案  
+在 管理員介面的回報狀態 、 稽核人介面之稽核任務列表 以及 受稽人員介面之稽核狀況 中項目的詳細資料頁面右上方按鈕可下載 PDF 檔案。  
 
 ![pdf_download](doc_img/pdf_download.png)  
 
@@ -308,11 +308,11 @@ PDF::html('paper', ['content' => $this->gen_html($hide_sign), 'title' => "個人
 
 #### 單位主管通知簽署 - 藉由信件寄送簽署連結以及稽核報告 PDF 給單位主管確認
 
-為了使各個單位主管通知簽屬的過程電子化，又避免在本系統內建立過多帳號，本系統採用電子郵件通知的方式，因此只需要在各單位資料表中加入主管信箱 (`dept.email`) ，並在電子郵件中附上唯一的簽署連結，主管便可透過連結即可簽屬並使得流程繼續  
+為了使各個單位主管通知簽署的過程電子化，又避免在本系統內建立過多帳號，本系統採用電子郵件通知的方式，因此只需要在各單位資料表中加入主管信箱 (`dept.email`) ，並在電子郵件中附上唯一的簽署連結，主管便可透過連結即可簽屬並使得流程繼續。  
 
 本系統中使用 `email_sign` 之資料表來儲存有效之驗證碼 (`es_code` 欄位)，並且透過 Laravel 內建之 `Mail` 套件進行信件的寄送， Laravel 的 `Mail` 套件可以直接整合本身的 Template 模組 (Blade) 來進行信件內容的產生。  
 
-稽核報告簽屬流程部分，在 `app/models/PiaReport.php` 中的 `send_email()` 函式為針對 所有稽核報告 簽屬的流程，會根據當前物件進行到的階段進行信件寄送 (單位主管、資安暨個資保護稽核小組、資訊安全暨個人資料保護推動委員會)：
+稽核報告簽屬流程部分，在 `app/models/PiaReport.php` 中的 `send_email()` 函式為針對所有稽核報告 簽署的流程，會根據當前物件進行到的階段進行信件寄送 (單位主管、資安暨個資保護稽核小組、資訊安全暨個人資料保護推動委員會)：
 
 ```php
 // Line 161 in app/models/PiaReport.php
@@ -341,11 +341,11 @@ Mail::send('emails/sign',
 });
 ```
 
-主管收到之信件內容將附上簽屬連結：  
+主管收到之信件內容將附上簽署連結：  
 
 ![email_sign_link](doc_img/email_sign_link.png)  
 
-主管點擊連結後，將會呼叫 `app/models/PiaEmailSign.php` 之 `sign()` 進行確認並且更新流程之狀態  
+主管點擊連結後，將會呼叫 `app/models/PiaEmailSign.php` 之 `sign()` 進行確認並且更新流程之狀態。  
 
 ![next_sign](doc_img/next_sign.png)  
 
@@ -353,13 +353,13 @@ Mail::send('emails/sign',
 
 ![report_confirm_link](doc_img/report_confirm_link.png)  
 
-主管點擊連結後，將會呼叫 `app/controllers/AuditeeController.php` 之 `sign($code,$yes_no)` / `sign2($code,$yes_no)` 對主管之選擇進行流程之進行  
+主管點擊連結後，將會呼叫 `app/controllers/AuditeeController.php` 之 `sign($code,$yes_no)` / `sign2($code,$yes_no)` 依主管之選擇繼續流程。  
 
 ![reportitem_next_sign](doc_img/reportitem_next_sign.png)  
 
 #### 受稽單位介面 - 矯正預防報告填寫或指定其他同仁填寫
 
-除了受稽單位窗口自行填寫矯正預防報告之外，可透過給定同仁 Email 與稱謂來寄送填寫矯正預防之連結 (使用與簽屬時相同之驗證碼) ，來使同仁能自行填寫而非透過窗口進行：  
+除了受稽單位窗口自行填寫矯正預防報告之外，亦可透過指派給其它同仁之 Email ，寄送填寫矯正預防之連結 (使用與簽署時相同之驗證碼) ，轉由其它同仁填寫而非由窗口進行：  
 
 ![assinging](doc_img/assinging.png)  
 
@@ -367,11 +367,11 @@ Mail::send('emails/sign',
 
 ![assigned_email](doc_img/assigned_email.png)  
 
-點擊連結便會呼叫 `app/controllers/AuditeeController.php` 之 `feedback_assign($code)`，產生對應之矯正預防表單：  
+點擊連結便會呼叫 `app/controllers/AuditeeController.php` 之 `feedback_assign($code)`，連結至對應之矯正預防表單：  
 
 ![assigned](doc_img/assigned.png)  
 
-不管由驗證碼指定填寫的表單呼叫 `app/controllers/AuditeeController.php` 之 `feedback_assign_process($code)` ，或者窗口自行填寫時呼叫之 `feedback_process($ri_id)` ，都會呼叫 `feedback_processing($item,$assigned)` 來進行矯正預防 (Model: `app/models/PiaReportItem.php` / DB: `report_item`) 之資料儲存、主管通知與流程進行
+不管由驗證碼指定填寫的表單呼叫 `app/controllers/AuditeeController.php` 之 `feedback_assign_process($code)` ，或者窗口自行填寫時呼叫之 `feedback_process($ri_id)` ，都會呼叫 `feedback_processing($item,$assigned)` 來進行矯正預防 (Model: `app/models/PiaReportItem.php` / DB: `report_item`) 之資料儲存、主管通知與流程進行。
 
 ![reportitem_filled](doc_img/reportitem_filled.png)  
 
