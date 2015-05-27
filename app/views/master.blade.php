@@ -77,10 +77,12 @@
 
     <div class="container">
       @yield('content')
+    </div> <!-- /container -->
+    <div class="container">
       <footer>
         <p>© NCHU 2015</p>
       </footer>
-    </div> <!-- /container -->
+    </div>
 
   @section('footer_scripts')
 

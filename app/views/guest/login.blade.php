@@ -10,7 +10,7 @@
 @stop
 
 @section('content')
-
+<div class="row">
   <div class="col-md-6">
       <div class="jumbotron">
         <h1>個資稽核系統</h1>
@@ -26,11 +26,12 @@
         <h2 class="form-signin-heading">請登入</h2>
         <div class="col-md-2"></div>
         <input type="text" class="form-control" placeholder="請在此輸入帳號" required="" autofocus="" name="user"> <!-- name="usr_mail" -->
-        <div class="row">&nbsp;</div>
+        <br>
         <input type="password" class="form-control" placeholder="請在此輸入密碼" required="" name="pwd"> <!-- name="pwd" -->
+        <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
 
       </form>
   </div>
-
+</div>
 @stop
